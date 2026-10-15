@@ -1,0 +1,429 @@
+{
+ "design": "ADR-002 P0",
+ "force": {
+  "splits": {
+   "train": {
+    "wells": 98,
+    "samples": 1170511,
+    "expected": {
+     "wells": 98,
+     "samples": 1170511
+    },
+    "matches": true,
+    "labelled": 1.0,
+    "classes_present": 12,
+    "columns": 29
+   },
+   "open_test": {
+    "wells": 10,
+    "samples": 136786,
+    "expected": {
+     "wells": 10,
+     "samples": 136786
+    },
+    "matches": true,
+    "labelled": 1.0,
+    "classes_present": 10,
+    "columns": 28
+   },
+   "hidden_test": {
+    "wells": 10,
+    "samples": 122397,
+    "expected": {
+     "wells": 10,
+     "samples": 122397
+    },
+    "matches": true,
+    "labelled": 1.0,
+    "classes_present": 11,
+    "columns": 29
+   }
+  },
+  "checks": {
+   "no_well_in_two_splits": true,
+   "all_labels_mapped": true,
+   "curve_missing_share_train": {
+    "GR": 0.0,
+    "RHOB": 0.138,
+    "NPHI": 0.346,
+    "DTC": 0.069,
+    "RDEP": 0.009,
+    "RMED": 0.033,
+    "PEF": 0.426,
+    "CALI": 0.075,
+    "BS": 0.417,
+    "DRHO": 0.156,
+    "SP": 0.262,
+    "DTS": 0.851,
+    "RSHA": 0.461
+   }
+  },
+  "class_counts_train": {
+   "65000": 720803,
+   "30000": 168937,
+   "65030": 150455,
+   "70000": 56320,
+   "80000": 33329,
+   "99000": 15245,
+   "70032": 10513,
+   "88000": 8213,
+   "90000": 3820,
+   "74000": 1688,
+   "86000": 1085,
+   "93000": 103
+  },
+  "wells": {
+   "open_test": [
+    "15/9-14",
+    "25/10-10",
+    "25/11-24",
+    "25/5-3",
+    "29/3-1",
+    "34/10-16 R",
+    "34/3-3 A",
+    "34/6-1 S",
+    "35/6-2 S",
+    "35/9-8"
+   ],
+   "hidden_test": [
+    "15/9-23",
+    "16/2-7",
+    "16/7-6",
+    "17/4-1",
+    "25/10-9",
+    "31/2-10",
+    "31/2-21 S",
+    "34/3-2 S",
+    "35/11-5",
+    "35/9-7"
+   ]
+  },
+  "gate_force": true
+ },
+ "kgs": {
+  "files": 28906,
+  "readable": 28865,
+  "readable_share": 0.9985816093544593,
+  "wells": 24169,
+  "files_direct": 8463,
+  "files_in_nested_zips": 20443,
+  "unreadable": [
+   {
+    "archive": "2016",
+    "entry": "2016/1046089355.zip/1046089355.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2015",
+    "entry": "2015/1045063913.zip/1045063913.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2024",
+    "entry": "1054310828.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2024",
+    "entry": "1055044140.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2024",
+    "entry": "1055545188.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2025",
+    "entry": "1057019407.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053292672.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375814.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375818.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375831.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375841.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375844.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375848.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375853.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375854.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375858.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375859.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053375860.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053379583.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053379584.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053379585.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053428763.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053428770.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053428775.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053428810.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053428816.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053428820.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2023",
+    "entry": "1053428828.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2021",
+    "entry": "1051725863.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2021",
+    "entry": "1051725957.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2021",
+    "entry": "1052060599.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2021",
+    "entry": "1052060601.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2021",
+    "entry": "1052060602.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2021",
+    "entry": "1052060603.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2020",
+    "entry": "1051325728.zip/1051325728.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2020",
+    "entry": "1051662829.zip/1051662829.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2020",
+    "entry": "1051662838.zip/1051662838.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2019",
+    "entry": "1046943435.zip/1046943435.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2019",
+    "entry": "1046943436.zip/1046943436.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2019",
+    "entry": "1046943437.zip/1046943437.las",
+    "error": "ValueError('no ~C (curve) section')"
+   },
+   {
+    "archive": "2022",
+    "entry": "1052700553.las",
+    "error": "ValueError('no ~C (curve) section')"
+   }
+  ],
+  "las_version": {
+   "2.0": 28689,
+   "1.2": 162,
+   "3.0": 9,
+   "3.00": 1,
+   "2": 1,
+   "0": 1,
+   "2.000": 1,
+   "": 1
+  },
+  "wrapped_files": 427,
+  "null_codes": {
+   "-999.25": 27310,
+   "-999.0": 742,
+   "-9999.0": 358,
+   "-999.95": 233,
+   "0.0": 132,
+   "-99.99": 53
+  },
+  "depth_units": {
+   "FT": 28844,
+   "S": 17,
+   "MV": 1,
+   "": 1,
+   "SEC": 1,
+   "M": 1
+  },
+  "located_share": 0.996159966788902,
+  "location_source": {
+   "kgs_index": 27010,
+   "header": 1896
+  },
+  "curve_entries": 373791,
+  "curve_entries_recognised_share": 0.8411786265586919,
+  "curve_entries_lithology_share": 0.620517882988087,
+  "standard_curve_counts": {
+   "TOOL_QC": 47547,
+   "MICRO": 34686,
+   "NPHI": 33102,
+   "RHOB": 28063,
+   "GR": 27633,
+   "RDEP": 19663,
+   "DPHI": 19034,
+   "SP": 18278,
+   "CALI": 15455,
+   "RMED": 15292,
+   "RSHA": 13586,
+   "DCAL": 11183,
+   "COND_DEEP": 10304,
+   "DTC": 6418,
+   "PHI_OTHER": 5484,
+   "PEF": 5146,
+   "DRHO": 2647,
+   "BS": 656,
+   "GAS": 248
+  },
+  "top_unrecognised": {
+   "R60O": 958,
+   "R40O": 958,
+   "CALIPERL": 925,
+   "RTAO": 912,
+   "AMP3FT": 814,
+   "RT90": 774,
+   "RT60": 773,
+   "RT20": 771,
+   "RT30": 766,
+   "AMP5FT": 762,
+   "RT10": 755,
+   "CT90": 737,
+   "NPHD": 726,
+   "DPHD": 725,
+   "DLIM": 714,
+   "SCAL": 709,
+   "DT35": 683,
+   "QN": 682,
+   "QF": 681,
+   "RMUD": 679,
+   "COND(MI)": 678,
+   "TT5FT": 668,
+   "SPRL": 655,
+   "AMPCAL": 650,
+   "SMTU": 626
+  },
+  "files_with": {
+   "GR": 0.9319864388016329,
+   "GR+RHOB+NPHI": 0.5828201757420605,
+   "core (GR, RHOB, NPHI, DTC, RDEP)": 0.1817269770981803
+  },
+  "archive_counts": {
+   "1999": 2061,
+   "2001_2005": 1498,
+   "2006_2011": 2360,
+   "2012": 2263,
+   "2013": 2330,
+   "2014": 3231,
+   "2015": 2082,
+   "2016": 2283,
+   "2017": 894,
+   "2018": 356,
+   "2019": 546,
+   "2020": 539,
+   "2021": 592,
+   "2022": 264,
+   "2023": 708,
+   "2024": 3810,
+   "2025": 2715,
+   "2026": 374
+  }
+ },
+ "gate_force": true,
+ "gate_kgs": true,
+ "gate_passed": true
+}
