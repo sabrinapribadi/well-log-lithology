@@ -1,0 +1,13 @@
+# Well-log lithology (OG-2). Paths relative to WLL_DATA_DIR unless absolute.
+paths:
+  force_official: force2020/official            # FORCE 2020 competition files (train.zip, leaderboard test, hidden test, penalty matrix)
+  force_npd: force2020/NPD_Lithostratigraphy_member_formations_all_wells.xlsx
+  kgs_las_zips: kgs/las_zips
+  kgs_wells: kgs/ks_wells.zip
+  kgs_tops: kgs/ks_tops.zip
+  derived: derived
+  outputs_dir: data/outputs                    # small, committed artefacts only (repository-relative)
+
+# FORCE 2020 lithology codes → class index used by the official penalty matrix (lithology_competition/data/test_code.py)
+lithology_codes: {30000: 0, 65030: 1, 65000: 2, 80000: 3, 74000: 4, 70000: 5, 70032: 6, 88000: 7, 86000: 8, 99000: 9, 90000: 10, 93000: 11}
+lithology_names: [Sandstone, Sandstone/Shale, Shale, Marl, Dolomite, Limestone, Chalk, Halite, Anhydrite, Tuff, Coal, Basement]
