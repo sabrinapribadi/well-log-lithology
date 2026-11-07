@@ -1,0 +1,98 @@
+{
+ "source": "https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition (README, Results of final scoring)",
+ "retrieved": "2026-11-07",
+ "note": "13 of the top-30 leaderboard teams submitted code the organisers could run on the hidden wells. Leaderboard score = open test.",
+ "finalists": [
+  {
+   "final_rank": 1,
+   "team": "Olawale Ibrahim",
+   "open_test": -0.5118,
+   "leaderboard_rank": 24,
+   "hidden_test": -0.469
+  },
+  {
+   "final_rank": 2,
+   "team": "GIR Team",
+   "open_test": -0.5037,
+   "leaderboard_rank": 11,
+   "hidden_test": -0.4792
+  },
+  {
+   "final_rank": 3,
+   "team": "Lab.ICA-Team / Smith A.",
+   "open_test": -0.4943,
+   "leaderboard_rank": 6,
+   "hidden_test": -0.4954
+  },
+  {
+   "final_rank": 4,
+   "team": "H3G (Haoyuan Zhang, Harry Brandsen, Gregory Barrere, Helena Nandi Formentin)",
+   "open_test": -0.509,
+   "leaderboard_rank": 17,
+   "hidden_test": -0.5045
+  },
+  {
+   "final_rank": 5,
+   "team": "ISPL Team",
+   "open_test": -0.4885,
+   "leaderboard_rank": 2,
+   "hidden_test": -0.5084
+  },
+  {
+   "final_rank": 6,
+   "team": "Jiampiers C.",
+   "open_test": -0.5014,
+   "leaderboard_rank": 9,
+   "hidden_test": -0.5087
+  },
+  {
+   "final_rank": 7,
+   "team": "Jos\u00e9 Berm\u00fadez",
+   "open_test": -0.5052,
+   "leaderboard_rank": 14,
+   "hidden_test": -0.5091
+  },
+  {
+   "final_rank": 8,
+   "team": "Bohdan Pavlyshenko",
+   "open_test": -0.5112,
+   "leaderboard_rank": 22,
+   "hidden_test": -0.5171
+  },
+  {
+   "final_rank": 9,
+   "team": "Jeremy Zhao",
+   "open_test": -0.5264,
+   "leaderboard_rank": 31,
+   "hidden_test": -0.5173
+  },
+  {
+   "final_rank": 10,
+   "team": "Campbell Hutcheson",
+   "open_test": -0.505,
+   "leaderboard_rank": 13,
+   "hidden_test": -0.5221
+  },
+  {
+   "final_rank": 11,
+   "team": "David P.",
+   "open_test": -0.4775,
+   "leaderboard_rank": 1,
+   "hidden_test": -0.5256
+  },
+  {
+   "final_rank": 12,
+   "team": "SoftServe Team",
+   "open_test": -0.4936,
+   "leaderboard_rank": 3,
+   "hidden_test": -0.5263
+  },
+  {
+   "final_rank": 13,
+   "team": "Dapo Awolayo",
+   "open_test": -0.5121,
+   "leaderboard_rank": 25,
+   "hidden_test": -0.9441
+  }
+ ]
+}

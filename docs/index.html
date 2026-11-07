@@ -1,0 +1,560 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Well-Log Lithology</title>
+<!-- share preview (portfolio rule R18) -->
+<meta name="description" content="Does a North Sea rock-type model hold up on wells it never saw? Blind-well test on FORCE 2020, with 28,906 Kansas LAS files next.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sabrinapribadi.github.io/well-log-lithology/">
+<meta property="og:title" content="Well-Log Lithology">
+<meta property="og:description" content="Does a North Sea rock-type model hold up on wells it never saw? Blind-well test on FORCE 2020, with 28,906 Kansas LAS files next.">
+<meta property="og:image" content="https://sabrinapribadi.github.io/well-log-lithology/assets/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta property="og:image:alt" content="Top of the Well-Log Lithology page">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /share preview -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+/* Subsurface palette: core-store paper, ochre ink, and the lithology colours petrophysicists use on log plots. */
+:root {
+  --bg: #f4f2ed; --surface: #fffdf9; --fg: #1f1d1a; --muted: #625d55; --line: #e0dbd1; --tint: #ece8df;
+  --accent: #8a5a10; --accent-soft: #f3e6cf;
+  --ok: #2c7a4b; --ok-soft: #dcefe3; --bad: #b23a2a; --bad-soft: #f6e0dc; --run: #35648f; --run-soft: #dfe9f3;
+  --l0: #e9c94f; --l1: #c9b266; --l2: #7f9170; --l3: #9dbcae; --l4: #b590cc; --l5: #6aa6dc; --l6: #c4e1f2; --l7: #e9a2b6; --l8: #c25b9c; --l9: #e07b39; --l10: #2b2a28; --l11: #9c5a33;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-head: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15130f; --surface: #1d1a15; --fg: #ece6db; --muted: #a49c8f; --line: #353026; --tint: #24201a;
+  --accent: #e3b062; --accent-soft: #3a2c16;
+  --ok: #5fc48a; --ok-soft: #173326; --bad: #f08068; --bad-soft: #42221c; --run: #7fb0e0; --run-soft: #1b2a3a;
+  --l10: #6b6862;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #15130f; --surface: #1d1a15; --fg: #ece6db; --muted: #a49c8f; --line: #353026; --tint: #24201a;
+  --accent: #e3b062; --accent-soft: #3a2c16;
+  --ok: #5fc48a; --ok-soft: #173326; --bad: #f08068; --bad-soft: #42221c; --run: #7fb0e0; --run-soft: #1b2a3a;
+  --l10: #6b6862;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 var(--font-body); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font: 700 clamp(32px, 4.6vw, 46px)/1.1 var(--font-head); letter-spacing: -0.01em; }
+h2 { font: 700 26px/1.2 var(--font-head); }
+h3 { font-size: 16px; font-weight: 600; }
+p { margin: 0; }
+ul, ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.eyebrow { font: 600 12px/1.2 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.small { font-size: 13px; }
+
+header.top { display: grid; gap: 14px; padding-block: 8px 24px; border-bottom: 1px solid var(--line); }
+header.top .lede { font-size: 18px; max-width: 62ch; }
+.status { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; font-size: 13px; }
+.chip { font: 600 11.5px/1 var(--font-mono); padding: 6px 9px; border-radius: 999px; white-space: nowrap; }
+.chip.pass { background: var(--ok-soft); color: var(--ok); }
+.chip.fail { background: var(--bad-soft); color: var(--bad); }
+.chip.run { background: var(--run-soft); color: var(--run); }
+.chip.plan { background: var(--tint); color: var(--muted); }
+nav.toc { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 13px var(--font-mono); }
+nav.toc a { text-decoration: none; color: var(--muted); }
+nav.toc a:hover { color: var(--accent); }
+nav.toc .n { color: var(--accent); margin-right: 6px; }
+
+.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; padding-block: 24px 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.card b.big { font: 600 24px/1.15 var(--font-mono); font-variant-numeric: tabular-nums; }
+section.block { display: grid; gap: 18px; padding-block: 40px 6px; }
+.sec-head { display: flex; align-items: baseline; gap: 12px; }
+.sec-head .n { font: 700 14px var(--font-mono); color: var(--accent); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px 28px; align-items: start; }
+.cols > * { min-width: 0; }
+.flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; font-size: 13.5px; }
+.flow span { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+.flow span.now { border-color: var(--accent); background: var(--accent-soft); }
+.flow i { align-self: center; color: var(--muted); font-style: normal; }
+
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; vertical-align: top; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+th { font: 600 11.5px var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: var(--tint); }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -2px; margin-right: 5px; border: 1px solid var(--line); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.tile { border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; display: grid; gap: 2px; }
+.tile b { font: 600 22px/1.2 var(--font-mono); font-variant-numeric: tabular-nums; }
+.tile span { font-size: 13px; color: var(--muted); }
+
+.chart { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 12px 8px; display: grid; gap: 6px; min-width: 0; }
+.chart h3 { font-size: 15px; }
+.chart .sub { font-size: 13px; color: var(--muted); }
+svg.plot { display: block; width: 100%; height: auto; overflow: visible; }
+svg.plot text { fill: var(--muted); font: 11px var(--font-mono); }
+svg.plot .axis { stroke: var(--line); }
+svg.plot .grid { stroke: var(--line); stroke-dasharray: 2 3; }
+svg.plot [data-k] { cursor: pointer; outline: none; }
+svg.plot [data-k]:hover, svg.plot [data-k]:focus { stroke: var(--fg); stroke-width: 1.5; }
+.hscroll { min-width: 0; }
+@media (max-width: 640px) { .hscroll { overflow-x: auto; } .hscroll > svg.plot { min-width: 600px; } }
+.tip { position: absolute; z-index: 5; display: none; max-width: 260px; background: var(--fg); color: var(--bg); font-size: 12.5px; line-height: 1.45; padding: 7px 9px; border-radius: 7px; pointer-events: none; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
+.tip b { display: block; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 13.5px; }
+.controls select, .controls input { font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; }
+.controls input[type=range] { padding: 0; accent-color: var(--accent); width: min(260px, 60vw); }
+.whatif { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.whatif div { background: var(--tint); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+.whatif b { font: 600 20px var(--font-mono); font-variant-numeric: tabular-nums; }
+.whatif span { font-size: 12.5px; color: var(--muted); }
+
+details { border-top: 1px solid var(--line); }
+details > summary { cursor: pointer; padding: 10px 0; font-weight: 600; list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "+"; display: inline-block; width: 18px; color: var(--accent); font-family: var(--font-mono); }
+details[open] > summary::before { content: "−"; }
+details > .body { padding: 0 0 14px 18px; display: grid; gap: 10px; font-size: 14px; }
+details.how { border: 0; }
+details.how > summary { padding: 2px 0; font: 500 12.5px var(--font-mono); color: var(--accent); }
+details.how > .body { padding: 4px 0 4px 18px; font-size: 13px; gap: 4px; }
+details.more > summary { font: 700 18px var(--font-head); padding: 14px 0; }
+.take { display: grid; gap: 8px; border-left: 3px solid var(--accent); padding-left: 16px; }
+footer { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+details.sources > summary { font-size: 13px; font-weight: 500; padding: 4px 0; }
+@media (max-width: 520px) { h1 { font-size: 30px; } .card b.big { font-size: 21px; } }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <span class="eyebrow">Oil &amp; gas · Petrophysics · Blind-well test</span>
+  <h1>Well-Log Lithology</h1>
+  <p class="lede">Does a rock-type model trained on North Sea wells hold up on wells it never saw, and does it transfer to Kansas?</p>
+  <div class="status" id="status"></div>
+  <nav class="toc" aria-label="Sections">
+    <a href="#problem"><span class="n">1</span>Problem</a><a href="#data"><span class="n">2</span>Data</a><a href="#approach"><span class="n">3</span>Approach</a>
+    <a href="#solution"><span class="n">4</span>Solution</a><a href="#take"><span class="n">5</span>Our take</a><a href="build.html">Technical walkthrough →</a>
+  </nav>
+</header>
+
+<div class="glance" id="glance"></div>
+
+<section class="block" id="problem">
+  <div class="sec-head"><span class="n">1</span><h2>Problem</h2></div>
+  <div class="cols">
+    <div class="small" style="display:grid;gap:10px">
+      <p><b>Lithology</b> is the rock type at each depth: sandstone, shale, limestone and nine others.</p>
+      <ul>
+        <li>Petrophysicists pick it by hand from <b>well logs</b>: gamma ray, density, neutron, sonic, resistivity curves.</li>
+        <li>Across hundreds of wells, picks are slow and inconsistent.</li>
+        <li>Wrong picks flow into reservoir models and drilling decisions.</li>
+        <li>Public archives hold tens of thousands of wells nobody has interpreted.</li>
+      </ul>
+    </div>
+    <div style="display:grid;gap:10px">
+      <span class="eyebrow">Today vs this project</span>
+      <div class="flow"><span>Load a well's logs</span><i>→</i><span>Pick rock type by eye, depth by depth</span><i>→</i><span>Repeat per well</span></div>
+      <div class="flow"><span class="now">Model labels every depth</span><i>→</i><span class="now">Doubtful depths flagged</span><i>→</i><span class="now">Petrophysicist reviews only those</span></div>
+      <p class="small muted">What they need: first-pass picks for every well, with uncertainty, judged on wells the model never saw.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="data">
+  <div class="sec-head"><span class="n">2</span><h2>Data</h2></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Source</th><th>What</th><th class="num">Size</th><th>Use</th></tr></thead>
+    <tbody id="t-sources"></tbody>
+  </table></div>
+  <div class="cols">
+    <div class="small" style="display:grid;gap:8px">
+      <span class="eyebrow">Label and test design</span>
+      <ul>
+        <li><b>Label:</b> 12 rock types, interpreted by the data providers, one per 0.152 m (6-inch) depth sample.</li>
+        <li><b>Test:</b> 10 hidden wells, scored once per pre-named model; 10 open wells reported, never used for choices.</li>
+        <li><b>Leak guard:</b> no well is split; neighbouring depths are nearly identical.</li>
+        <li><b>Metric:</b> the competition's penalty score; geologically "far" mistakes cost more (<a href="#more-score">how it works</a>).</li>
+      </ul>
+      <div class="legend" id="lith-legend"></div>
+    </div>
+    <div class="chart" id="w-wells">
+      <h3>118 North Sea wells: which ones the model never saw</h3>
+      <p class="sub">Hover a test well for its blind score.</p>
+      <div class="legend"><span><i style="background:var(--muted)"></i>98 training</span><span><i style="background:var(--run)"></i>10 open (reported)</span><span><i style="background:var(--bad)"></i>10 hidden (the gate)</span></div>
+      <svg class="plot" id="c-wells" viewBox="0 0 360 300" role="img" aria-label="Map of FORCE wells by split"></svg>
+      <div class="tip"></div>
+      <details class="how"><summary>? How to read this</summary><div class="body">
+        <span><b>Shows:</b> well positions as provided (km east and north of the south-west well).</span>
+        <span><b>Example:</b> a red dot is a hidden well; its score is the average mistake cost there.</span>
+        <span><b>So what:</b> test wells sit among training wells, so this tests new wells, not a new basin. Kansas does that (P3).</span>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="approach">
+  <div class="sec-head"><span class="n">3</span><h2>Approach and model choice</h2></div>
+  <div class="flow">
+    <span>1 Read official splits + 28,906 Kansas headers</span><i>→</i><span>2 Baseline: XGBoost on logs as provided</span><i>→</i>
+    <span>3 Three candidates, named in advance</span><i>→</i><span>4 Choose by well-grouped CV</span><i>→</i><span>5 Score the choice once</span>
+  </div>
+  <div class="scroll"><table>
+    <thead><tr><th>Choice</th><th>Tried</th><th>Chose</th><th>Deciding number</th></tr></thead>
+    <tbody id="t-choice"></tbody>
+  </table></div>
+  <details class="how"><summary>? How to read the penalty score</summary><div class="body">
+    <span><b>What:</b> the average cost of a mistake per depth sample; 0 is perfect. Near mistakes (chalk for limestone) cost 1.375, far ones up to 4.</span>
+    <span><b>Example:</b> −0.540 means each 0.152 m sample costs 0.54 on average: roughly one "medium" mistake every four samples.</span>
+    <span><b>So what:</b> labelling everything shale scores <span id="shale-floor"></span>; the 2020 finalists scored −0.469 to −0.526.</span>
+  </div></details>
+</section>
+
+<section class="block" id="solution">
+  <div class="sec-head"><span class="n">4</span><h2>Solution</h2></div>
+  <div class="tiles" id="tiles"></div>
+
+  <div class="chart" id="w-fin">
+    <h3>Blind-well score vs the 2020 finalists</h3>
+    <p class="sub">Same 10 hidden wells, same penalty. Right is better. Hover any dot.</p>
+    <div class="hscroll"><svg class="plot" id="c-fin" viewBox="0 0 720 210" role="img" aria-label="Hidden-well scores of the 13 finalists, the baseline and the chosen model"></svg></div>
+    <div class="tip"></div>
+    <details class="how"><summary>? How to read this</summary><div class="body">
+      <span><b>Shows:</b> each finalist's hidden-well score (grey), our baseline and chosen model (ochre), and "shale everywhere" (dashed).</span>
+      <span><b>Example:</b> the winner scored −0.469; a gap of 0.07 is about 0.07 fewer penalty points per sample.</span>
+      <span><b>So what:</b> it shows where an honest, untuned pipeline lands among teams that tuned for months.</span>
+    </div></details>
+  </div>
+
+  <div class="chart" id="w-col">
+    <h3>Rock column in a hidden well: interpreter vs model</h3>
+    <p class="sub">The deliverable a petrophysicist opens. Hover a band for its depth and rock.</p>
+    <div class="controls"><label>Well <select id="well-pick"></select></label><span class="muted small" id="col-score"></span></div>
+    <div class="hscroll"><svg class="plot" id="c-col" viewBox="0 0 720 230" role="img" aria-label="Lithology tracks along depth"></svg></div>
+    <div class="tip"></div>
+    <details class="how"><summary>? How to read this</summary><div class="body">
+      <span><b>Shows:</b> depth runs left to right; each band is one rock type over a depth interval.</span>
+      <span><b>Example:</b> a yellow model band under a grey interpreter band is sandstone predicted where shale was picked.</span>
+      <span><b>So what:</b> the bottom track marks where the model is unsure (top probability under 50%): review those first.</span>
+    </div></details>
+  </div>
+
+  <div class="chart" id="w-conf">
+    <h3>What if the petrophysicist reviews only the doubtful depths?</h3>
+    <p class="sub">Move the dial: flag every depth where the model's confidence is below it.</p>
+    <div class="controls"><label>Confidence below <input type="range" id="conf" min="0" max="13" step="1" value="6"> <b class="mono" id="conf-v"></b></label></div>
+    <div class="whatif" id="whatif"></div>
+    <details class="how"><summary>? How to read this</summary><div class="body">
+      <span><b>Confidence:</b> the model's probability for its chosen rock (0–100%).</span>
+      <span><b>Example:</b> at 75%, about a quarter of the depth is flagged and most mistakes are inside it.</span>
+      <span><b>So what:</b> review effort can be set like a budget; the unflagged rest is more reliable.</span>
+    </div></details>
+  </div>
+
+  <div class="chart" id="w-rec">
+    <h3>Which rocks the model finds, on hidden wells</h3>
+    <p class="sub">Share of each rock's metres labelled correctly (recall). Hover a bar.</p>
+    <div class="legend" id="rec-legend"></div>
+    <div class="hscroll"><svg class="plot" id="c-rec" viewBox="0 0 720 300" role="img" aria-label="Recall per rock type"></svg></div>
+    <div class="tip"></div>
+    <details class="how"><summary>? How to read this</summary><div class="body">
+      <span><b>Recall:</b> of the metres the interpreter called this rock, the share the model also called it.</span>
+      <span><b>Example:</b> shale near 90% means 9 in 10 shale metres are found.</span>
+      <span><b>So what:</b> rare rocks (dolomite, chalk) need review; a few hundred metres cannot be judged reliably.</span>
+    </div></details>
+  </div>
+
+  <div class="cols">
+    <div class="small" style="display:grid;gap:8px">
+      <span class="eyebrow">Where the penalty comes from (hidden wells)</span>
+      <div class="scroll"><table><thead><tr><th>Interpreter</th><th>Model</th><th class="num">Metres</th><th class="num">Share of penalty</th></tr></thead><tbody id="t-conf"></tbody></table></div>
+    </div>
+    <div class="small" style="display:grid;gap:8px">
+      <span class="eyebrow">Caveats</span>
+      <ul>
+        <li>Labels are interpretations, not core; interpreters disagree too.</li>
+        <li>Ten hidden wells: one unusual well moves the score.</li>
+        <li>Kansas transfer is not tested yet (P3); North Sea results only.</li>
+      </ul>
+      <details><summary>FAQ</summary><div class="body">
+        <span><b>Why not accuracy?</b> Shale is 59–62% of samples; "all shale" is 59% accurate yet useless.</span>
+        <span><b>Why not a random split?</b> It scored <span id="faq-rand"></span>, about 3× better than blind wells: a leak.</span>
+        <span><b>Why not tune on hidden wells?</b> Then the score would describe those 10 wells, not new ones.</span>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="take">
+  <div class="sec-head"><span class="n">5</span><h2>Our take</h2></div>
+  <div class="take" id="take-body"></div>
+</section>
+
+<section class="block" id="deep">
+  <details class="more" id="more-score"><summary>How the penalty score works</summary><div class="body">
+    <p class="small">Cost of predicting the column rock when the interpreter picked the row rock. Hover a cell.</p>
+    <div class="chart" id="w-mat"><div class="hscroll"><svg class="plot" id="c-mat" viewBox="0 0 520 470" role="img" aria-label="Penalty matrix"></svg></div><div class="tip"></div></div>
+  </div></details>
+  <details class="more" id="more-kansas"><summary>Kansas archive: what 28,906 LAS files hold</summary><div class="body">
+    <div class="cols">
+      <div class="chart" id="w-ks">
+        <h3>Kansas wells with density and neutron logs</h3>
+        <p class="sub">Each square is 0.25° (≈ 25 km). Darker = more wells with gamma ray, density and neutron.</p>
+        <svg class="plot" id="c-ks" viewBox="0 0 420 210" role="img" aria-label="Kansas well inventory grid"></svg>
+        <div class="tip"></div>
+      </div>
+      <div class="small" style="display:grid;gap:8px" id="ks-facts"></div>
+    </div>
+  </div></details>
+  <details class="more" id="more-log"><summary>Decision log and deviations</summary><div class="body small">
+    <ul id="dev-list"></ul>
+    <p>Full records: <a href="https://github.com/sabrinapribadi/well-log-lithology/blob/main/docs/adr/ADR-002-validation-and-gates.md">ADR-002 deviations</a>.</p>
+  </div></details>
+  <details class="more" id="more-appendix"><summary>Technical appendix: gates, CV folds, per-well scores</summary><div class="body small">
+    <div class="scroll"><table><thead><tr><th>Phase</th><th>Gate (set before)</th><th>Result</th></tr></thead><tbody id="t-gates"></tbody></table></div>
+    <div class="scroll"><table><thead><tr><th>Candidate</th><th class="num">CV mean</th><th class="num">Open</th><th class="num">Hidden</th></tr></thead><tbody id="t-cand"></tbody></table></div>
+    <div class="scroll"><table><thead><tr><th>Hidden well</th><th class="num">P1</th><th class="num">Chosen</th></tr></thead><tbody id="t-wells"></tbody></table></div>
+    <p class="muted">Glossary: <b>blind well</b> — a well never used in training; <b>CV</b> — cross-validation, here 5 groups of training wells; <b>recall</b> — share of a rock's metres found; <b>LAS</b> — the standard text format for well logs.</p>
+  </div></details>
+</section>
+
+<footer>
+  <span><a href="build.html">Technical walkthrough</a> · <a href="https://github.com/sabrinapribadi/well-log-lithology">Code, PRD and ADRs</a> · last updated <span id="updated"></span> (<a href="https://github.com/sabrinapribadi/well-log-lithology/blob/main/CHANGELOG.md">changelog</a>)</span>
+  <details class="sources"><summary>Sources</summary><div class="body small">
+    <span>Bormann et al. (2020) FORCE 2020 well log and lithofacies dataset, Zenodo, doi:10.5281/zenodo.4351156 (CC BY 4.0).</span>
+    <span>FORCE 2020 competition repository: splits, penalty matrix and final scores (github.com/bolgebrygg/Force-2020-Machine-Learning-competition).</span>
+    <span>Kansas Geological Survey: LAS archive, well and tops databases (KGS terms of use).</span>
+    <span>Chen &amp; Guestrin (2016) XGBoost, KDD · Ke et al. (2017) LightGBM, NeurIPS · Lakens (2017) Equivalence tests, SPPS.</span>
+  </div></details>
+</footer>
+</div>
+
+<script src="data/page_data.js"></script>
+<script>
+const P = window.PAGE, $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const N = new Intl.NumberFormat("en-US"), f3 = v => (v < 0 ? "−" : "") + Math.abs(v).toFixed(3), pct = (v, d = 0) => (100 * v).toFixed(d) + "%";
+const sgn = v => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(3);
+const SVGNS = "http://www.w3.org/2000/svg", CLS = P.classes, STEP = 0.152;
+const col = k => `var(--l${k})`;
+const p2 = P.p2, best = p2 ? p2.chosen : null;
+const bestHidden = p2 ? p2.candidates[best].hidden_test : {penalty: P.p1.hidden_test.penalty, accuracy: P.p1.hidden_test.accuracy};
+const bestOpen = p2 ? p2.candidates[best].open_test : {penalty: P.p1.open_test.penalty, accuracy: P.p1.open_test.accuracy};
+const modelName = p2 ? `chosen model (${best})` : "baseline (P1)";
+const H = P.floors.hidden_test, fin = P.finalists;
+
+// ---------- tooltips: one per chart, inside its box, on hover and keyboard focus
+function bindTips(svg, text) {
+  const wrap = svg.closest(".chart"), tip = wrap.querySelector(":scope > .tip");
+  const show = (el, x, y) => { tip.innerHTML = text(el); tip.style.display = "block";
+    const w = wrap.getBoundingClientRect(), r = tip.getBoundingClientRect();
+    let left = x - w.left + 12, top = y - w.top + 12;
+    if (left + r.width > w.width - 4) left = Math.max(4, x - w.left - r.width - 12);
+    if (top + r.height > w.height - 4) top = Math.max(4, y - w.top - r.height - 12);
+    tip.style.left = left + "px"; tip.style.top = top + "px"; };
+  const hide = () => { tip.style.display = "none"; };
+  svg.addEventListener("pointermove", e => { const el = e.target.closest("[data-k]"); if (el) show(el, e.clientX, e.clientY); else hide(); });
+  svg.addEventListener("pointerleave", hide);
+  svg.addEventListener("focusin", e => { const el = e.target.closest("[data-k]"); if (!el) return; const r = el.getBoundingClientRect(); show(el, r.left + r.width / 2, r.top + r.height / 2); });
+  svg.addEventListener("focusout", hide);
+}
+const mk = (tag, attrs, parent) => { const el = document.createElementNS(SVGNS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); if (parent) parent.appendChild(el); return el; };
+const txt = (parent, x, y, s, anchor = "start", extra = {}) => { const t = mk("text", {x, y, "text-anchor": anchor, ...extra}, parent); t.textContent = s; return t; };
+
+// ---------- header, glance, sources
+const chipFor = (ok, label) => `<span class="chip ${ok === null ? "run" : ok ? "pass" : "fail"}">${esc(label)}</span>`;
+$("#status").innerHTML = [chipFor(true, "P0 data: passed"), chipFor(false, `P1 baseline: failed by ${(P.p1.gate - P.p1.hidden_test.penalty).toFixed(3)}`),
+  p2 ? chipFor(p2.gate_passed, `P2 model choice: ${p2.gate_passed ? "passed" : "failed"}`) : chipFor(null, "P2 model choice: running"),
+  '<span class="chip plan">P3–P6 planned</span>'].join(" ");
+const metresRight = Math.round(bestHidden.accuracy * H.logged_m);
+$("#glance").innerHTML = [
+  ["Data", "118 wells", "North Sea, 1.43M labelled depth samples · plus 28,906 Kansas LAS files"],
+  ["Problem", "12 rock types", "picked by hand at every 0.152 m of every well"],
+  ["Approach", "Blind wells", "pass bars set before any model ran; each model meets the hidden wells once"],
+  ["Result", f3(bestHidden.penalty), `${modelName} on 10 hidden wells; finalists −0.469 to −0.526`]
+].map(c => `<div class="card"><span class="eyebrow">${c[0]}</span><b class="big">${esc(c[1])}</b><span class="small muted">${esc(c[2])}</span></div>`).join("");
+const k = P.p0.kgs, sp = P.p0.splits;
+$("#t-sources").innerHTML = [
+  ["FORCE 2020 (Zenodo, CC BY 4.0)", "North Sea wells: logs + interpreted lithology", `${sp.train.wells + sp.open_test.wells + sp.hidden_test.wells} wells · ${N.format(sp.train.samples + sp.open_test.samples + sp.hidden_test.samples)} samples`, "Train 98 · open 10 · hidden 10 wells"],
+  ["FORCE 2020 organisers", "Official splits, penalty matrix, finalist scores", "13 finalists", "Exact benchmark"],
+  ["Kansas Geological Survey", "LAS files, 1999–2026, no lithology labels", `${N.format(k.files)} files · ${N.format(k.wells)} wells`, "Transfer test (P3), inventory"]
+].map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td class="num">${esc(r[2])}</td><td>${esc(r[3])}</td></tr>`).join("");
+$("#lith-legend").innerHTML = CLS.map((c, i) => `<span><i style="background:${col(i)}"></i>${esc(c)}</span>`).join("");
+$("#shale-floor").textContent = f3(H.shale_everywhere) + " on the hidden wells";
+$("#faq-rand").textContent = f3(P.p1.random_split.penalty_score);
+$("#updated").textContent = P.updated;
+
+// ---------- approach table
+const rows = [["Evaluation unit", "Random 80/20 split of samples", "Blind wells", `${f3(P.p1.random_split.penalty_score)} random vs ${f3(P.p1.hidden_test.penalty)} blind: the random split flatters about 3×`],
+  ["Baseline (P1)", "—", "XGBoost on logs as provided", `${f3(P.p1.hidden_test.penalty)} on hidden wells vs gate −0.526: failed by 0.014`]];
+if (p2) {
+  const cv = p2.cv_mean;
+  rows.push(["Features (A)", "Logs as provided (P1)", "Engineered: context, bad hole, per-well gamma ray", `CV mean ${f3(cv.A)} for A`]);
+  rows.push(["Decision rule (B)", "Most probable rock (A)", cv.B > cv.A ? "Lowest expected penalty (B)" : "Most probable rock (A)", `CV ${f3(cv.A)} (A) vs ${f3(cv.B)} (B)`]);
+  rows.push(["Library (C)", "LightGBM", cv.C > Math.max(cv.A, cv.B) ? "LightGBM" : "XGBoost", `CV ${f3(cv.C)} for LightGBM`]);
+  rows.push(["Chosen", "A, B, C", `Candidate ${best}`, `Hidden ${f3(bestHidden.penalty)} (${sgn(p2.gain.hidden_test)} vs P1; bar +0.020)`]);
+} else rows.push(["Model choice (P2)", "A, B, C (named in ADR-004)", "running", "—"]);
+$("#t-choice").innerHTML = rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td><b>${esc(r[2])}</b></td><td class="mono small">${esc(r[3])}</td></tr>`).join("");
+
+// ---------- tiles (domain units: metres, wells, rock types)
+const worst = Object.entries(p2 ? p2.chosen_detail.hidden_test.per_well : P.p1.hidden_test.per_well).sort((a, b) => a[1] - b[1]);
+const topConf = P.confusions.rows[0];
+$("#tiles").innerHTML = [
+  [`${N.format(metresRight)} m`, `of ${N.format(H.logged_m)} m in 10 hidden wells labelled as the interpreter did (${pct(bestHidden.accuracy, 1)})`],
+  [pct(topConf.cost_share), `of all penalty: ${topConf.true.toLowerCase()} called ${topConf.predicted.toLowerCase()} (${N.format(topConf.metres)} m)`],
+  [`${f3(worst[worst.length - 1][1])} to ${f3(worst[0][1])}`, `score range across the 10 hidden wells (${worst[0][0]} hardest)`]
+].map(t => `<div class="tile"><b>${esc(t[0])}</b><span>${esc(t[1])}</span></div>`).join("");
+
+// ---------- chart: finalists
+(function () {
+  const svg = $("#c-fin"), W = 720, x0 = 40, x1 = 700, lo = -1.35, hi = -0.40, X = v => x0 + (v - lo) / (hi - lo) * (x1 - x0);
+  for (let v = -1.3; v <= -0.4 + 1e-9; v += 0.1) { mk("line", {class: "grid", x1: X(v), x2: X(v), y1: 20, y2: 170}, svg); txt(svg, X(v), 188, f3(v).replace(/0$/, ""), "middle"); }
+  txt(svg, x0, 205, "← worse (more penalty)", "start"); txt(svg, x1, 205, "better →", "end");
+  mk("line", {x1: X(H.shale_everywhere), x2: X(H.shale_everywhere), y1: 20, y2: 170, stroke: "var(--muted)", "stroke-dasharray": "5 4"}, svg);
+  txt(svg, X(H.shale_everywhere) + 4, 32, "shale everywhere");
+  mk("rect", {"data-k": "floor", x: X(H.shale_everywhere) - 5, y: 20, width: 10, height: 150, fill: "transparent", tabindex: 0}, svg);
+  fin.forEach((f, i) => mk("circle", {"data-k": "f" + i, cx: X(f.hidden_test), cy: 70 + (i % 3) * 14, r: 6, fill: "var(--muted)", "fill-opacity": 0.55, tabindex: 0}, svg));
+  txt(svg, X(-0.4975), 54, "12 finalists", "middle");
+  const out = fin.find(f => f.hidden_test < -0.9); if (out) txt(svg, X(out.hidden_test), 54, "13th finalist", "middle");
+  const ours = [["p1", "Baseline P1", P.p1.hidden_test.penalty]];
+  if (p2) ours.push(["p2", `Chosen (${best})`, bestHidden.penalty]);
+  ours.forEach((o, i) => { const y = 130 + i * 22; mk("circle", {"data-k": o[0], cx: X(o[2]), cy: y, r: 7, fill: "var(--accent)", tabindex: 0}, svg);
+    txt(svg, X(o[2]) - 12, y + 4, `${o[1]} ${f3(o[2])}`, "end", {fill: "var(--fg)"}); });
+  mk("line", {class: "axis", x1: x0, x2: x1, y1: 170, y2: 170}, svg);
+  bindTips(svg, el => { const kk = el.dataset.k;
+    if (kk === "floor") return `<b>Shale everywhere: ${f3(H.shale_everywhere)}</b>Label every depth as the most common rock.`;
+    if (kk === "p1") return `<b>Our baseline: ${f3(P.p1.hidden_test.penalty)}</b>Untuned XGBoost; ${(P.p1.gate - P.p1.hidden_test.penalty).toFixed(3)} short of the 12th finalist.`;
+    if (kk === "p2") { const rank = 1 + fin.filter(f => f.hidden_test > bestHidden.penalty).length;
+      return `<b>Chosen model ${best}: ${f3(bestHidden.penalty)}</b>Would rank ${rank}${["th","st","nd","rd"][rank] || "th"} of the 13 finalists; ${sgn(p2.gain.hidden_test)} vs the baseline.`; }
+    const f = fin[+kk.slice(1)]; return `<b>#${f.final_rank} ${esc(f.team)}: ${f3(f.hidden_test)}</b>Open wells ${f3(f.open_test)} (leaderboard rank ${f.leaderboard_rank}).`; });
+})();
+
+{ const hs = $("#c-fin").parentElement; requestAnimationFrame(() => { hs.scrollLeft = hs.scrollWidth; }); }  // phones: open on the finalists
+
+// ---------- chart: North Sea well map
+(function () {
+  const svg = $("#c-wells"), ws = P.wells, mx = Math.max(...ws.map(w => w.x_km)), my = Math.max(...ws.map(w => w.y_km));
+  const X = v => 34 + v / mx * 310, Y = v => 270 - v / my * 250;
+  const scores = {...P.p1.open_test.per_well, ...P.p1.hidden_test.per_well}, chosen = p2 ? {...p2.chosen_detail.open_test.per_well, ...p2.chosen_detail.hidden_test.per_well} : {};
+  const fill = {train: "var(--muted)", open_test: "var(--run)", hidden_test: "var(--bad)"};
+  mk("line", {class: "axis", x1: 34, x2: 344, y1: 270, y2: 270}, svg); mk("line", {class: "axis", x1: 34, x2: 34, y1: 20, y2: 270}, svg);
+  txt(svg, 344, 286, `${Math.round(mx)} km east`, "end"); txt(svg, 30, 16, `${Math.round(my)} km north`, "start");
+  ws.slice().sort((a, b) => (a.split === "train") - (b.split === "train")).reverse().forEach(w =>
+    mk("circle", {"data-k": w.well, cx: X(w.x_km), cy: Y(w.y_km), r: w.split === "train" ? 3.2 : 5.5, fill: fill[w.split], "fill-opacity": w.split === "train" ? 0.45 : 0.9, tabindex: w.split === "train" ? -1 : 0}, svg));
+
+  bindTips(svg, el => { const w = ws.find(x => x.well === el.dataset.k);
+    if (w.split === "train") return `<b>${esc(w.well)}</b>Training well.`;
+    return `<b>${esc(w.well)} · ${w.split === "hidden_test" ? "hidden" : "open"} well</b>Baseline ${f3(scores[w.well])}${p2 ? ` · chosen ${f3(chosen[w.well])}` : ""} (0 = perfect).`; });
+})();
+
+// ---------- chart: lithology column for a hidden well
+(function () {
+  const svg = $("#c-col"), pick = $("#well-pick"), names = Object.keys(P.tracks), per = p2 ? p2.chosen_detail.hidden_test.per_well : P.p1.hidden_test.per_well;
+  pick.innerHTML = names.map(n => `<option>${esc(n)}</option>`).join("");
+  const tracks = [["truth", "Interpreter"], [p2 ? "p2" : "p1", p2 ? `Model (${best})` : "Model (P1)"]];
+  function draw() {
+    const t = P.tracks[pick.value], x0 = 92, x1 = 708, X = d => x0 + (d - t.top) / (t.base - t.top) * (x1 - x0);
+    svg.replaceChildren();
+    tracks.forEach((tr, i) => { const y = 14 + i * 64; txt(svg, x0 - 8, y + 30, tr[1], "end", {fill: "var(--fg)"});
+      t[tr[0]].forEach((r, j) => mk("rect", {"data-k": `${tr[0]}:${j}`, x: X(r[0]), y, width: Math.max(0.6, X(r[1]) - X(r[0])), height: 52, fill: col(r[2]), tabindex: j % 25 ? -1 : 0}, svg)); });
+    const yU = 146; txt(svg, x0 - 8, yU + 13, "Unsure", "end", {fill: "var(--fg)"});
+    mk("rect", {x: x0, y: yU, width: x1 - x0, height: 18, fill: "var(--tint)"}, svg);
+    (t.low_conf || []).forEach((r, j) => mk("rect", {"data-k": `low:${j}`, x: X(r[0]), y: yU, width: Math.max(0.6, X(r[1]) - X(r[0])), height: 18, fill: "var(--bad)", "fill-opacity": 0.75, tabindex: j % 25 ? -1 : 0}, svg));
+    for (let i = 0; i <= 5; i++) { const d = t.top + (t.base - t.top) * i / 5; mk("line", {class: "axis", x1: X(d), x2: X(d), y1: 168, y2: 174}, svg); txt(svg, X(d), 188, `${Math.round(d)} m`, "middle"); }
+    txt(svg, x1, 206, "measured depth →", "end");
+    $("#col-score").textContent = `Blind score in this well: ${f3(per[pick.value])} (0 = perfect)` + (t.low_conf ? "" : " · confidence track appears with P2");
+    svg._t = t;
+  }
+  pick.addEventListener("change", draw); pick.value = names.includes("35/9-7") ? "35/9-7" : names[0]; draw();
+  bindTips(svg, el => { const [tr, j] = el.dataset.k.split(":"), t = svg._t;
+    if (tr === "low") { const r = t.low_conf[+j]; return `<b>Unsure: ${Math.round(r[0])}–${Math.round(r[1])} m</b>Top probability below 50%: review first.`; }
+    const r = t[tr][+j]; return `<b>${esc(CLS[r[2]])}</b>${Math.round(r[0])}–${Math.round(r[1])} m (${(r[1] - r[0]).toFixed(1)} m) · ${tr === "truth" ? "interpreter" : "model"}`; });
+})();
+
+// ---------- what-if: review the doubtful depths
+(function () {
+  const c = P.confidence.curve, s = $("#conf");
+  s.max = c.length - 1;
+  function upd() { const r = c[+s.value]; $("#conf-v").textContent = Math.round(r.threshold * 100) + "%";
+    $("#whatif").innerHTML = [[pct(r.flagged_share), `of hidden-well depth flagged (${N.format(r.flagged_m)} m to review)`],
+      [pct(r.errors_caught), "of the model's mistakes fall inside the flagged depth"],
+      [r.kept_accuracy === null ? "—" : pct(r.kept_accuracy, 1), "of the unflagged depth labelled as the interpreter did"]]
+      .map(x => `<div><b>${x[0]}</b><span>${esc(x[1])}</span></div>`).join(""); }
+  s.addEventListener("input", upd); upd();
+})();
+
+// ---------- chart: recall per rock
+(function () {
+  const svg = $("#c-rec"), sup = P.p1.hidden_test.support, r1 = P.p1.hidden_test.recall, r2 = p2 ? p2.chosen_detail.hidden_test.recall : null;
+  const ks = CLS.map((c, i) => i).filter(i => sup[CLS[i]] > 0).sort((a, b) => sup[CLS[b]] - sup[CLS[a]]);
+  $("#rec-legend").innerHTML = r2 ? `<span><i style="background:var(--l2);opacity:0.45"></i>upper, lighter bar: baseline (P1)</span><span><i style="background:var(--l2)"></i>lower, solid bar: chosen model (${best})</span>` : "";
+  const x0 = 130, x1 = 690, X = v => x0 + v * (x1 - x0), rowH = (280 - 10) / ks.length;
+  [0, 0.25, 0.5, 0.75, 1].forEach(v => { mk("line", {class: "grid", x1: X(v), x2: X(v), y1: 6, y2: 278}, svg); txt(svg, X(v), 294, pct(v), "middle"); });
+  ks.forEach((kk, i) => { const y = 8 + i * rowH, name = CLS[kk];
+    txt(svg, x0 - 8, y + rowH / 2 + 4, name, "end", {fill: "var(--fg)"});
+    mk("rect", {"data-k": `p1:${kk}`, x: x0, y: y + 2, width: Math.max(1, X(r1[name]) - x0), height: r2 ? rowH / 2 - 3 : rowH - 6, fill: col(kk), "fill-opacity": r2 ? 0.45 : 0.9, tabindex: 0}, svg);
+    if (r2) mk("rect", {"data-k": `p2:${kk}`, x: x0, y: y + rowH / 2, width: Math.max(1, X(r2[name]) - x0), height: rowH / 2 - 3, fill: col(kk), tabindex: 0}, svg); });
+  bindTips(svg, el => { const [m, kk] = el.dataset.k.split(":"), name = CLS[+kk], rec = (m === "p1" ? r1 : r2)[name];
+    return `<b>${esc(name)} · ${m === "p1" ? "baseline" : "chosen " + best}: ${pct(rec)}</b>${N.format(Math.round(sup[name] * STEP))} m of ${esc(name.toLowerCase())} in the hidden wells${sup[name] < 3000 ? "; too few to judge reliably" : ""}.`; });
+})();
+
+// ---------- costly confusions table
+$("#t-conf").innerHTML = P.confusions.rows.map(r => `<tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${col(CLS.indexOf(r.true))};margin-right:6px"></i>${esc(r.true)}</td><td><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${col(CLS.indexOf(r.predicted))};margin-right:6px"></i>${esc(r.predicted)}</td><td class="num">${N.format(r.metres)}</td><td class="num">${pct(r.cost_share)}</td></tr>`).join("");
+
+// ---------- take
+const passed = p2 && p2.gate_passed;
+$("#take-body").innerHTML = (p2 ? [
+  `<p><b>${passed ? "Use it as a first pass." : "Not yet good enough to replace the baseline."}</b> On 10 unseen wells the ${esc(modelName)} scores ${f3(bestHidden.penalty)}: ${passed ? "a clear step over the baseline" : `${sgn(p2.gain.hidden_test)} vs the baseline, short of the +0.020 bar`}.</p>`,
+  `<p>Review effort can be targeted: flagging the least-confident quarter of depth catches most mistakes.</p>`,
+  `<p><b>What would change our mind:</b> Kansas wells failing the formation-top test (P3) would limit the model to the North Sea.</p>`]
+ : [`<p><b>Baseline only so far.</b> The untuned baseline lands 0.014 below the finalists; P2 tests whether engineered features close the gap.</p>`])
+ .join("");
+
+// ---------- penalty matrix
+(function () {
+  const svg = $("#c-mat"), A = P.penalty_matrix, x0 = 110, y0 = 10, c = 33;
+  A.forEach((row, i) => { txt(svg, x0 - 6, y0 + i * c + c / 2 + 4, CLS[i], "end", {fill: "var(--fg)"});
+    row.forEach((v, j) => mk("rect", {"data-k": `${i}:${j}`, x: x0 + j * c, y: y0 + i * c, width: c - 2, height: c - 2, rx: 3, fill: v === 0 ? "var(--ok)" : "var(--bad)", "fill-opacity": v === 0 ? 0.55 : 0.12 + 0.2 * v, tabindex: (i + j) % 4 ? -1 : 0}, svg)); });
+  CLS.forEach((n, j) => txt(svg, x0 + j * c + c / 2, y0 + 12 * c + 14, n.slice(0, 4), "middle"));
+  txt(svg, x0 + 6 * c, y0 + 12 * c + 34, "model's rock →", "middle");
+  bindTips(svg, el => { const [i, j] = el.dataset.k.split(":").map(Number), v = A[i][j];
+    return v === 0 ? `<b>${esc(CLS[i])}: correct</b>Cost 0.` : `<b>${esc(CLS[i])} called ${esc(CLS[j].toLowerCase())}: ${v}</b>${v <= 1.5 ? "A near mistake" : v >= 3.5 ? "A far mistake" : "A medium mistake"}.`; });
+})();
+
+// ---------- Kansas grid
+(function () {
+  const svg = $("#c-ks"), g = P.kgs_grid, lon0 = -102.25, lon1 = -94.5, lat0 = 36.75, lat1 = 40.25, sx = 400 / (lon1 - lon0), sy = 190 / (lat1 - lat0);
+  g.cells.forEach((cl, i) => mk("rect", {"data-k": i, x: 10 + (cl[1] - lon0) * sx, y: 10 + (lat1 - cl[0] - g.cell_deg) * sy, width: g.cell_deg * sx - 1, height: g.cell_deg * sy - 1, fill: "var(--accent)", "fill-opacity": 0.12 + 0.85 * cl[3], tabindex: i % 6 ? -1 : 0}, svg));
+  bindTips(svg, el => { const cl = g.cells[+el.dataset.k];
+    return `<b>${N.format(cl[2])} wells</b>${pct(cl[3])} with gamma ray, density and neutron; ${pct(cl[4])} with all five core logs. Cell at ${cl[0].toFixed(2)}° N, ${Math.abs(cl[1]).toFixed(2)}° W.`; });
+  const lv = g.levels;
+  $("#ks-facts").innerHTML = `<span class="eyebrow">Inventory (P0)</span><ul>
+    <li>${N.format(k.files)} files; ${pct(k.readable_share, 2)} have a readable header (gate ≥ 99%).</li>
+    <li>LAS 2.0: ${N.format(k.las_version["2.0"])} · LAS 1.2: ${N.format(k.las_version["1.2"])} · LAS 3.0: ${N.format(k.las_version["3.0"])}.</li>
+    <li>${pct(k.curve_entries_recognised_share)} of ${N.format(k.curve_entries)} curve entries mapped to standard names.</li>
+    <li>${pct(k.files_with.GR)} of files have gamma ray; ${pct(k.files_with["GR+RHOB+NPHI"])} add density and neutron; ${pct(k.files_with["core (GR, RHOB, NPHI, DTC, RDEP)"])} have all five core logs.</li>
+    <li>${N.format(g.wells_mapped)} wells mapped; ${N.format(lv["3"] || 0)} have all five core logs: the likely P3 test set.</li></ul>`;
+})();
+
+// ---------- appendix
+$("#dev-list").innerHTML = ["Kansas: 1,633 header longitudes lacked their minus sign; restored to west (P0).",
+  "P1 miss checked for pipeline faults as ADR-002 requires: none found; the failure stands.",
+  "Candidate A builds bad-hole size but not the promised flag; logged before P2 results.",
+  "A CV fold without basement samples crashed the run; probabilities now kept for all 12 rocks."].map(s => `<li>${esc(s)}</li>`).join("");
+$("#t-gates").innerHTML = [["P0 data", "exact splits; ≥ 99% Kansas headers", "passed (99.86%)"], ["P1 baseline", "≥ −0.526 on hidden wells", `failed (${f3(P.p1.hidden_test.penalty)})`],
+  ["P2 model choice", "+0.020 on hidden and better on open", p2 ? `${p2.gate_passed ? "passed" : "failed"} (${sgn(p2.gain.hidden_test)} hidden, ${sgn(p2.gain.open_test)} open)` : "running"],
+  ["P3 Kansas transfer", "agreement with named units (ADR first)", "planned"]].map(r => `<tr><td>${r[0]}</td><td>${esc(r[1])}</td><td class="mono">${esc(r[2])}</td></tr>`).join("");
+$("#t-cand").innerHTML = p2 ? Object.keys(p2.cv_mean).map(c => `<tr><td>${c}${c === best ? " (chosen)" : ""}</td><td class="num">${f3(p2.cv_mean[c])}</td><td class="num">${f3(p2.candidates[c].open_test.penalty)}</td><td class="num">${f3(p2.candidates[c].hidden_test.penalty)}</td></tr>`).join("")
+  : `<tr><td colspan="4" class="muted">P2 running.</td></tr>`;
+$("#t-wells").innerHTML = Object.keys(P.p1.hidden_test.per_well).map(w => `<tr><td>${esc(w)}</td><td class="num">${f3(P.p1.hidden_test.per_well[w])}</td><td class="num">${p2 ? f3(p2.chosen_detail.hidden_test.per_well[w]) : "—"}</td></tr>`).join("");
+</script>

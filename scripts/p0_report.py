@@ -18,6 +18,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from src.curves import CORE, LITHOLOGY  # noqa: E402
+from src.las_header import fix_west_longitude  # noqa: E402
 
 CFG = yaml.safe_load((ROOT / "configs" / "default_config.yaml").read_text())
 DATA = Path(os.environ.get("WLL_DATA_DIR", "~/data/well-log-lithology")).expanduser()
@@ -27,6 +28,8 @@ OUT = ROOT / CFG["paths"]["outputs_dir"]
 def main() -> None:
     force = json.loads((OUT / "p0_force.json").read_text())
     f = pd.read_parquet(DATA / "derived/kgs_files.parquet"); c = pd.read_parquet(DATA / "derived/kgs_curves.parquet")
+    lon_fixed = int(f.lon.between(94.0, 103.0).sum())  # header longitudes missing their minus sign (Kansas is 94.6–102.05° W)
+    f["lon"] = fix_west_longitude(f.lon)
     c2 = c[c.standard != "DEPTH"]
     per = c2.dropna(subset=["standard"]).groupby("file").standard.apply(set)
     has = lambda need: per.apply(lambda s: set(need) <= s).reindex(f.file).fillna(False).to_numpy()
@@ -39,7 +42,7 @@ def main() -> None:
         "wrapped_files": int((f.wrap == "YES").sum()),
         "null_codes": {str(k): int(v) for k, v in f.null.value_counts().head(6).items()},
         "depth_units": f.depth_unit.replace({"F": "FT", "FEET": "FT"}).value_counts().to_dict(),
-        "located_share": float(f.lat.notna().mean()), "location_source": f.lat_source.value_counts().to_dict(),
+        "located_share": float(f.lat.notna().mean()), "longitude_sign_fixed": lon_fixed, "location_source": f.lat_source.value_counts().to_dict(),
         "curve_entries": int(len(c2)),
         "curve_entries_recognised_share": float(c2.standard.notna().mean()),
         "curve_entries_lithology_share": float(c2.standard.isin(LITHOLOGY).mean()),

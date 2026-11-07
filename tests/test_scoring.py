@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from src.scoring import A, CODES, NAMES, penalty_score, to_class
+from src.scoring import CODES, NAMES, A, penalty_score, to_class
 
 
 def official_loop(y_true, y_pred):

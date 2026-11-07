@@ -1,0 +1,514 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lithology Build Walkthrough</title>
+<!-- share preview (portfolio rule R18) -->
+<meta name="description" content="How the lithology model is being built, phase by phase: the pass bar set beforehand, the result, obstacles and fixes.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sabrinapribadi.github.io/well-log-lithology/build.html">
+<meta property="og:title" content="Lithology Build Walkthrough">
+<meta property="og:description" content="How the lithology model is being built, phase by phase: the pass bar set beforehand, the result, obstacles and fixes.">
+<meta property="og:image" content="https://sabrinapribadi.github.io/well-log-lithology/assets/preview-build.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta property="og:image:alt" content="Top of the Lithology Build Walkthrough page">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /share preview -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+/* Technical walkthrough (portfolio rule R14). Same tokens as index.html: core-store paper, ochre ink, lithology colours. */
+:root {
+  --bg: #f4f2ed; --surface: #fffdf9; --fg: #1f1d1a; --muted: #625d55; --line: #e0dbd1; --tint: #ece8df;
+  --accent: #8a5a10; --accent-soft: #f3e6cf;
+  --ok: #2c7a4b; --ok-soft: #dcefe3; --bad: #b23a2a; --bad-soft: #f6e0dc; --run: #35648f; --run-soft: #dfe9f3;
+  --lane-a: #f1eee7; --lane-b: #f8f6f1;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-head: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15130f; --surface: #1d1a15; --fg: #ece6db; --muted: #a49c8f; --line: #353026; --tint: #24201a;
+  --accent: #e3b062; --accent-soft: #3a2c16;
+  --ok: #5fc48a; --ok-soft: #173326; --bad: #f08068; --bad-soft: #42221c; --run: #7fb0e0; --run-soft: #1b2a3a;
+  --lane-a: #1a1712; --lane-b: #17140f;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #15130f; --surface: #1d1a15; --fg: #ece6db; --muted: #a49c8f; --line: #353026; --tint: #24201a;
+  --accent: #e3b062; --accent-soft: #3a2c16;
+  --ok: #5fc48a; --ok-soft: #173326; --bad: #f08068; --bad-soft: #42221c; --run: #7fb0e0; --run-soft: #1b2a3a;
+  --lane-a: #1a1712; --lane-b: #17140f;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 var(--font-body); }
+.wrap { max-width: 1160px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font: 700 clamp(28px, 4vw, 42px)/1.15 var(--font-head); letter-spacing: -0.01em; }
+h2 { font: 700 24px/1.2 var(--font-head); }
+h3 { font-size: 15px; font-weight: 600; }
+p { margin: 0; }
+.eyebrow { font: 600 12px/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+header.top { display: grid; gap: 14px; padding-block: 8px 24px; border-bottom: 1px solid var(--line); }
+header.top .lede { font-size: 17px; max-width: 66ch; }
+.links { display: flex; flex-wrap: wrap; gap: 8px 18px; font: 500 13px var(--font-mono); }
+.links a { text-decoration: none; }
+.links a:hover { text-decoration: underline; }
+
+section.block { display: grid; gap: 18px; padding-block: 34px 6px; }
+.howto { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.howto div { border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; display: grid; gap: 2px; }
+.howto b { font-size: 14px; }
+.howto span { font-size: 13px; color: var(--muted); }
+
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { font: 600 11.5px var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: var(--tint); }
+tr:last-child td { border-bottom: 0; }
+
+.map { min-width: 980px; }
+.map th.ph { cursor: pointer; white-space: nowrap; }
+.map th.ph:hover, .map th.ph.on { color: var(--accent); }
+.map th.ph.on { background: var(--accent-soft); }
+.map td.lane { font: 600 12px var(--font-mono); color: var(--muted); white-space: nowrap; background: var(--tint); }
+.map td.cell { font-size: 12.5px; line-height: 1.4; cursor: pointer; }
+.map td.cell.on { background: var(--accent-soft); }
+.map td.cell span { display: block; }
+.map td.cell span + span { margin-top: 4px; }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 600 11px/1 var(--font-mono); letter-spacing: 0.03em; padding: 5px 8px; border-radius: 999px; white-space: nowrap; }
+.chip.pass { background: var(--ok-soft); color: var(--ok); }
+.chip.fail { background: var(--bad-soft); color: var(--bad); }
+.chip.run { background: var(--run-soft); color: var(--run); }
+.chip.plan { background: var(--tint); color: var(--muted); }
+
+.picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.picker button { font: 600 13px var(--font-mono); border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 8px; padding: 8px 12px; cursor: pointer; display: grid; gap: 4px; justify-items: start; }
+.picker button small { font: 500 11px var(--font-body); color: var(--muted); }
+.picker button[aria-selected="true"] { border-color: var(--accent); background: var(--accent-soft); }
+@media (max-width: 600px) {
+  .picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .picker button { padding: 7px 9px; min-width: 0; }
+  .picker button small { display: none; }
+  .picker .chip { white-space: normal; line-height: 1.25; }
+}
+
+.phase-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
+.phase-head .dates { font: 500 12px var(--font-mono); color: var(--muted); }
+.scqa { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.scqa div { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 6px; align-content: start; }
+.scqa b { font: 600 11px var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.scqa p { font-size: 13.5px; line-height: 1.5; }
+@media (max-width: 860px) { .scqa { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .scqa { grid-template-columns: minmax(0, 1fr); } }
+
+.lanewrap { display: grid; gap: 12px; }
+.walk { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.walk button { font: 600 13px var(--font-body); border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+.walk button.primary { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+.walk button:disabled { opacity: 0.45; cursor: default; }
+.walk .pos { font: 600 12px var(--font-mono); color: var(--muted); }
+svg.swim { display: block; }
+svg.swim .lane-bg { fill: var(--lane-a); }
+svg.swim .lane-bg.alt { fill: var(--lane-b); }
+svg.swim .lane-label { fill: var(--muted); font: 600 11px var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+svg.swim .lane-line { stroke: var(--line); }
+svg.swim .edge { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+svg.swim .arrowhead { fill: var(--muted); }
+svg.swim g.step { cursor: pointer; outline: none; }
+svg.swim g.step rect { fill: var(--surface); stroke: var(--line); stroke-width: 1.2; }
+svg.swim g.step text { fill: var(--fg); font: 500 11.5px var(--font-body); }
+svg.swim g.step .num { fill: var(--accent); font: 700 11px var(--font-mono); }
+svg.swim g.step.kind-fail rect { stroke: var(--bad); }
+svg.swim g.step.kind-fix rect { stroke: var(--ok); }
+svg.swim g.step.kind-plan rect { stroke-dasharray: 4 3; }
+svg.swim g.step:hover rect, svg.swim g.step:focus rect { stroke: var(--accent); stroke-width: 2; }
+svg.swim g.step.current rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.4; }
+svg.swim g.step.done rect { fill: var(--tint); }
+.lane-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); }
+.lane-legend i { display: inline-block; width: 18px; height: 11px; border-radius: 3px; border: 1.5px solid var(--line); vertical-align: -1px; margin-right: 6px; background: var(--surface); }
+.lane-legend i.fail { border-color: var(--bad); }
+.lane-legend i.fix { border-color: var(--ok); }
+.lane-legend i.plan { border-style: dashed; }
+
+.detail { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
+.detail .kv { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 4px 12px; font-size: 13.5px; }
+.detail .kv b { font: 600 11px var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+.detail code, td code { font: 12px var(--font-mono); background: var(--tint); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+
+#phase { display: grid; gap: 30px; padding-top: 10px; }
+#phase > .part + .part { border-top: 1px solid var(--line); padding-top: 26px; }
+.ph-top { display: grid; gap: 14px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 36px; align-items: start; }
+@media (max-width: 860px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.box { display: grid; gap: 12px; min-width: 0; align-content: start; }
+.box > .eyebrow ~ .eyebrow { margin-top: 16px; }
+ul.points { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+.star { margin: 0; border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; font: italic 600 16px/1.5 var(--font-head); }
+.obst td:first-child { width: 22%; }
+@media (max-width: 600px) {
+  .obst thead { display: none; }
+  .obst, .obst tbody, .obst tr, .obst td { display: block; width: 100%; }
+  .obst tr { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .obst tr:last-child { border-bottom: 0; }
+  .obst td, .obst td:first-child { width: auto; border: 0; padding: 3px 0; display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 8px; }
+  .obst td::before { content: attr(data-label); font: 600 10.5px var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .obst td:first-child { font-weight: 600; }
+}
+.verdict-ok { color: var(--ok); font-weight: 600; }
+.verdict-no { color: var(--bad); font-weight: 600; }
+.verdict-wait { color: var(--run); font-weight: 600; }
+.tip { position: fixed; z-index: 10; max-width: 300px; background: var(--fg); color: var(--bg); font-size: 12.5px; line-height: 1.45; padding: 8px 10px; border-radius: 8px; pointer-events: none; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
+.tip b { display: block; margin-bottom: 2px; }
+footer { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <span class="eyebrow">Technical walkthrough · OG-2 · well-log lithology</span>
+  <h1>How the lithology model is being built, phase by phase</h1>
+  <p class="lede">Eight phases, each with a pass bar committed before the work. For each: the question, the steps, what broke, what it taught.</p>
+  <div class="links">
+    <a href="./">← Hiring-team view (results)</a>
+    <a href="https://github.com/sabrinapribadi/well-log-lithology">Code and ADRs</a>
+    <a href="https://github.com/sabrinapribadi/well-log-lithology/blob/main/CHANGELOG.md">Change log (STAR)</a>
+  </div>
+</header>
+
+<section class="block" aria-labelledby="h-read">
+  <span class="eyebrow" id="h-read">How to read each phase</span>
+  <div class="howto">
+    <div><b>SCQA</b><span>Situation · Complication · Question · Answer (the gate result)</span></div>
+    <div><b>Swimlane</b><span>Build steps by layer; step through with Next</span></div>
+    <div><b>Decisions</b><span>What was chosen, with the ADR that records why</span></div>
+    <div><b>Obstacles</b><span>Symptom → root cause → fix → prevention</span></div>
+    <div><b>Result vs gate</b><span>Pass or fail against the bar set in advance</span></div>
+    <div><b>Lessons + STAR</b><span>What carries over, and the one-line interview story</span></div>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="h-map">
+  <div class="phase-head"><h2 id="h-map">System map</h2><span class="muted">What each phase adds to each layer. Click a phase to open it.</span></div>
+  <div class="scroll"><table class="map" id="map"></table></div>
+</section>
+
+<section class="block" aria-labelledby="h-phase">
+  <span class="eyebrow" id="h-phase">Phase</span>
+  <div class="picker" id="picker" role="tablist" aria-label="Phases"></div>
+  <article id="phase"></article>
+</section>
+
+<footer>
+  <span>Every number comes from <code>data/outputs/*.json</code>, the ADRs and <code>CHANGELOG.md</code>. Data: FORCE 2020 (CC BY 4.0) and the Kansas Geological Survey LAS archive.</span>
+  <span>Sabrina Pribadi · last updated <span id="updated"></span> · <a href="./">results page</a> · <a href="https://github.com/sabrinapribadi/well-log-lithology">github.com/sabrinapribadi/well-log-lithology</a></span>
+</footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+<script src="data/page_data.js"></script>
+<script>
+const REPO = "https://github.com/sabrinapribadi/well-log-lithology/blob/main/";
+const ADR = {"001": "docs/adr/ADR-001-framing-and-evaluation-unit.md", "002": "docs/adr/ADR-002-validation-and-gates.md",
+  "003": "docs/adr/ADR-003-industry-alignment.md", "004": "docs/adr/ADR-004-baseline-and-model-choice.md"};
+const LANES = ["Data (FORCE · LAS)", "Parsing & QC", "Features", "Model", "Evaluation", "Serving & AI", "Platform", "Decision"];
+const P = window.PAGE, f3 = v => (v >= 0 ? "" : "−") + Math.abs(v).toFixed(3), pct = v => (100 * v).toFixed(1) + "%";
+const p2 = P.p2;
+
+// Steps: [lane, short title, what, why, where (file), kind] — kind: "" | "fail" | "fix" | "plan"
+const PHASES = [
+{
+  id: "p0", tag: "P0", name: "Data foundation", dates: "15 Oct 2026 · audited 7 Nov", verdict: ["pass", "passed"],
+  scqa: ["Petrophysicists label rock type well by well; public archives hold tens of thousands of wells nobody has read.",
+         "FORCE ships official splits and a penalty matrix; Kansas ships 28,906 LAS files in yearly and nested zips, with mixed versions and curve names.",
+         "Can both be read exactly: every split to the sample, and at least 99% of Kansas headers?",
+         "Yes. Splits exact (98 / 10 / 10 wells); 99.86% of Kansas headers read; 84% of curve entries recognised."],
+  steps: [
+    ["Decision", "Gates on GitHub first", "PRD, ADR-001 (blind wells, penalty score) and ADR-002 (every phase's gate) pushed before any data was read.", "A gate written after the result proves nothing.", "docs/adr/ADR-002-validation-and-gates.md"],
+    ["Decision", "Industry alignment", "ADR-003: ten expectations petrophysicists hold (classes, blind wells, LAS standard, QC, tops), each with a source.", "The project should look like petrophysics, not a generic classifier.", "docs/adr/ADR-003-industry-alignment.md"],
+    ["Data (FORCE · LAS)", "Official splits", "Train 1,170,511, open 136,786, hidden 122,397 samples; counts checked against the organisers' numbers.", "Scores are only comparable with the finalists on the exact same wells.", "scripts/force_ingest.py"],
+    ["Evaluation", "Scorer = official", "A vectorised penalty scorer, tested equal to the organisers' loop on random labels.", "Speed without changing the metric.", "src/scoring.py · tests/test_scoring.py"],
+    ["Data (FORCE · LAS)", "28,906 LAS files", "18 yearly zips; 20,443 files sit inside inner zips. Read in parallel, nothing unzipped to disk.", "8.9 GB zipped would not fit unpacked on the laptop.", "scripts/kgs_inventory.py"],
+    ["Parsing & QC", "Header parser", "LAS 1.2, 2.0 and 3.0 sections read up to the data block: version, null code, depth unit, curves, location.", "The header says what each file holds without reading its data.", "src/las_header.py"],
+    ["Parsing & QC", "Curve names: 43%", "The first curve dictionary recognised only 43% of curve entries.", "Kansas files use vendor names (G/R, DEN(CDL), POR(NEU), RES(DI)).", "src/curves.py", "fail"],
+    ["Parsing & QC", "Dictionary widened: 84%", "Listed the most common unrecognised names and added rules, each with a test.", "Coverage measured on the real archive, not assumed.", "src/curves.py · tests/test_las.py", "fix"],
+    ["Parsing & QC", "Longitude sign restored", "Audit: 1,633 headers wrote 99.0 for 99.0° W, putting 1,588 wells in Asia. Flipped to west, tested.", "A map of every location exposes what a table hides.", "src/las_header.py · ADR-002 deviations", "fix"],
+    ["Evaluation", "P0 gate report", "One JSON with split checks, readable share, versions, null codes and curve availability.", "Every number on the pages traces to this file.", "scripts/p0_report.py"]
+  ],
+  decisions: [["Blind wells, official splits, penalty score", "001"], ["Gates for every phase, fixed in advance", "002"], ["Work the way petrophysicists do", "003"]],
+  results: [["FORCE splits reproduced", "exact", "98 / 10 / 10 wells; every sample count matches", "ok"], ["Scorer vs official loop", "equal", "equal (tested)", "ok"],
+            ["Kansas headers readable", "≥ 99%", "99.86% (28,865 of 28,906)", "ok"], ["Curve entries recognised", "report", "84.1% of 373,791", "info"],
+            ["Files with GR, density and neutron", "report", "58.3% (all five core logs: 18.2%)", "info"]],
+  obstacles: [
+    ["43% of curve names recognised", "Kansas files use vendor mnemonics a FORCE-style list misses", "Ranked unrecognised names; widened the dictionary with tests: 84%", "Measure coverage on the real archive before trusting a dictionary"],
+    ["Well names blank in old files", "LAS 1.2 keeps the value in the description field", "Fall back to the description for LAS 1.2", "A fixture per LAS version in the tests"],
+    ["1,588 Kansas wells plotted in Asia", "Headers dropped the minus sign of west longitude", "Values 94–103 flipped to west; count stored", "Map every coordinate set before using it"]
+  ],
+  lessons: ["Read the standard, then measure the archive: they differ.", "A coverage number (84%) beats an assumption.", "Maps catch data errors that tables hide."],
+  star: "Before modelling, I proved the data matched the published competition to the last sample, and read 99.86% of 28,906 messy Kansas files."
+},
+{
+  id: "p1", tag: "P1", name: "Blind-well baseline", dates: "15 Oct – 7 Nov 2026", verdict: ["fail", "failed by 0.014"],
+  scqa: ["Twelve of the 2020 finalists scored −0.469 to −0.526 on 10 hidden wells.",
+         "A random split of depth samples flatters any model; only unseen wells show real skill.",
+         "Does an untuned XGBoost on the logs as provided reach the finalists' range (≥ −0.526)?",
+         `No: ${f3(P.p1.hidden_test.penalty)} on the hidden wells. A random split would have claimed ${f3(P.p1.random_split.penalty_score)}.`],
+  steps: [
+    ["Decision", "Baseline fixed first", "ADR-004 fixed the model, settings and features before P1 ran.", "No tuning on test wells, by construction.", "docs/adr/ADR-004-baseline-and-model-choice.md"],
+    ["Features", "Logs as provided", "20 logs, position, and stratigraphy (group, formation) coded from training wells only.", "Unseen names become missing, as in real new wells.", "src/features.py"],
+    ["Model", "XGBoost, 300 rounds", "Depth 8, learning rate 0.1, subsampling 0.8, seed 42, no class weights. Fit in 224 s.", "The 2020 winner's model family.", "scripts/p1_baseline.py"],
+    ["Evaluation", "Scored once", `Open wells ${f3(P.p1.open_test.penalty)}; hidden wells ${f3(P.p1.hidden_test.penalty)}.`, "Each pre-registered model meets the hidden wells once.", "data/outputs/p1_baseline.json"],
+    ["Evaluation", "Missed the gate", `${f3(P.p1.hidden_test.penalty)} vs −0.526: 0.014 short of the 12th finalist.`, "A miss is reported, not tuned away.", "ADR-002 gate results", "fail"],
+    ["Evaluation", "Pipeline checks", "Stratigraphy names (0.04% unseen), class mapping, null codes: no fault found.", "ADR-002 says a P1 miss points to the pipeline first.", "ADR-002 deviations"],
+    ["Evaluation", "Random-split check", `Same model, random 80/20 split of samples: ${f3(P.p1.random_split.penalty_score)}, about 3× better.`, "Shows the leak a random split hides.", "data/outputs/p1_baseline.json"]
+  ],
+  decisions: [["Baseline fixed before it ran", "004"], ["Blind wells only; random split shown once", "001"]],
+  results: [["Hidden-well penalty score", "≥ −0.526", f3(P.p1.hidden_test.penalty), "no"], ["Open-well penalty score", "report", `${f3(P.p1.open_test.penalty)} (finalists −0.478 to −0.526)`, "info"],
+            ["Hidden depth labelled correctly", "report", pct(P.p1.hidden_test.accuracy), "info"], ["Random 80/20 split", "report", f3(P.p1.random_split.penalty_score), "info"]],
+  obstacles: [
+    ["Missed competition level by 0.014", "Finalists engineered features; the baseline used logs as provided", "Checked the pipeline (none found); kept the failure; P2 tests engineered features", "Write the diagnosis steps into the gate itself"]
+  ],
+  lessons: ["Report the miss, then show what a random split would have hidden.", "A gate with a 'fail means' column says where to look first."],
+  star: "My baseline missed competition level by 0.014; I reported it, and showed that a random split would have flattered it threefold."
+},
+{
+  id: "p2", tag: "P2", name: "Model choice", dates: "7 Nov 2026", verdict: p2 ? (p2.gate_passed ? ["pass", "passed"] : ["fail", "failed"]) : ["run", "running"],
+  scqa: ["P1 sits 0.014 below the finalists; ADR-004 named three candidates before any ran.",
+         "Choosing by hidden-well score would leak the test; CV folds can still differ from new wells.",
+         "Does the candidate chosen by well-grouped CV beat P1 by ≥ 0.02 on hidden wells and also on open wells?",
+         p2 ? `${p2.gate_passed ? "Yes" : "No"}: candidate ${p2.chosen} ${f3(p2.candidates[p2.chosen].hidden_test.penalty)} on hidden wells (${p2.gain.hidden_test >= 0 ? "+" : "−"}${Math.abs(p2.gain.hidden_test).toFixed(3)} vs P1), 4th among the 13 finalists.` : "Running."],
+  steps: [
+    ["Decision", "Candidates fixed first", "A: engineered features. B: A + penalty-aware decision. C: LightGBM + A's features + B's decision.", "Named before any ran, so the winner cannot be picked after the fact.", "docs/adr/ADR-004-baseline-and-model-choice.md"],
+    ["Features", "Engineered features", "Log resistivities, bad-hole size (caliper − bit), per-well gamma-ray percentile, ±5-sample context within each well.", "How interpreters read logs: normalised, quality-checked, in context.", "src/features.py"],
+    ["Decision", "Bad-hole flag missing", "Audit: ADR-004 promised a flag and a size; the code builds the size only. Logged before results.", "For trees a flag adds nothing a split on size cannot learn.", "ADR-002 deviations", "fail"],
+    ["Evaluation", "Well-grouped CV", "5 folds of training wells (GroupKFold); no well in both training and validation.", "Selection must never see the test wells.", "scripts/p2_model_choice.py"],
+    ["Platform", "Run lost: laptop slept", "The first P2 run died when the Mac slept on battery.", "Long runs on a laptop need to stay awake.", "scripts/p2_model_choice.py", "fail"],
+    ["Platform", "Kept awake", "Re-run under caffeinate; same fold scores to 4 decimals: the pipeline is deterministic.", "Determinism makes reruns trustworthy.", "CHANGELOG", "fix"],
+    ["Model", "Fold without basement", "Fold 3 had no basement samples, so the model returned 11 probabilities, not 12; the run crashed.", "Basement has 103 samples in a few wells.", "src/features.py", "fail"],
+    ["Model", "All 12 classes kept", "Probabilities placed into all 12 columns by class label; unseen classes get 0. Tested.", "The penalty matrix needs every class in its place.", "src/features.py · tests/test_features.py", "fix"],
+    ["Model", "LightGBM diverged", "Candidate C scored −1.03 on hidden wells; raw scores reached 1.4 million on its own training wells.", "Its default leaf limit (0.001) lets rare-rock leaves explode; XGBoost's is 1.", "scripts/p2_lgb_diagnostic.py", "fail"],
+    ["Evaluation", "Chosen scored once", p2 ? `CV means: A ${f3(p2.cv_mean.A)}, B ${f3(p2.cv_mean.B)}, C ${f3(p2.cv_mean.C)}. Chosen: ${p2.chosen}.` : "Pending.", "Highest CV mean wins; all three are then reported on test wells.", "data/outputs/p2_model_choice.json"]
+  ],
+  decisions: [["Candidates and selection rule fixed before P2", "004"], ["Gate: +0.02 on hidden wells and better on open wells", "002"]],
+  results: p2 ? [["Chosen vs P1, hidden wells", "≥ +0.020", `${p2.gain.hidden_test >= 0 ? "+" : "−"}${Math.abs(p2.gain.hidden_test).toFixed(3)}`, p2.gain.hidden_test >= 0.02 ? "ok" : "no"],
+                 ["Chosen vs P1, open wells", "> 0", `${p2.gain.open_test >= 0 ? "+" : "−"}${Math.abs(p2.gain.open_test).toFixed(3)}`, p2.gain.open_test > 0 ? "ok" : "no"],
+                 ["Chosen, hidden-well score", "report", f3(p2.candidates[p2.chosen].hidden_test.penalty), "info"]]
+               : [["Chosen vs P1, hidden wells", "≥ +0.020", "running", "wait"], ["Chosen vs P1, open wells", "> 0", "running", "wait"]],
+  obstacles: [
+    ["First P2 run lost", "The Mac slept on battery mid-run", "Run under caffeinate; plugged in", "Every long run starts kept awake"],
+    ["Crash in CV fold 3", "A fold without basement samples gave 11 probability columns", "Map probabilities to all 12 classes by label; test", "Test every model wrapper with a missing class"],
+    ["LightGBM scored near 'shale everywhere'", "Default leaf limit 1,000× looser than XGBoost's; leaves of a few rare-rock samples blew up", "Diagnosed on training wells only; with a matched limit raw scores stay ≤ 34. Result kept as scored", "Match safeguards across libraries before comparing them"],
+    ["Bad-hole flag not built", "Spec said flag and size; code built size only", "Logged as a deviation before results", "Check each spec line against the code before a run"]
+  ],
+  lessons: ["Rare classes break code paths, not just scores.", "Audit the spec against the code while the run is still going.", "Features carried the gain (+0.031); the decision rule added +0.005."],
+  star: p2 ? `I chose between three pre-named models using only training wells, then scored the winner once on hidden wells: ${f3(p2.candidates[p2.chosen].hidden_test.penalty)}.` : ""
+},
+{
+  id: "p3", tag: "P3", name: "Kansas transfer", dates: "planned", verdict: ["plan", "planned"],
+  scqa: ["Kansas has 28,906 LAS files but no lithology labels.", "North Sea rocks and logging tools differ from Kansas.",
+         "Do predictions agree with the known lithology of named Kansas units?", "Planned: an ADR with the test is written before any Kansas prediction."],
+  steps: [
+    ["Decision", "Transfer test first", "ADR before predicting: e.g. Hutchinson Salt → halite, Arbuckle Group → dolomite.", "Geology is the only label Kansas has.", "planned", "plan"],
+    ["Parsing & QC", "Curves standardised", "Units and names mapped to the FORCE curves for wells with the core logs.", "The model can only read what it was trained on.", "planned", "plan"],
+    ["Model", "Score Kansas wells", "Lithology and probability curves per well, written as LAS.", "The deliverable a petrophysicist opens.", "planned", "plan"],
+    ["Evaluation", "Check against tops", "Agreement within formation-top intervals from the KGS tops database.", "Supported by geology, or the claim is withdrawn.", "planned", "plan"]
+  ],
+  decisions: [], results: [["Agreement with named units", "set in the P3 ADR", "not run", "wait"]], obstacles: [], lessons: [], star: ""
+},
+{
+  id: "p4", tag: "P4", name: "Log quality and drift", dates: "planned", verdict: ["plan", "planned"],
+  scqa: ["Kansas logs span 1999–2026 and many tools.", "Quality and curve sets change by year and company.", "Can quality be measured per well and tracked over time?", "Planned."],
+  steps: [
+    ["Parsing & QC", "Per-well quality", "Curve availability, value ranges, bad-hole share per well.", "Flags wells the model should not trust.", "planned", "plan"],
+    ["Evaluation", "Drift by year", "Distribution shift of each input by archive year.", "New wells arrive every year.", "planned", "plan"],
+    ["Serving & AI", "Quality report", "One row per well, shown on the map.", "A data manager's view.", "planned", "plan"]
+  ],
+  decisions: [], results: [["Measures for every Kansas well", "all wells", "not run", "wait"]], obstacles: [], lessons: [], star: ""
+},
+{
+  id: "p5", tag: "P5", name: "API, MCP, copilot", dates: "planned", verdict: ["plan", "planned"],
+  scqa: ["Geologists and AI assistants need answers per well.", "LLM explanations can invent numbers.", "Can tools serve lithology with grounded explanations, within cost and latency budgets?", "Planned."],
+  steps: [
+    ["Serving & AI", "predict_lithology(well)", "API returning lithology and probability curves.", "Typed tools, not free text.", "planned", "plan"],
+    ["Serving & AI", "MCP tools", "The same tools for AI assistants.", "One contract for apps and agents.", "planned", "plan"],
+    ["Evaluation", "Grounded notes", "Every number in an explanation traced to a tool result; cost and p95 latency measured (R13).", "Budgets set before building.", "planned", "plan"]
+  ],
+  decisions: [], results: [["Contracts, grounding, budgets", "all pass", "not run", "wait"]], obstacles: [], lessons: [], star: ""
+},
+{
+  id: "p6", tag: "P6", name: "Databricks job", dates: "planned", verdict: ["plan", "planned"],
+  scqa: ["Scoring every Kansas curve means about 10⁸ depth rows.", "That exceeds the 8 GB laptop and needs a schedule.", "Can Databricks reproduce the local score exactly and run on a schedule?", "Planned."],
+  steps: [
+    ["Platform", "Spark LAS standardisation", "Every Kansas curve read and standardised on Spark.", "Volume justifies Spark here (R15).", "planned", "plan"],
+    ["Platform", "Model registry", "The chosen model registered with its version.", "Reproducible scoring.", "planned", "plan"],
+    ["Evaluation", "Exact parity", "Hidden-well score on Databricks equals the local score.", "Same code, same answer.", "planned", "plan"],
+    ["Platform", "Scheduled drift", "New yearly archive scored with drift checks.", "The industry's cadence.", "planned", "plan"]
+  ],
+  decisions: [], results: [["Score parity with local run", "exact", "not run", "wait"]], obstacles: [], lessons: [], star: ""
+},
+{
+  id: "p7", tag: "P7", name: "Pages", dates: "from 7 Nov 2026", verdict: ["run", "live for P0–P2"],
+  scqa: ["Hiring teams read a page in about two minutes.", "Technical reviewers need every step and failure.", "Can both read the same results, every number explained?", "Results page and this walkthrough are live for P0–P2; browser tests run before each publish."],
+  steps: [
+    ["Serving & AI", "Results page", "Glance strip, problem, data, approach, solution, our take; details collapsed.", "Readable in about two minutes (R12).", "docs/index.html"],
+    ["Serving & AI", "Walkthrough", "This page: SCQA, steps, obstacles, results per phase.", "For technical assessments (R14).", "docs/build.html"],
+    ["Evaluation", "Browser tests", "Hover, phone width and dark mode checked in real Chrome.", "Tooltips must work where readers are.", "tests/browser/"]
+  ],
+  decisions: [], results: [["Browser tests, three modes", "all pass", "run before publish", "info"]], obstacles: [], lessons: [], star: ""
+}];
+
+const MAP = {
+  "Data (FORCE · LAS)": {p0: ["Official splits", "28,906 LAS files"], p3: ["Kansas tops"], p6: ["Yearly archives"]},
+  "Parsing & QC": {p0: ["Header parser", "Curve dictionary 84%"], p3: ["Units standardised"], p4: ["Per-well quality"]},
+  "Features": {p1: ["Logs as provided"], p2: ["Context, bad hole, normalised GR"]},
+  "Model": {p1: ["XGBoost baseline"], p2: ["A · B · C candidates"], p3: ["Kansas scoring"]},
+  "Evaluation": {p0: ["Split + scorer checks"], p1: ["Blind wells", "Random-split leak"], p2: ["Well-grouped CV"], p3: ["vs formation tops"], p4: ["Drift by year"], p5: ["Grounding"], p6: ["Exact parity"], p7: ["Browser tests"]},
+  "Serving & AI": {p5: ["API + MCP", "Copilot notes"], p7: ["Results page", "Walkthrough"]},
+  "Platform": {p2: ["Kept-awake runs"], p6: ["Databricks job, registry"]}
+};
+
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const tip = $("#tip");
+function showTip(e, html) {
+  tip.innerHTML = html; tip.hidden = false;
+  const r = tip.getBoundingClientRect(), x = (e.clientX ?? e.x) + 14, y = (e.clientY ?? e.y) + 14;
+  tip.style.left = Math.max(8, Math.min(x, innerWidth - r.width - 8)) + "px";
+  tip.style.top = Math.max(8, Math.min(y, innerHeight - r.height - 8)) + "px";
+}
+function hideTip() { tip.hidden = true; }
+const chip = v => `<span class="chip ${v[0]}">${esc(v[1])}</span>`;
+const adrLink = n => `<a href="${REPO}${ADR[n]}">ADR-${n}</a>`;
+const fileLink = f => f === "planned" ? '<span class="muted">planned</span>'
+  : f.split(" · ").map(x => /^(ADR|CHANGELOG)/.test(x) ? esc(x) : `<code>${esc(x)}</code>`).join(" · ");
+
+function renderMap() {
+  const head = `<thead><tr><th>Layer</th>${PHASES.map(p => `<th class="ph" data-id="${p.id}" tabindex="0" title="Open ${p.tag}">${p.tag}<br><span class="muted" style="text-transform:none;font-weight:500">${esc(p.name.split(" ")[0])}…</span></th>`).join("")}</tr></thead>`;
+  const rows = Object.keys(MAP).map(lane => `<tr><td class="lane">${esc(lane)}</td>${PHASES.map(p =>
+    `<td class="cell" data-id="${p.id}">${(MAP[lane][p.id] || []).map(t => `<span>${esc(t)}</span>`).join("") || '<span class="muted">·</span>'}</td>`).join("")}</tr>`).join("");
+  $("#map").innerHTML = head + "<tbody>" + rows + "</tbody>";
+  $("#map").querySelectorAll("th.ph, td.cell").forEach(el => {
+    const p = PHASES.find(x => x.id === el.dataset.id);
+    el.addEventListener("click", () => select(p.id, true));
+    el.addEventListener("keydown", e => { if (e.key === "Enter") select(p.id, true); });
+    el.addEventListener("mousemove", e => showTip(e, `<b>${esc(p.tag)} · ${esc(p.name)}</b>${esc(p.verdict[1])}. Click to open.`));
+    el.addEventListener("mouseleave", hideTip);
+  });
+}
+function renderPicker() {
+  $("#picker").innerHTML = PHASES.map(p => `<button role="tab" data-id="${p.id}" aria-selected="false">${p.tag} ${chip(p.verdict)}<small>${esc(p.name)}</small></button>`).join("");
+  $("#picker").querySelectorAll("button").forEach(b => b.addEventListener("click", () => select(b.dataset.id, false)));
+}
+const COL = 150, BOX_W = 132, BOX_H = 62, LANE_H = 86, LABEL_W = 132, PAD = 14;
+function wrap(text, max) {
+  const words = text.split(" "), lines = []; let cur = "";
+  for (const w of words) { if ((cur + " " + w).trim().length > max && cur) { lines.push(cur); cur = w; } else cur = (cur + " " + w).trim(); }
+  if (cur) lines.push(cur); return lines.slice(0, 3);
+}
+function renderSwim(p, state) {
+  const lanes = LANES.filter(l => p.steps.some(s => s[0] === l));
+  const W = LABEL_W + p.steps.length * COL + PAD, H = lanes.length * LANE_H;
+  const pos = p.steps.map((s, i) => ({x: LABEL_W + i * COL + (COL - BOX_W) / 2, y: lanes.indexOf(s[0]) * LANE_H + (LANE_H - BOX_H) / 2}));
+  let svg = `<svg class="swim" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(p.tag)} build steps by layer">
+    <defs><marker id="ah-${p.id}" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrowhead" d="M0,0 L8,4 L0,8 z"/></marker></defs>`;
+  lanes.forEach((l, i) => {
+    svg += `<rect class="lane-bg${i % 2 ? " alt" : ""}" x="0" y="${i * LANE_H}" width="${W}" height="${LANE_H}"/>`;
+    svg += `<line class="lane-line" x1="0" x2="${W}" y1="${(i + 1) * LANE_H}" y2="${(i + 1) * LANE_H}"/>`;
+    wrap(l, 14).forEach((t, k, arr) => svg += `<text class="lane-label" x="12" y="${i * LANE_H + LANE_H / 2 + (k - (arr.length - 1) / 2) * 14 + 4}">${esc(t)}</text>`);
+  });
+  for (let i = 0; i < pos.length - 1; i++) {
+    const a = pos[i], b = pos[i + 1], x1 = a.x + BOX_W, y1 = a.y + BOX_H / 2, x2 = b.x - 2, y2 = b.y + BOX_H / 2, mx = (x1 + x2) / 2;
+    svg += `<path class="edge" marker-end="url(#ah-${p.id})" d="M${x1},${y1} H${mx} V${y2} H${x2}"/>`;
+  }
+  p.steps.forEach((s, i) => {
+    const {x, y} = pos[i], kind = s[5] ? ` kind-${s[5]}` : "", cls = i === state.i ? " current" : i < state.i ? " done" : "";
+    svg += `<g class="step${kind}${cls}" data-i="${i}" tabindex="0" role="button" aria-label="Step ${i + 1}: ${esc(s[1])}">
+      <rect x="${x}" y="${y}" width="${BOX_W}" height="${BOX_H}" rx="8"/>
+      <text class="num" x="${x + 9}" y="${y + 16}">${i + 1}</text>
+      ${wrap(s[1], 16).map((t, k) => `<text x="${x + 24}" y="${y + 17 + k * 15}">${esc(t)}</text>`).join("")}</g>`;
+  });
+  return svg + "</svg>";
+}
+function stepDetail(p, i) {
+  const s = p.steps[i], kind = {fail: "Where it failed", fix: "A fix", plan: "Planned"}[s[5]] || "";
+  return `<div class="detail" aria-live="polite"><span class="eyebrow">Step ${i + 1} of ${p.steps.length} · ${esc(s[0])}${kind ? " · " + kind : ""}</span>
+    <h3>${esc(s[1])}</h3><div class="kv"><b>What</b><span>${esc(s[2])}</span><b>Why</b><span>${esc(s[3])}</span><b>Where</b><span>${fileLink(s[4])}</span></div></div>`;
+}
+const state = {id: "p0", i: 0};
+function renderPhase() {
+  const p = PHASES.find(x => x.id === state.id);
+  const scqa = ["Situation", "Complication", "Question", "Answer"].map((h, k) => `<div><b>${h}</b><p>${esc(p.scqa[k])}</p></div>`).join("");
+  const res = p.results.map(r => `<tr><td>${esc(r[0])}</td><td class="mono">${esc(r[1])}</td><td class="mono">${esc(r[2])}</td><td>${
+    r[3] === "ok" ? '<span class="verdict-ok">pass</span>' : r[3] === "no" ? '<span class="verdict-no">fail</span>' : r[3] === "wait" ? '<span class="verdict-wait">pending</span>' : '<span class="muted">info</span>'}</td></tr>`).join("");
+  const obs = p.obstacles.length ? `<div class="part box"><span class="eyebrow">Obstacles · symptom → root cause → fix → prevention</span>
+    <div class="scroll"><table class="obst"><thead><tr><th>Symptom</th><th>Root cause</th><th>Fix</th><th>Prevention</th></tr></thead><tbody>${
+    p.obstacles.map(o => `<tr>${o.map((c, k) => `<td data-label="${["Symptom", "Root cause", "Fix", "Prevention"][k]}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>` : "";
+  $("#phase").innerHTML = `
+    <div class="part ph-top"><div class="phase-head"><h2>${esc(p.tag)} · ${esc(p.name)}</h2>${chip(p.verdict)}<span class="dates">${esc(p.dates)}</span></div>
+    <div class="scqa">${scqa}</div></div>
+    <div class="part lanewrap">
+      <div class="walk"><span class="eyebrow">Build steps</span>
+        <button type="button" id="prev">◀ Prev</button><button type="button" class="primary" id="next">Next ▶</button>
+        <span class="pos" id="pos"></span></div>
+      <div class="scroll" id="swim"></div>
+      <div class="lane-legend"><span><i></i>step</span><span><i class="fail"></i>where it failed</span><span><i class="fix"></i>a fix</span><span><i class="plan"></i>planned</span><span>Hover a step for a summary; click or use Next for details.</span></div>
+      <div id="detail"></div>
+    </div>
+    <div class="part two">
+      <div class="box"><span class="eyebrow">Result vs gate (set before the work)</span>
+        <div class="scroll"><table><thead><tr><th>Check</th><th>Target</th><th>Result</th><th></th></tr></thead><tbody>${res}</tbody></table></div></div>
+      <div class="box"><span class="eyebrow">Key decisions</span>${p.decisions.length ? `<ul class="points">${p.decisions.map(d => `<li>${esc(d[0])} · ${adrLink(d[1])}</li>`).join("")}</ul>` : '<p class="muted">Decided in the phase\'s ADR, before the work.</p>'}
+        ${p.lessons.length ? `<span class="eyebrow">Lessons learned</span><ul class="points">${p.lessons.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : ""}</div>
+    </div>
+    ${obs}
+    ${p.star ? `<div class="part box"><span class="eyebrow">STAR talking point</span><p class="star">“${esc(p.star)}”</p></div>` : ""}`;
+  $("#prev").addEventListener("click", () => step(-1));
+  $("#next").addEventListener("click", () => step(1));
+  drawSteps();
+}
+function drawSteps() {
+  const p = PHASES.find(x => x.id === state.id);
+  $("#swim").innerHTML = renderSwim(p, state);
+  $("#detail").innerHTML = stepDetail(p, state.i);
+  $("#pos").textContent = `Step ${state.i + 1} of ${p.steps.length}`;
+  $("#prev").disabled = state.i === 0; $("#next").disabled = state.i === p.steps.length - 1;
+  $("#swim").querySelectorAll("g.step").forEach(g => {
+    const s = p.steps[+g.dataset.i];
+    const go = () => { state.i = +g.dataset.i; drawSteps(); $(`#swim g.step[data-i="${state.i}"]`).focus({preventScroll: true}); };
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    g.addEventListener("mousemove", e => showTip(e, `<b>${+g.dataset.i + 1}. ${esc(s[1])}</b>${esc(s[2])}`));
+    g.addEventListener("mouseleave", hideTip);
+    g.addEventListener("focus", () => { const r = g.getBoundingClientRect(); showTip({clientX: r.left, clientY: r.bottom}, `<b>${+g.dataset.i + 1}. ${esc(s[1])}</b>${esc(s[2])}`); });
+    g.addEventListener("blur", hideTip);
+  });
+  const cur = $("#swim g.step.current");
+  if (cur) { const box = $("#swim"), r = cur.getBoundingClientRect(), b = box.getBoundingClientRect();
+    if (r.left < b.left || r.right > b.right) box.scrollLeft += r.left - b.left - 40; }
+}
+function step(d) { const p = PHASES.find(x => x.id === state.id); state.i = Math.max(0, Math.min(p.steps.length - 1, state.i + d)); hideTip(); drawSteps(); }
+function select(id, scroll) {
+  state.id = id; state.i = 0; hideTip();
+  document.querySelectorAll("#picker button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.id === id)));
+  document.querySelectorAll("#map th.ph, #map td.cell").forEach(el => el.classList.toggle("on", el.dataset.id === id));
+  renderPhase();
+  try { history.replaceState(null, "", "#" + id); } catch (e) { /* sandboxed viewers */ }
+  if (scroll) $("#h-phase").scrollIntoView({behavior: "smooth", block: "start"});
+}
+document.addEventListener("keydown", e => {
+  if (e.target.closest("input, textarea")) return;
+  if (e.key === "ArrowRight") step(1); else if (e.key === "ArrowLeft") step(-1);
+});
+addEventListener("scroll", hideTip, {passive: true});
+$("#updated").textContent = P.updated;
+renderMap(); renderPicker();
+const start = (location.hash || "").slice(1);
+select(PHASES.some(p => p.id === start) ? start : "p0", false);
+</script>

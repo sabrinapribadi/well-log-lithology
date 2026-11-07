@@ -19,9 +19,9 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from src.scoring import CODES  # noqa: E402
-
 import yaml  # noqa: E402
+
+from src.scoring import CODES  # noqa: E402
 
 CFG = yaml.safe_load((ROOT / "configs" / "default_config.yaml").read_text())
 DATA = Path(os.environ.get("WLL_DATA_DIR", "~/data/well-log-lithology")).expanduser()
@@ -50,7 +50,8 @@ def main() -> None:
                             "matches": (n_w, n) == EXPECT[k], "labelled": float(v[LABEL].notna().mean()),
                             "classes_present": int(v[LABEL].nunique()), "columns": int(v.shape[1])}
         v.to_parquet(out / f"force_{k}.parquet", index=False)
-    res["checks"]["no_well_in_two_splits"] = not (wells["train"] & wells["open_test"] or wells["train"] & wells["hidden_test"] or wells["open_test"] & wells["hidden_test"])
+    res["checks"]["no_well_in_two_splits"] = not (wells["train"] & wells["open_test"] or wells["train"] & wells["hidden_test"]
+                                                  or wells["open_test"] & wells["hidden_test"])
     res["checks"]["all_labels_mapped"] = all(set(v[LABEL].dropna().astype(int)) <= set(CODES) for v in d.values())
     res["checks"]["curve_missing_share_train"] = {c: round(float(d["train"][c].isna().mean()), 3) for c in
                                                   ["GR", "RHOB", "NPHI", "DTC", "RDEP", "RMED", "PEF", "CALI", "BS", "DRHO", "SP", "DTS", "RSHA"]}
@@ -59,7 +60,8 @@ def main() -> None:
     res["gate_force"] = all(s["matches"] for s in res["splits"].values()) and res["checks"]["no_well_in_two_splits"] and res["checks"]["all_labels_mapped"]
     (ROOT / CFG["paths"]["outputs_dir"]).mkdir(parents=True, exist_ok=True)
     (ROOT / CFG["paths"]["outputs_dir"] / "p0_force.json").write_text(json.dumps(res, indent=1))
-    print({k: (s["wells"], s["samples"], s["matches"]) for k, s in res["splits"].items()}, res["checks"]["no_well_in_two_splits"], res["checks"]["all_labels_mapped"], "gate", res["gate_force"])
+    print({k: (s["wells"], s["samples"], s["matches"]) for k, s in res["splits"].items()},
+          res["checks"]["no_well_in_two_splits"], res["checks"]["all_labels_mapped"], "gate", res["gate_force"])
 
 
 if __name__ == "__main__":

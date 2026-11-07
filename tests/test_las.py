@@ -48,3 +48,11 @@ def test_las12_value_in_description():
 def test_curve_dictionary():
     assert [standard_name(m) for m in ["G/R", "DEN(CDL)", "POR(NEU)", "RES(DI)", "CALIPER", "C1", "DCAL", "CCL"]] == \
         ["GR", "RHOB", "NPHI", "RDEP", "CALI", "GAS", "DCAL", "TOOL_QC"]
+
+
+def test_west_longitude_sign_restored():
+    import pandas as pd
+
+    from src.las_header import fix_west_longitude
+    assert fix_west_longitude(99.0031) == -99.0031 and fix_west_longitude(-98.6) == -98.6 and fix_west_longitude(10.5) == 10.5
+    assert fix_west_longitude(pd.Series([99.0, -98.0, None])).tolist()[:2] == [-99.0, -98.0]

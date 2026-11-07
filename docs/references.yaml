@@ -1,0 +1,36 @@
+# Every paper or dataset cited in an ADR (rule R2). `python scripts/evidence.py` fetches venue, type and citations
+# from OpenAlex and writes data/outputs/references_evidence.json plus a table per ADR.
+- key: bormann_2020
+  doi: 10.5281/zenodo.4351156
+  venue: "Zenodo (dataset, CC BY 4.0)"
+  kind: dataset
+  used_in: [ADR-001, ADR-003]
+  role: data, official splits and penalty matrix
+- key: chen_guestrin_2016
+  doi: 10.1145/2939672.2939785
+  used_in: [ADR-004]
+  role: P1 baseline and candidates A, B
+- key: ke_2017
+  title: "LightGBM: A Highly Efficient Gradient Boosting Decision Tree"
+  venue: "NeurIPS 2017 (OpenAlex primary copy is a mirror)"
+  peer_reviewed: true
+  used_in: [ADR-004]
+  role: candidate C
+- key: nrr_2025
+  doi: 10.1007/s11053-024-10452-z
+  used_in: [ADR-004]
+  role: cited alternative (semi-supervised contrastive + Transformer)
+- key: wlfm_2025
+  title: "WLFM: A Well-Logs Foundation Model for Multi-Task and Cross-Well Geological Interpretation"
+  arxiv: "2509.18152"
+  used_in: [ADR-004]
+  role: cited alternative (well-log foundation model)
+- key: tabular_fm_2026
+  title: "Beyond IID: How General Are Tabular Foundation Models, Really?"
+  arxiv: "2606.30410"
+  used_in: [ADR-004]
+  role: cited alternative (tabular foundation models off IID data)
+- key: lakens_2017
+  doi: 10.1177/1948550617697177
+  used_in: [ADR-002]
+  role: practice of a pre-set smallest worthwhile difference (the +0.02 margin is our own choice)

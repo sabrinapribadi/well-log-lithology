@@ -39,7 +39,13 @@ def fetch(ref: dict) -> dict:
     return {"key": ref["key"], "title": w.get("title"), "venue": venue,
             "peer_reviewed": peer, "year": year, "citations": cites,
             "citations_per_year": round(cites / max(1, dt.date.today().year - (year or dt.date.today().year) + 1), 1),
-            "role": ref.get("role"), "used_in": ref.get("used_in", []), "openalex_id": w.get("id")}
+            "role": ref.get("role"), "used_in": ref.get("used_in", []), "openalex_id": w.get("id"), "kind": ref.get("kind", "paper")}
+
+
+def review_label(r: dict) -> str:
+    if r["kind"] == "dataset":
+        return "n/a (dataset)"
+    return "yes" if r["peer_reviewed"] else "no (preprint)"
 
 
 def main() -> None:
@@ -54,7 +60,7 @@ def main() -> None:
         print("|---|---|---|---|---|---|---|")
         for r in rows:
             if adr in r["used_in"]:
-                print(f"| {r['title']} | {r['venue']} | {'yes' if r['peer_reviewed'] else 'no (preprint)'} | {r['year']} | {r['citations']:,} | {r['citations_per_year']:,} | {r['role']} |")
+                print(f"| {r['title']} | {r['venue']} | {review_label(r)} | {r['year']} | {r['citations']:,} | {r['citations_per_year']:,} | {r['role']} |")
 
 
 if __name__ == "__main__":

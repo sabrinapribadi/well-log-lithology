@@ -1,0 +1,10 @@
+[tool.ruff]
+line-length = 170
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E731", "E702"]  # compact house style: one-line `log = lambda` helpers and short `a; b` statements
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "scripts"]

@@ -1,0 +1,112 @@
+{
+ "retrieved": "2026-11-07",
+ "source": "OpenAlex",
+ "references": [
+  {
+   "key": "bormann_2020",
+   "title": "FORCE 2020 Well well log and lithofacies dataset for machine learning competition",
+   "venue": "Zenodo (dataset, CC BY 4.0)",
+   "peer_reviewed": false,
+   "year": 2020,
+   "citations": 15,
+   "citations_per_year": 2.1,
+   "role": "data, official splits and penalty matrix",
+   "used_in": [
+    "ADR-001",
+    "ADR-003"
+   ],
+   "openalex_id": "https://openalex.org/W4393659431",
+   "kind": "dataset"
+  },
+  {
+   "key": "chen_guestrin_2016",
+   "title": "XGBoost",
+   "venue": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)",
+   "peer_reviewed": true,
+   "year": 2016,
+   "citations": 61163,
+   "citations_per_year": 5560.3,
+   "role": "P1 baseline and candidates A, B",
+   "used_in": [
+    "ADR-004"
+   ],
+   "openalex_id": "https://openalex.org/W2295598076",
+   "kind": "paper"
+  },
+  {
+   "key": "ke_2017",
+   "title": "LightGBM: A Highly Efficient Gradient Boosting Decision Tree",
+   "venue": "NeurIPS 2017 (OpenAlex primary copy is a mirror)",
+   "peer_reviewed": true,
+   "year": 2017,
+   "citations": 10513,
+   "citations_per_year": 1051.3,
+   "role": "candidate C",
+   "used_in": [
+    "ADR-004"
+   ],
+   "openalex_id": "https://openalex.org/W2768348081",
+   "kind": "paper"
+  },
+  {
+   "key": "nrr_2025",
+   "title": "Enhanced Lithology Classification Using an Interpretable SHAP Model Integrating Semi-Supervised Contrastive Learning and Transformer with Well Logging Data",
+   "venue": "Natural Resources Research",
+   "peer_reviewed": true,
+   "year": 2025,
+   "citations": 33,
+   "citations_per_year": 16.5,
+   "role": "cited alternative (semi-supervised contrastive + Transformer)",
+   "used_in": [
+    "ADR-004"
+   ],
+   "openalex_id": "https://openalex.org/W4406537334",
+   "kind": "paper"
+  },
+  {
+   "key": "wlfm_2025",
+   "title": "WLFM: A Well-Logs Foundation Model for Multi-Task and Cross-Well Geological Interpretation",
+   "venue": "arXiv 2509.18152",
+   "peer_reviewed": false,
+   "year": 2025,
+   "citations": 5,
+   "citations_per_year": 2.5,
+   "role": "cited alternative (well-log foundation model)",
+   "used_in": [
+    "ADR-004"
+   ],
+   "openalex_id": "https://openalex.org/W4416257517",
+   "kind": "paper"
+  },
+  {
+   "key": "tabular_fm_2026",
+   "title": "Beyond IID: How General Are Tabular Foundation Models, Really?",
+   "venue": "arXiv 2606.30410",
+   "peer_reviewed": false,
+   "year": 2026,
+   "citations": 25,
+   "citations_per_year": 25.0,
+   "role": "cited alternative (tabular foundation models off IID data)",
+   "used_in": [
+    "ADR-004"
+   ],
+   "openalex_id": "https://openalex.org/W7166710320",
+   "kind": "paper"
+  },
+  {
+   "key": "lakens_2017",
+   "title": "Equivalence Tests",
+   "venue": "Social Psychological and Personality Science",
+   "peer_reviewed": true,
+   "year": 2017,
+   "citations": 2617,
+   "citations_per_year": 261.7,
+   "role": "practice of a pre-set smallest worthwhile difference (the +0.02 margin is our own choice)",
+   "used_in": [
+    "ADR-002"
+   ],
+   "openalex_id": "https://openalex.org/W2610765860",
+   "kind": "paper"
+  }
+ ]
+}

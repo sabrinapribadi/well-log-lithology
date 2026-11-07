@@ -1,0 +1,26 @@
+{
+ "train": {
+  "wells": 98,
+  "samples": 1170511,
+  "sample_step_m": 0.152,
+  "logged_m": 177918,
+  "shale_everywhere": -1.152966204503845,
+  "shale_share": 0.6158019873371544
+ },
+ "open_test": {
+  "wells": 10,
+  "samples": 136786,
+  "sample_step_m": 0.152,
+  "logged_m": 20791,
+  "shale_everywhere": -1.1641487432924422,
+  "shale_share": 0.6139151667568319
+ },
+ "hidden_test": {
+  "wells": 10,
+  "samples": 122397,
+  "sample_step_m": 0.152,
+  "logged_m": 18604,
+  "shale_everywhere": -1.3079538305677427,
+  "shale_share": 0.5868362786669608
+ }
+}

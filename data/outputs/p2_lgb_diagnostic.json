@@ -1,0 +1,16 @@
+{
+ "wells": 30,
+ "samples": 370045,
+ "configs": {
+  "pre-registered (min_sum_hessian_in_leaf 0.001)": {
+   "train_fit_penalty": -0.2836239511410774,
+   "train_fit_accuracy": 0.8934291775324623,
+   "max_abs_raw_score": 1403934.742099648
+  },
+  "min_sum_hessian_in_leaf 1 (as XGBoost min_child_weight)": {
+   "train_fit_penalty": -0.004715980488859463,
+   "train_fit_accuracy": 0.9981461714115851,
+   "max_abs_raw_score": 34.32756288146076
+  }
+ }
+}

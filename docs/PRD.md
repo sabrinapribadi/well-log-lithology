@@ -1,9 +1,9 @@
 PRODUCT REQUIREMENT DOCUMENT (PRD)
 Project: Well-Log Lithology — Does a North Sea Model Transfer to Kansas?
-Version: 0.1 (design: framing, gates and industry alignment, before any analysis)
+Version: 0.2 (P0 passed, P1 failed by 0.014, P2 passed; pages live)
 Author: Sabrina Pribadi
-Date: October 15, 2026
-Status: Active — design pushed; P0 next
+Date: November 7, 2026
+Status: Active — P0–P2 done; P3 (Kansas transfer) next
 
 
 1. EXECUTIVE SUMMARY
@@ -149,7 +149,13 @@ Raw data lives in `WLL_DATA_DIR` (OneDrive `github_project/data/well-log-litholo
 
 13. KEY INSIGHTS
 
-To be filled as phases finish.
+- Blind wells matter: the same baseline scores −0.171 on a random split of samples and −0.540 on unseen wells (about 3× worse).
+- P1 failed: an untuned XGBoost on the logs as provided lands 0.014 below the 12th finalist.
+- P2 passed: engineered features (context, bad hole, per-well gamma ray) plus the expected-penalty decision reach −0.504 on hidden wells, 4th among the 13 finalists.
+- Most of the penalty is shale-family confusion: sandstone/shale called shale alone is the largest single source.
+- Review can be budgeted: flagging the least-confident depths catches most mistakes (results page dial).
+- LightGBM with default leaf limits diverged on rare rocks (raw scores 1.4M); matched limits fix it on training wells.
+- Kansas archive: 99.86% of 28,906 headers read; 18.2% of files carry all five core logs, the likely transfer test set.
 
 
 14. APPENDIX — References
@@ -157,6 +163,9 @@ To be filled as phases finish.
 - Bormann, P., Aursand, P., Dilib, F., Manral, S., Dischington, P. (2020). FORCE 2020 Well well log and lithofacies dataset for machine learning competition. Zenodo, doi:10.5281/zenodo.4351156
 - Chen, T., Guestrin, C. (2016). XGBoost: A Scalable Tree Boosting System. KDD
 - Ke, G. et al. (2017). LightGBM: A Highly Efficient Gradient Boosting Decision Tree. NeurIPS
-- Canadian Well Logging Society. LAS Version 2.0: A Digital Standard for Logs
+- Canadian Well Logging Society. LAS Version 2.0: A Digital Standard for Logs (1992; update July 2009)
 - Zeller, D. E., ed. (1968). The stratigraphic succession in Kansas. Kansas Geological Survey Bulletin 189
-- Lakens, D. (2017). Equivalence tests. Social Psychological and Personality Science 8
+- Lakens, D. (2017). Equivalence tests: a practical primer. Social Psychological and Personality Science 8(4)
+- Natural Resources Research (2025). Enhanced lithology classification using an interpretable SHAP model integrating semi-supervised contrastive learning and Transformer with well logging data. doi:10.1007/s11053-024-10452-z
+- WLFM: a well-logs foundation model for multi-task and cross-well geological interpretation (2025). arXiv 2509.18152
+- Beyond IID: how general are tabular foundation models, really? (2026). arXiv 2606.30410

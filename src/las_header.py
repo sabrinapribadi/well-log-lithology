@@ -72,3 +72,12 @@ def parse_header(raw: bytes) -> dict:
             "null": null, "strt": strt, "stop": stop, "step": step, "depth_unit": well.get("STRT", ("", ""))[0].upper(),
             "api": g("API") or g("UWI"), "lat": _num(g("LAT") or g("LATI")), "lon": _num(g("LON") or g("LONG")),
             "well": g("WELL"), "company": g("COMP"), "county": g("CNTY"), "n_curves": len(curves), "curves": curves}
+
+
+def fix_west_longitude(lon, lo: float = 94.0, hi: float = 103.0):
+    """Kansas lies at 94.6–102.05° W. Headers that drop the minus sign (e.g. LONG 99.0) are flipped to −99.0;
+    any other value is returned unchanged. Works on scalars and pandas Series."""
+    try:
+        return lon.where(~lon.between(lo, hi), -lon)
+    except AttributeError:
+        return -lon if lon is not None and lo <= lon <= hi else lon
