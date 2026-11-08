@@ -46,6 +46,25 @@ def engineered_matrix(d: pd.DataFrame, codes: dict) -> pd.DataFrame:
     return X
 
 
+TRANSFER_LOGS = ["GR", "RHOB", "NPHI", "DTC", "RDEP", "RMED", "RSHA", "PEF", "CALI", "BS", "SP", "DRHO"]
+
+
+def transfer_matrix(d: pd.DataFrame) -> pd.DataFrame:
+    """P3 model T inputs (ADR-005 §1): candidate A's engineered features built only from logs Kansas files carry.
+    No depth, position, stratigraphy or drilling curves. Expects WELL and DEPTH_MD (metres); missing logs stay missing."""
+    d = d.sort_values(["WELL", "DEPTH_MD"])
+    X = pd.DataFrame({c: (d[c] if c in d else np.nan) for c in TRANSFER_LOGS}, index=d.index).astype("float32")
+    for c in ("RSHA", "RMED", "RDEP"):
+        X[f"log_{c}"] = np.log10(X[c].clip(lower=1e-3)).astype("float32")
+    X["badhole"] = (X["CALI"] - X["BS"]).astype("float32")
+    g = X.groupby(d["WELL"])
+    X["gr_pct_well"] = g["GR"].rank(pct=True).astype("float32")
+    for c in CONTEXT:
+        X[f"d_{c}"] = g[c].diff().astype("float32")
+        X[f"roll_{c}"] = g[c].transform(lambda s: s.rolling(2 * HALF_WINDOW + 1, center=True, min_periods=1).mean()).astype("float32")
+    return X
+
+
 def labels(d: pd.DataFrame) -> np.ndarray:
     return to_class(d[LABEL].to_numpy())
 

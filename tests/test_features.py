@@ -43,3 +43,11 @@ def test_missing_class_gets_zero_probability_and_keeps_indices():
     out = full_proba(Stub(), None)
     assert out.shape == (1, 12) and out[0, 10] == 1.0 and out[0, 4] == out[0, 11] == 0
     assert expected_penalty_decision(out)[0] == 10
+
+
+def test_transfer_matrix_has_no_position_or_stratigraphy_and_tolerates_missing_logs():
+    from src.features import transfer_matrix
+    d = pd.DataFrame({"WELL": ["K1"] * 5 + ["K2"] * 5, "DEPTH_MD": list(range(5)) * 2, "GR": [10.0] * 5 + [100.0] * 5})
+    X = transfer_matrix(d)   # a Kansas-like file with only gamma ray
+    assert not {"DEPTH_MD", "X_LOC", "Y_LOC", "Z_LOC", "GROUP", "FORMATION", "ROP", "MUDWEIGHT"} & set(X.columns)
+    assert X["RHOB"].isna().all() and np.allclose(X.loc[d.WELL == "K1", "roll_GR"], 10.0)
