@@ -10,3 +10,4 @@
 | [ADR-006](ADR-006-log-quality-and-drift.md) | P4 log quality and drift | Accepted | Per-file coverage, physical ranges, bad hole, model confidence; PSI by archive year (bands 0.10 / 0.25); gate: ≥ 99% of readable files and every year. |
 | [ADR-007](ADR-007-api-mcp-copilot.md) | P5 API, MCP tools, grounded copilot | Accepted | One store for API, MCP and notes; grader + template fallback; budgets $0.20 per 1,000 notes, p95 5 s live, 50 ms cached. |
 | [ADR-008](ADR-008-databricks-job.md) | P6 Databricks job | Accepted | Parity of B to three decimals, Unity Catalog registry, Spark scoring of the newest archive, PSI drift; yearly schedule paused on Free Edition. |
+| [ADR-009](ADR-009-method-comparison.md) | P2b method comparison | Accepted | Fair LightGBM (one documented fix) and a 1D CNN over depth windows, same CV and hidden-well rule; B stays unless beaten by ≥ 0.02 in CV; finalists' methods documented. |

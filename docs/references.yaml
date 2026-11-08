@@ -34,3 +34,15 @@
   doi: 10.1177/1948550617697177
   used_in: [ADR-002]
   role: practice of a pre-set smallest worthwhile difference (the +0.02 margin is our own choice)
+- key: imamverdiyev_2019
+  doi: 10.1016/j.petrol.2018.11.023
+  used_in: [ADR-009]
+  role: 1D CNN on well logs (candidate D)
+- key: geophysics_2021
+  doi: 10.1190/geo2020-0676.1
+  used_in: [ADR-009]
+  role: deep models on log curves with a geologic constraint (context)
+- key: yurdakul_2020
+  doi: 10.21314/JRMV.2020.227
+  used_in: [ADR-006]
+  role: population stability index (drift bands)
