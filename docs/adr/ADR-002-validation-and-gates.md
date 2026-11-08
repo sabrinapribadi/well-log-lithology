@@ -18,9 +18,9 @@ Each phase passes or fails a gate written here before its work starts. A failed 
 | P1 | Can a standard model reach competition level on blind wells? | XGBoost (the winning team's model family), trained on the 98 training wells with documented features and no tuning on test wells, scores **≥ −0.526** on the hidden test, i.e. within the 12 finalists' range (−0.469 to −0.526) | The pipeline, not the model, is wrong: features, encoding or class mapping |
 | P2 | Does a better-designed model beat the baseline on blind wells? | The model chosen in ADR-004 (written before P2) beats P1 by **≥ 0.02** on the hidden test **and** scores better on the open test. Selection uses only well-grouped cross-validation on the training wells | Keep the P1 model; report the candidates' scores |
 | P3 | Does the model transfer to Kansas? | Designed in ADR-005 (pushed before any Kansas prediction): agreement with known lithology of named Kansas units (e.g. Hutchinson Salt → halite; Arbuckle → dolomite) in wells with formation tops | Transfer claim withdrawn; North Sea-only model |
-| P4 | Can the logs' quality be monitored? | Per-well data-quality and drift measures (curve availability, ranges, bad-hole share) computed for every Kansas well and year | Monitoring not shipped |
-| P5 | Can geologists and agents use it? | API and MCP contract tests pass; LLM explanations grounded in tool results; cost and latency within R13 budgets | Tools not shipped |
-| P6 | Does it run as a scheduled cloud job? | Databricks reproduces the local P1 or P2 hidden-test score exactly; model registered; drift job runs | Local only |
+| P4 | Can the logs' quality be monitored? | (ADR-006) Per-well data-quality and drift measures (curve availability, ranges, bad-hole share) computed for every Kansas well and year | Monitoring not shipped |
+| P5 | Can geologists and agents use it? | (ADR-007) API and MCP contract tests pass; LLM explanations grounded in tool results; cost and latency within R13 budgets | Tools not shipped |
+| P6 | Does it run as a scheduled cloud job? | (ADR-008) Databricks reproduces the local P1 or P2 hidden-test score exactly; model registered; drift job runs | Local only |
 | P7 | Can readers use the results? | Results page and technical walkthrough live; browser tests pass in three display modes | Pages not published |
 
 ## About the thresholds
