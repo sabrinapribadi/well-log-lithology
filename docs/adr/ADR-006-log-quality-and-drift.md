@@ -57,7 +57,7 @@
 
 - **Coverage:** gamma ray, neutron and density together cover a median 36% of each file's depth; 0% in the 1999–2011 archives, 83–99% in most archives since 2015.
 - **Values:** a median 0.1% of samples fall outside physical ranges.
-- **Hole condition:** knowable for 9.5% of files only (DRHO in 2,644, caliper and bit size in 78); median bad-hole share there 5.5%.
+- **Hole condition:** knowable for 9.4% of files only (DRHO in 2,644, caliper and bit size in 78); median bad-hole share there 5.5%.
 - **Model T's confidence:** median 0.77, steady across years (0.75–0.82).
 - **Drift vs earlier years:** neutron alerts (PSI > 0.25) in 9 of 17 comparable years, largest in 2020–2021 (0.58), consistent with changing tools; gamma ray and sonic stable in 15–16 of 17.
 - **Drift vs FORCE:** density alerts in 17 of 18 years; neutron, sonic, resistivity and T's confidence in all 18. Kansas logs sit far from what the model learned, consistent with P3's failure.

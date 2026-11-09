@@ -1,9 +1,9 @@
 PRODUCT REQUIREMENT DOCUMENT (PRD)
 Project: Well-Log Lithology — Does a North Sea Model Transfer to Kansas?
-Version: 0.2 (P0 passed, P1 failed by 0.014, P2 passed; pages live)
+Version: 0.3 (P3 failed and transfer withdrawn; P4, P5 passed; P6 failed on parity; method comparison added)
 Author: Sabrina Pribadi
-Date: November 7, 2026
-Status: Active — P0–P2 done; P3 (Kansas transfer) next
+Date: November 9, 2026
+Status: Active — P0–P6 done; North Sea-only model (Kansas transfer failed)
 
 
 1. EXECUTIVE SUMMARY
@@ -155,7 +155,13 @@ Raw data lives in `WLL_DATA_DIR` (OneDrive `github_project/data/well-log-litholo
 - Most of the penalty is shale-family confusion: sandstone/shale called shale alone is the largest single source.
 - Review can be budgeted: flagging the least-confident depths catches most mistakes (results page dial).
 - LightGBM with default leaf limits diverged on rare rocks (raw scores 1.4M); matched limits fix it on training wells.
-- Kansas archive: 99.86% of 28,906 headers read; 18.2% of files carry all five core logs, the likely transfer test set.
+- Kansas archive: 99.86% of 28,906 headers read; 18.2% of files carry all five core logs.
+- Transfer failed (0 of 6 units): Kansas Paleozoic carbonates are tighter than any North Sea limestone and read as sandstone; evaporite intervals do not read as evaporites.
+- Kansas logs sit outside the North Sea training range in every archive year (P4 drift); gamma ray, neutron and density together cover a median 36% of depth.
+- Method comparison: a fair LightGBM is level with XGBoost; a 1D CNN trails by 0.27 in CV; 11 of 12 in-range finalists used tree ensembles.
+- Hidden-well scores move by up to 0.18 with the random seed alone; P2's +0.036 is within that noise.
+- The copilot serves validated outputs only: 100% grounded notes at $0.066 per 1,000.
+- Databricks reproduces quality and drift exactly; retraining B differs like a seed change.
 
 
 14. APPENDIX — References

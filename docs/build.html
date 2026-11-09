@@ -279,7 +279,7 @@ const PHASES = [
   star: "My baseline missed competition level by 0.014; I reported it, and showed that a random split would have flattered it threefold."
 },
 {
-  id: "p2", tag: "P2", name: "Model choice", dates: "7 Nov 2026", verdict: p2 ? (p2.gate_passed ? ["pass", "passed"] : ["fail", "failed"]) : ["run", "running"],
+  id: "p2", tag: "P2", name: "Model choice", dates: "7–8 Nov 2026", verdict: p2 ? (p2.gate_passed ? ["pass", "passed"] : ["fail", "failed"]) : ["run", "running"],
   scqa: ["P1 sits 0.014 below the finalists; ADR-004 named three candidates before any ran.",
          "Choosing by hidden-well score would leak the test; CV folds can still differ from new wells.",
          "Does the candidate chosen by well-grouped CV beat P1 by ≥ 0.02 on hidden wells and also on open wells?",
@@ -294,6 +294,8 @@ const PHASES = [
     ["Model", "Fold without basement", "Fold 3 had no basement samples, so the model returned 11 probabilities, not 12; the run crashed.", "Basement has 103 samples in a few wells.", "src/features.py", "fail"],
     ["Model", "All 12 classes kept", "Probabilities placed into all 12 columns by class label; unseen classes get 0. Tested.", "The penalty matrix needs every class in its place.", "src/features.py · tests/test_features.py", "fix"],
     ["Model", "LightGBM diverged", "Candidate C scored −1.03 on hidden wells; raw scores reached 1.4 million on its own training wells.", "Its default leaf limit (0.001) lets rare-rock leaves explode; XGBoost's is 1.", "scripts/p2_lgb_diagnostic.py", "fail"],
+    ["Model", "Fair LightGBM (P2b)", "LightGBM with XGBoost's leaf limit: CV −0.679, level with B (ADR-009).", "One matched safeguard, nothing else changed.", "scripts/p2b_lightgbm_fair.py", "fix"],
+    ["Model", "1D CNN (P2b)", "Convolutional network over ±2.4 m windows on the Apple GPU: CV −0.944, far behind.", "The cheapest credible deep baseline.", "scripts/p2b_cnn.py"],
     ["Evaluation", "Chosen scored once", p2 ? `CV means: A ${f3(p2.cv_mean.A)}, B ${f3(p2.cv_mean.B)}, C ${f3(p2.cv_mean.C)}. Chosen: ${p2.chosen}.` : "Pending.", "Highest CV mean wins; all three are then reported on test wells.", "data/outputs/p2_model_choice.json"]
   ],
   decisions: [["Candidates and selection rule fixed before P2", "004"], ["Gate: +0.02 on hidden wells and better on open wells", "002"]],
@@ -311,67 +313,124 @@ const PHASES = [
   star: p2 ? `I chose between three pre-named models using only training wells, then scored the winner once on hidden wells: ${f3(p2.candidates[p2.chosen].hidden_test.penalty)}.` : ""
 },
 {
-  id: "p3", tag: "P3", name: "Kansas transfer", dates: "planned", verdict: ["plan", "planned"],
-  scqa: ["Kansas has 28,906 LAS files but no lithology labels.", "North Sea rocks and logging tools differ from Kansas.",
-         "Do predictions agree with the known lithology of named Kansas units?", "Planned: an ADR with the test is written before any Kansas prediction."],
+  id: "p3", tag: "P3", name: "Kansas transfer", dates: "8 Nov 2026", verdict: ["fail", "failed: 0 of 6"],
+  scqa: ["Kansas has 28,906 LAS files but no lithology labels; only formation tops and published unit lithology.",
+         "North Sea rocks and tools differ, and a test could be tuned after seeing predictions.",
+         "Does the model label six named Kansas units with their known rock, far more often than elsewhere?",
+         "No: 0 of 6 units passed. Shales found but not distinctive; carbonates read as sandstone. Transfer withdrawn."],
   steps: [
-    ["Decision", "Transfer test first", "ADR before predicting: e.g. Hutchinson Salt → halite, Arbuckle Group → dolomite.", "Geology is the only label Kansas has.", "planned", "plan"],
-    ["Parsing & QC", "Curves standardised", "Units and names mapped to the FORCE curves for wells with the core logs.", "The model can only read what it was trained on.", "planned", "plan"],
-    ["Model", "Score Kansas wells", "Lithology and probability curves per well, written as LAS.", "The deliverable a petrophysicist opens.", "planned", "plan"],
-    ["Evaluation", "Check against tops", "Agreement within formation-top intervals from the KGS tops database.", "Supported by geology, or the claim is withdrawn.", "planned", "plan"]
+    ["Decision", "Test pushed first", "ADR-005: six units with expected rock from KGS bulletins; agreement ≥ 50% and lift ≥ 2 in 4 of 6.", "Geology is the only Kansas label; the bar must exist before predictions.", "docs/adr/ADR-005-kansas-transfer-test.md"],
+    ["Data (FORCE · LAS)", "OneDrive offline", "6 of 18 archives were online-only and OneDrive refused every download.", "Sampling local years only would bias the test by era.", "kgs/las_zips", "fail"],
+    ["Data (FORCE · LAS)", "Archives restored", "Files kept on device; all 18 archives verified against the P0 entry counts.", "No test runs on a partial archive.", "kgs/las_zips", "fix"],
+    ["Model", "Transferable model T", "B's recipe without depth, position or North Sea stratigraphy: FORCE hidden −0.672 (cost 0.168).", "Kansas has none of those inputs.", "scripts/p3_transfer_model.py"],
+    ["Parsing & QC", "Wells chosen blind", "1,915 files from headers and tops only, up to 300 wells per unit, seed 42.", "Selection must not see predictions.", "scripts/p3_select_wells.py"],
+    ["Parsing & QC", "Gap bug caught", "A test showed the resampler bridged a 0.46 m gap; fixed to never cross gaps over 0.3 m.", "Interpolating across missing log is invented data.", "src/kansas.py · tests/test_kansas.py", "fix"],
+    ["Evaluation", "0 of 6 units", "Heebner 90% shale but lift 1.6; carbonates 0%; salt 0%.", "Reported as the pre-registered failure.", "data/outputs/p3_kansas_transfer.json", "fail"],
+    ["Evaluation", "Why it failed", "Kansas carbonates: density 2.60, neutron 0.08, gamma ray 44 API, matching North Sea sandstone's gamma ray.", "A failure is only useful if explained.", "scripts/p3_diagnostic.py"]
   ],
-  decisions: [], results: [["Agreement with named units", "set in the P3 ADR", "not run", "wait"]], obstacles: [], lessons: [], star: ""
+  decisions: [["Six named units, matrix-near acceptance, lift guard", "005"], ["Transfer claim withdrawn; P5–P6 serve validated outputs", "002"]],
+  results: [["Units passing (≥ 50% and lift ≥ 2)", "≥ 4 of 6", "0 of 6", "no"], ["Heebner shale agreement", "≥ 50%", "90% (lift 1.6 < 2)", "no"],
+            ["Lansing–Kansas City limestone", "≥ 50%", "0.2% (56% sandstone)", "no"], ["T on FORCE hidden wells", "report", "−0.672 (B −0.504)", "info"]],
+  obstacles: [
+    ["OneDrive refused to download 6 archives", "Sync stalled; files were online-only placeholders", "Kept the data folder on device; verified entry counts", "Pin a project's data while building (portfolio rule)"],
+    ["Resampler crossed log gaps", "Rule measured distance to the nearest sample, not gap width", "Mask any grid point inside a gap wider than 0.3 m; tested", "Write the test from the rule's wording, then the code"],
+    ["Carbonates predicted as sandstone", "Kansas Paleozoic carbonates are tighter than any North Sea limestone; PEF exists in 35% of wells", "Reported; transfer withdrawn", "Check input ranges against training before claiming transfer"]
+  ],
+  lessons: ["Let geology refute the model, and say why it did.", "A strong lift with low agreement (Stone Corral, lift 88) shows signal without enough of it."],
+  star: "I designed a geological test before predicting a single Kansas well, the model failed it, and I traced the failure to old carbonates that look like North Sea sandstone."
 },
 {
-  id: "p4", tag: "P4", name: "Log quality and drift", dates: "planned", verdict: ["plan", "planned"],
-  scqa: ["Kansas logs span 1999–2026 and many tools.", "Quality and curve sets change by year and company.", "Can quality be measured per well and tracked over time?", "Planned."],
+  id: "p4", tag: "P4", name: "Log quality and drift", dates: "8 Nov 2026", verdict: ["pass", "passed"],
+  scqa: ["Kansas logs span 1999–2026, many companies and tools.", "Nobody knew which wells carry usable logs or how inputs shift by year.",
+         "Can quality be measured for every file and drift for every year?", "Yes: 99.92% of readable files, 24,157 wells, drift for all 18 archives."],
   steps: [
-    ["Parsing & QC", "Per-well quality", "Curve availability, value ranges, bad-hole share per well.", "Flags wells the model should not trust.", "planned", "plan"],
-    ["Evaluation", "Drift by year", "Distribution shift of each input by archive year.", "New wells arrive every year.", "planned", "plan"],
-    ["Serving & AI", "Quality report", "One row per well, shown on the map.", "A data manager's view.", "planned", "plan"]
+    ["Decision", "Measures fixed first", "ADR-006: coverage, physical ranges, bad hole, model confidence; PSI with bands 0.10 / 0.25.", "Thresholds from physics and published practice.", "docs/adr/ADR-006-log-quality-and-drift.md"],
+    ["Parsing & QC", "Every file, streamed", "28,865 readable files read once with 3 workers in 2.1 hours; no all-curves table on the laptop.", "Memory stays flat; Spark is for the yearly job.", "scripts/p4_quality.py"],
+    ["Evaluation", "Coverage by year", "Gamma ray, neutron and density together: median 36% of depth; 0% in 1999–2011, 83–99% since 2015.", "Tells which wells any model can read.", "data/outputs/p4_quality.json"],
+    ["Evaluation", "Drift by year", "Neutron alerts in 9 of 17 years; gamma ray and sonic stable in 15–16.", "Tool changes show up as drift.", "src/drift.py"],
+    ["Evaluation", "Drift vs North Sea", "Density, neutron, sonic, resistivity and confidence alert in nearly every year.", "Explains P3: Kansas is out of range.", "data/outputs/p4_quality.json"]
   ],
-  decisions: [], results: [["Measures for every Kansas well", "all wells", "not run", "wait"]], obstacles: [], lessons: [], star: ""
+  decisions: [["Quality and drift measures and bands", "006"]],
+  results: [["Files measured", "≥ 99% of readable", "99.92% (28,841 of 28,865)", "ok"], ["Drift computed", "every year", "all 18 archives", "ok"],
+            ["Median GR+neutron+density coverage", "report", "36% of depth", "info"], ["Hole condition known", "report", "9.4% of files", "info"]],
+  obstacles: [
+    ["Hole condition rarely knowable", "Only 2,644 files carry DRHO and 78 a caliper with bit size", "Reported as 'unknown' instead of guessing", "Say what cannot be measured"]
+  ],
+  lessons: ["Data quality explains model failure better than model tweaks do.", "A drift statistic needs a stated reference; P6 later showed why."],
+  star: "I measured every one of 28,865 Kansas files and showed its logs sit outside the North Sea range in every year, which explained the transfer failure."
 },
 {
-  id: "p5", tag: "P5", name: "API, MCP, copilot", dates: "planned", verdict: ["plan", "planned"],
-  scqa: ["Geologists and AI assistants need answers per well.", "LLM explanations can invent numbers.", "Can tools serve lithology with grounded explanations, within cost and latency budgets?", "Planned."],
+  id: "p5", tag: "P5", name: "API, MCP, copilot", dates: "9 Nov 2026", verdict: ["pass", "passed"],
+  scqa: ["Petrophysicists and AI assistants want answers per well without code.", "P3 failed, so Kansas rock predictions must not be served; LLMs can invent numbers.",
+         "Can tools serve validated outputs with grounded notes, within cost and latency budgets?", "Yes: 60 live notes 100% grounded, $0.066 per 1,000, p95 2.7–4.7 s live, 0.04 ms cached."],
   steps: [
-    ["Serving & AI", "predict_lithology(well)", "API returning lithology and probability curves.", "Typed tools, not free text.", "planned", "plan"],
-    ["Serving & AI", "MCP tools", "The same tools for AI assistants.", "One contract for apps and agents.", "planned", "plan"],
-    ["Evaluation", "Grounded notes", "Every number in an explanation traced to a tool result; cost and p95 latency measured (R13).", "Budgets set before building.", "planned", "plan"]
+    ["Decision", "Re-scoped first", "ADR-007 amendment: North Sea lithology from B; Kansas quality only; the failed test as the honest Kansas answer.", "Shipping known-poor predictions would mislead.", "docs/adr/ADR-007-api-mcp-copilot.md"],
+    ["Serving & AI", "One store", "20 FORCE wells' columns, 24,158 Kansas quality rows, 8 unit results.", "API, MCP and notes read the same numbers.", "scripts/p5_build_store.py"],
+    ["Serving & AI", "API + MCP tools", "predict_lithology, well_quality, unit_agreement, explain_well; LAS upload returns quality only.", "One contract for apps and agents.", "src/serving/"],
+    ["Evaluation", "Contract tests", "22 tests on a small committed store, template mode, run in CI.", "CI has no data or key.", "tests/test_serving.py"],
+    ["Serving & AI", "Notes read as fractions", "Prompt v1 notes were grounded but said '0.789 of depth'.", "Plain units are a rule (R17).", "src/serving/notes.py", "fail"],
+    ["Serving & AI", "Prompt v2", "Shares given and written as percentages; still 100% grounded.", "Readable and traceable.", "src/serving/notes.py", "fix"],
+    ["Evaluation", "60 live cases", "$0.066 per 1,000 notes; p95 2.7 s and 4.7 s in two runs; cache 0.04 ms.", "Budgets set from two earlier projects' measurements.", "data/outputs/p5_notes_eval.json"]
   ],
-  decisions: [], results: [["Contracts, grounding, budgets", "all pass", "not run", "wait"]], obstacles: [], lessons: [], star: ""
+  decisions: [["Typed tools, grounded notes, template fallback; validated outputs only", "007"]],
+  results: [["Served notes grounded", "100%", "100% (60 of 60)", "ok"], ["Cost per 1,000 notes", "≤ $0.20", "$0.066", "ok"],
+            ["p95 latency, live", "≤ 5 s", "2.7–4.7 s", "ok"], ["p95 latency, cached", "≤ 50 ms", "0.04 ms", "ok"]],
+  obstacles: [
+    ["Notes said '0.789 of labelled depth'", "Facts held fractions; the model copied them", "Facts carry percentages; prompt says to write them", "Shape the facts the way readers need the numbers"],
+    ["Live latency varied 2.7–4.7 s", "Provider variance between runs", "Reported both; notes precomputed and cached", "Budget from measurements, serve from cache"]
+  ],
+  lessons: ["The copilot's best answer about Kansas is 'not validated', with the reason.", "Reusing a tested grader beats writing a new one."],
+  star: "My copilot cites only numbers it can trace, costs $0.066 per 1,000 notes, and refuses to call a Kansas rock it cannot vouch for."
 },
 {
-  id: "p6", tag: "P6", name: "Databricks job", dates: "planned", verdict: ["plan", "planned"],
-  scqa: ["Scoring every Kansas curve means about 10⁸ depth rows.", "That exceeds the 8 GB laptop and needs a schedule.", "Can Databricks reproduce the local score exactly and run on a schedule?", "Planned."],
+  id: "p6", tag: "P6", name: "Databricks job", dates: "9 Nov 2026", verdict: ["fail", "failed on parity"],
+  scqa: ["KGS publishes a yearly archive; scoring, drift and model versions are an operations job.", "The cloud must reproduce the laptop, or its numbers cannot be trusted.",
+         "Does Databricks reproduce B's score, register the models and run the yearly quality and drift job?", "Registry and the yearly job: yes, matching the laptop. Retraining B: −0.486 vs −0.504, failed."],
   steps: [
-    ["Platform", "Spark LAS standardisation", "Every Kansas curve read and standardised on Spark.", "Volume justifies Spark here (R15).", "planned", "plan"],
-    ["Platform", "Model registry", "The chosen model registered with its version.", "Reproducible scoring.", "planned", "plan"],
-    ["Evaluation", "Exact parity", "Hidden-well score on Databricks equals the local score.", "Same code, same answer.", "planned", "plan"],
-    ["Platform", "Scheduled drift", "New yearly archive scored with drift checks.", "The industry's cadence.", "planned", "plan"]
+    ["Decision", "Re-scoped first", "ADR-008 amendment: the yearly job measures quality and drift, not Kansas lithology.", "Follows P3's failure.", "docs/adr/ADR-008-databricks-job.md"],
+    ["Platform", "Inputs uploaded", "FORCE Parquet, model T, the 2026 archive; a broken 113 MB upload retried file by file.", "Slow network; retries over restarts.", "scripts/databricks_prepare_inputs.sh"],
+    ["Evaluation", "Parity failed", "Databricks −0.486 vs laptop −0.504; 94.4% of predictions identical.", "Exactly what the gate tests.", "data/outputs/p6_parity.json", "fail"],
+    ["Evaluation", "Causes ruled out", "Pinned versions, same ARM family, thread count, duplicates: none explains it. Features bit-identical.", "Isolate before concluding.", "data/outputs/p6_parity.json"],
+    ["Evaluation", "Seed spread", "Laptop seeds 1, 2, 3, 42: −0.482, −0.666, −0.501, −0.504 (sd 0.086).", "The build difference acts like a seed change.", "scripts/p6_seed_spread.py"],
+    ["Platform", "Models registered", "workspace.og2.lithology_b and lithology_t, alias champion.", "Versioned models for scheduled use.", "scripts/databricks_p6.py"],
+    ["Platform", "Spark quality job", "374 of 374 files of the 2026 archive; quality equal to the laptop to four decimals.", "The yearly cadence, end to end.", "scripts/databricks_p6.py"],
+    ["Evaluation", "Drift reference bug", "pandas 3 dropped a column; equal-weight years shifted the bands.", "A reference must mirror the laptop's.", "scripts/p6_drift_reference.py", "fail"],
+    ["Evaluation", "Drift matches", "Uniform reference: same band as the laptop for all 6 inputs.", "Parity where the computation is deterministic.", "data/outputs/p6_drift.json", "fix"]
   ],
-  decisions: [], results: [["Score parity with local run", "exact", "not run", "wait"]], obstacles: [], lessons: [], star: ""
+  decisions: [["Serverless job, registry, yearly quality and drift; parity to 3 decimals", "008"]],
+  results: [["B's hidden score in the cloud", "−0.504 to 3 decimals", "−0.486", "no"], ["Models registered", "B and T", "both, alias champion", "ok"],
+            ["2026 archive quality", "runs", "374 of 374 files; equals laptop", "ok"], ["Drift job", "runs", "bands equal laptop for 6 of 6", "ok"]],
+  obstacles: [
+    ["Cloud score −0.486, laptop −0.504", "XGBoost builds differ in float summation; near-tied splits flip", "Proved inputs identical; measured seed spread 0.18", "State parity for inference and deterministic steps, not retraining"],
+    ["Drift task crashed", "pandas 3 groupby.apply drops the grouping column", "Explicit sampling with an assert", "Assert the columns a reference must keep"],
+    ["Cloud drift bands differed", "Equal-weight years changed the reference distribution", "Uniform sample, matching P4's weights", "Mirror the laptop's reference exactly"]
+  ],
+  lessons: ["Seed noise (0.18) is larger than P2's gain (0.036): one seed cannot rank close models.", "Bit-identical inputs plus a seed study turn a parity failure into an explanation."],
+  star: "When the cloud score differed, I proved the inputs were bit-identical and showed the gap was smaller than the model's own seed noise."
 },
 {
-  id: "p7", tag: "P7", name: "Pages", dates: "from 7 Nov 2026", verdict: ["run", "live for P0–P2"],
-  scqa: ["Hiring teams read a page in about two minutes.", "Technical reviewers need every step and failure.", "Can both read the same results, every number explained?", "Results page and this walkthrough are live for P0–P2; browser tests run before each publish."],
+  id: "p7", tag: "P7", name: "Pages", dates: "7–9 Nov 2026", verdict: ["pass", "passed"],
+  scqa: ["Hiring teams read a page in about two minutes.", "Technical reviewers need every step and failure.", "Can both read the same results, every number explained?",
+         "Yes: results page and this walkthrough, browser-tested in light, dark and phone modes."],
   steps: [
-    ["Serving & AI", "Results page", "Glance strip, problem, data, approach, solution, our take; details collapsed.", "Readable in about two minutes (R12).", "docs/index.html"],
-    ["Serving & AI", "Walkthrough", "This page: SCQA, steps, obstacles, results per phase.", "For technical assessments (R14).", "docs/build.html"],
-    ["Evaluation", "Browser tests", "Hover, phone width and dark mode checked in real Chrome.", "Tooltips must work where readers are.", "tests/browser/"]
+    ["Serving & AI", "Results page", "Glance strip, problem, data, approach, solution, our take; details collapsed (6.7 screens).", "Readable in about two minutes (R12).", "docs/index.html"],
+    ["Serving & AI", "Walkthrough", "This page: SCQA, steps, obstacles, results for every phase.", "For technical assessments (R14).", "docs/build.html"],
+    ["Serving & AI", "Share preview", "Open Graph tags and a 1200 × 627 image, so link cards show a thumbnail.", "Rule R18.", "docs/assets/"],
+    ["Evaluation", "Browser tests", "Every chart hovered and focused in real Chrome, three modes; walkthrough steps walked.", "Tooltips must work where readers are.", "tests/browser/"]
   ],
-  decisions: [], results: [["Browser tests, three modes", "all pass", "run before publish", "info"]], obstacles: [], lessons: [], star: ""
+  decisions: [], results: [["Results-page checks", "all pass", "121 of 121", "ok"], ["Walkthrough checks", "all pass", "all pass", "ok"]],
+  obstacles: [["Phone charts unreadable", "Wide charts scaled labels to 5 px", "Minimum width with sideways scroll inside the chart", "Screenshot phone width before publishing"]],
+  lessons: ["A failure needs as much page space as a success."], star: "Both pages show every pass and every failure, and each number has a plain explanation."
 }];
 
 const MAP = {
-  "Data (FORCE · LAS)": {p0: ["Official splits", "28,906 LAS files"], p3: ["Kansas tops"], p6: ["Yearly archives"]},
-  "Parsing & QC": {p0: ["Header parser", "Curve dictionary 84%"], p3: ["Units standardised"], p4: ["Per-well quality"]},
-  "Features": {p1: ["Logs as provided"], p2: ["Context, bad hole, normalised GR"]},
-  "Model": {p1: ["XGBoost baseline"], p2: ["A · B · C candidates"], p3: ["Kansas scoring"]},
-  "Evaluation": {p0: ["Split + scorer checks"], p1: ["Blind wells", "Random-split leak"], p2: ["Well-grouped CV"], p3: ["vs formation tops"], p4: ["Drift by year"], p5: ["Grounding"], p6: ["Exact parity"], p7: ["Browser tests"]},
-  "Serving & AI": {p5: ["API + MCP", "Copilot notes"], p7: ["Results page", "Walkthrough"]},
-  "Platform": {p2: ["Kept-awake runs"], p6: ["Databricks job, registry"]}
+  "Data (FORCE · LAS)": {p0: ["Official splits", "28,906 LAS files"], p3: ["Tops; archives restored"], p6: ["2026 archive uploaded"]},
+  "Parsing & QC": {p0: ["Header parser", "Curve dictionary 84%"], p3: ["Units, gaps, resampling"], p4: ["Every file streamed"]},
+  "Features": {p1: ["Logs as provided"], p2: ["Context, bad hole, normalised GR"], p3: ["No position or strata (T)"]},
+  "Model": {p1: ["XGBoost baseline"], p2: ["A · B · C, C2, CNN"], p3: ["Transfer model T"]},
+  "Evaluation": {p0: ["Split + scorer checks"], p1: ["Blind wells", "Random-split leak"], p2: ["Well-grouped CV"], p3: ["Unit agreement + lift"], p4: ["Coverage, PSI drift"], p5: ["60 live notes"], p6: ["Parity, seed spread"], p7: ["Browser tests"]},
+  "Serving & AI": {p5: ["API + MCP", "Grounded notes"], p7: ["Results page", "Walkthrough"]},
+  "Platform": {p2: ["Kept-awake runs"], p6: ["Registry", "Spark quality job"]}
 };
 
 const $ = (s, el = document) => el.querySelector(s);

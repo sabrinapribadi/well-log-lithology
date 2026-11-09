@@ -1,0 +1,12 @@
+{
+ "design": "ADR-008 parity_b",
+ "hidden_score_databricks": -0.48607706888240726,
+ "hidden_score_local": -0.504,
+ "equal_to_3_decimals": false,
+ "identical_predictions_share": 0.9435361977826254,
+ "rows_compared": 122397,
+ "xgboost": "3.4.1",
+ "pandas": "3.0.6",
+ "numpy": "2.5.4",
+ "machine": "aarch64"
+}

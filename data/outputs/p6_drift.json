@@ -1,0 +1,43 @@
+{
+ "design": "ADR-008 monitor_drift",
+ "reference_rows": 355158,
+ "new_rows": 732159,
+ "rows": [
+  {
+   "archive": "2026",
+   "input": "GR",
+   "psi_vs_earlier": 0.013689682632141171,
+   "band": "stable"
+  },
+  {
+   "archive": "2026",
+   "input": "RHOB",
+   "psi_vs_earlier": 0.12486079433249975,
+   "band": "watch"
+  },
+  {
+   "archive": "2026",
+   "input": "NPHI",
+   "psi_vs_earlier": 0.3125395289616305,
+   "band": "alert"
+  },
+  {
+   "archive": "2026",
+   "input": "DTC",
+   "psi_vs_earlier": 0.011711503602188934,
+   "band": "stable"
+  },
+  {
+   "archive": "2026",
+   "input": "RDEP",
+   "psi_vs_earlier": 0.03246266963440034,
+   "band": "stable"
+  },
+  {
+   "archive": "2026",
+   "input": "T_CONF",
+   "psi_vs_earlier": 0.10805662889578893,
+   "band": "watch"
+  }
+ ]
+}

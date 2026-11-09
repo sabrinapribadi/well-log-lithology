@@ -89,6 +89,23 @@
 - **`POST /predict`:** returns model B's curve only for files with FORCE-style inputs; for other LAS files it returns a quality report and states that lithology is not validated there.
 - **Notes:** explain a FORCE well's column (rocks, doubtful intervals, blind score) or a Kansas well's quality; the budgets and the gate are unchanged.
 
+## Empirical results (2026-11-09)
+
+**P5 passed.**
+
+| Check | Target | Result |
+|---|---|---|
+| Contract tests (API, MCP registry, notes in template mode) | pass in CI | 22 tests pass |
+| Live cases | ≥ 60 | 60 (20 FORCE wells, 40 Kansas wells) |
+| Served notes grounded | 100% | 100%; live drafts 100% (prompt v2) |
+| Required facts covered | — | 100% |
+| Cost per 1,000 notes | ≤ $0.20 | $0.066 |
+| p95 latency, live | ≤ 5,000 ms | 2,718 ms (v1 run), 4,708 ms (v2 run): provider variance |
+| p95 latency, cached | ≤ 50 ms | 0.04 ms |
+
+- **Prompt v1 → v2:** v1 notes were grounded but wrote shares as fractions ("0.789 of depth"); v2 gives and writes them as percentages (R17).
+- Prices from the vendor's pricing page, retrieved 2026-11-09 ($0.10 input, $0.01 cached input, $0.50 output per 1M tokens).
+
 ## Related Decisions
 
 - ADR-002 (P5 gate), ADR-005 (Kansas predictions), ADR-006 (quality measures)

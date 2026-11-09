@@ -75,6 +75,30 @@
 - **`monitor_drift`:** unchanged in method; its reference is a down-sampled P4 drift sample (≤ 20,000 rows per year), uploaded once.
 - **Gate:** unchanged (parity to three decimals; models registered; drift task runs).
 
+## Empirical results (2026-11-09)
+
+**P6 failed on parity; registry and the yearly job passed.**
+
+| Check | Target | Result |
+|---|---|---|
+| B's hidden score on Databricks vs laptop | equal to 3 decimals | **−0.486 vs −0.504: failed**; 94.4% of predictions identical |
+| Models registered | B and T, alias `champion` | `workspace.og2.lithology_b` v1, `workspace.og2.lithology_t` v1: passed |
+| Yearly quality job (2026 archive, Spark) | runs | 374 of 374 files; coverage 0.9871, out-of-range 0.0009, T confidence 0.777, equal to the laptop's P4 to four decimals: passed |
+| Drift job | runs | PSI vs earlier years in the same band as the laptop for all 6 inputs (neutron 0.313 alert; density 0.125 watch): passed |
+
+### Why parity failed (falsification diagnostic)
+
+- **Ruled out:** library versions (rerun pinned to the laptop's pandas 3.0.6, numpy 2.5.4, pyarrow 26.0.0, xgboost 3.4.1: same −0.486); processor family (both ARM); thread count (laptop with 4 threads: −0.5040); duplicate rows (none).
+- **Features are bit-identical:** all 122,397 × 43 hidden-well features match the laptop's.
+- **The remaining difference is the XGBoost build** (Linux vs macOS wheel). Floating-point sums can differ in the last digits, changing near-tied splits; over 300 trees this behaves like a different random seed.
+- **Seed spread on the laptop alone:** seeds 1, 2, 3 and 42 give −0.482, −0.666, −0.501, −0.504 (range 0.18, sd 0.086). The Databricks gap (0.018) is smaller than an ordinary seed change.
+- **Consequence:** exact cross-platform parity is not achievable for this model as trained. Parity of inference (scoring a model trained once) and of the deterministic steps (quality, drift) does hold.
+
+### Deviations
+
+- **Drift reference (2026-11-09):** amendment 1 capped the reference at 20,000 rows per year, which weights every year equally and gave different bands from P4 (neutron "watch" instead of "alert"). Changed to a uniform 360,000-row sample, so years keep their P4 weights; bands then match P4 for all inputs.
+- **Environment:** the parity task runs in an environment pinned to the laptop's library versions (`parity`), the registry task in the MLflow environment (`ml`).
+
 ## Related Decisions
 
 - ADR-001 (scale), ADR-002 (P6 gate), ADR-004 (B), ADR-005 (T and reading rules), ADR-006 (PSI bands)

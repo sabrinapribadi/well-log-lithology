@@ -2,6 +2,50 @@
 
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
+## [0.10.0] — 2026-11-09 — P6 Databricks: parity failed, explained; registry and yearly job passed
+**Files:** databricks.yml, scripts/databricks_p6.py, scripts/databricks_prepare_inputs.sh, scripts/p6_drift_reference.py, scripts/p6_seed_spread.py, src/quality.py, data/outputs/p6_*.json, docs/adr/ADR-008
+- **Situation:** ADR-008 required Databricks to reproduce model B's hidden-well score to three decimals, register the models, and run a yearly quality and drift job.
+- **Task:** Same code as the laptop on serverless compute; Kansas lithology no longer served (amendment 1).
+- **Action:**
+  - Parity trained B on Databricks: −0.486 vs −0.504. Ruled out versions (pinned rerun), processor family, threads and duplicates; features were bit-identical.
+  - Measured B's own seed spread on the laptop: −0.482 to −0.666 (sd 0.086). The build difference acts like a seed change.
+  - Registered B and T in Unity Catalog; Spark job measured the 2026 archive's quality and drift.
+  - Fixed two bugs on the way: pandas 3 dropped the grouping column; equal-weight down-sampling changed drift bands.
+- **Result:** parity **failed**; registry passed; quality matches the laptop to four decimals and drift bands match for all six inputs.
+- **Talking point:** When the cloud score differed, I proved the inputs were bit-identical and showed the gap was smaller than the model's own seed noise.
+
+## [0.9.0] — 2026-11-09 — P5 API, MCP tools, grounded copilot: passed
+**Files:** src/serving/, scripts/p5_build_store.py, scripts/p5_eval_notes.py, tests/test_serving.py, tests/fixtures/store_small.json, configs/default_config.yaml, data/outputs/p5_notes_eval.json, docs/adr/ADR-007
+- **Situation:** P3 failed, so serving Kansas lithology would ship known-poor predictions.
+- **Task:** API, MCP tools and LLM notes on validated outputs only, within R13 budgets set from two earlier measurements.
+- **Action:** One store for North Sea lithology (model B), Kansas quality (P4) and the transfer result; grader + template fallback reused from GEO-1; prompt v2 writes shares as percentages.
+- **Result:** 22 contract tests; 60 live cases 100% grounded; $0.066 per 1,000 notes; p95 2.7–4.7 s live (budget 5 s); 0.04 ms cached: **passed**.
+- **Talking point:** The copilot refuses to call a Kansas rock: it explains the well's log quality and why lithology is not validated there.
+
+## [0.8.0] — 2026-11-08 — P4 log quality and drift: passed
+**Files:** scripts/p4_quality.py, src/drift.py, tests/test_drift.py, data/outputs/p4_quality.json, docs/adr/ADR-006
+- **Situation:** 28,906 Kansas LAS files from 1999–2026; nobody knew which wells a model could read.
+- **Task:** Quality measures for ≥ 99% of readable files and drift for every archive year (ADR-006).
+- **Action:** Streamed every file once: coverage, physical ranges, hole condition, model confidence; PSI by year vs earlier years and vs FORCE.
+- **Result:** 99.92% of files (24,157 wells); gamma ray, neutron and density together cover a median 36% of depth (0% before 2012); neutron drifts in 9 of 17 years; every year alerts against FORCE: **passed**.
+- **Talking point:** The quality scan explained the transfer failure: Kansas logs sit outside the North Sea training range in every year.
+
+## [0.7.0] — 2026-11-08 — P3 Kansas transfer: failed; P5–P6 re-scoped
+**Files:** docs/adr/ADR-005, scripts/p3_*.py, src/kansas.py, tests/test_kansas.py, data/outputs/p3_*.json, docs/adr/ADR-007, ADR-008
+- **Situation:** A North Sea model and 28,906 unlabelled Kansas files; the only labels are geological.
+- **Task:** Agreement ≥ 50% and lift ≥ 2 in 4 of 6 named units, designed before any prediction (ADR-005).
+- **Action:** Pushed the test first; built a transferable model T (no position or stratigraphy; FORCE cost 0.168); scored 1,915 files; diagnosed the failure on log values.
+- **Result:** 0 of 6 units: **failed**. Shales found (Heebner 90%) but lift < 2; carbonates read as sandstone (tighter than any North Sea limestone); evaporite intervals do not read as evaporites. Transfer claim withdrawn; P5–P6 serve validated outputs only.
+- **Talking point:** I let geology refute my model, then showed exactly why: old Kansas carbonates look like North Sea sandstone on gamma ray.
+
+## [0.6.0] — 2026-11-08 — P2b method comparison and the finalists' methods
+**Files:** docs/adr/ADR-009, scripts/p2b_lightgbm_fair.py, scripts/p2b_cnn.py, configs/force2020_finalists.json, data/outputs/p2b_*.json, docs/adr/ADR-004
+- **Situation:** P2 tested only trees, LightGBM had diverged, and no deep model was tested.
+- **Task:** A fair LightGBM and a 1D CNN under P2's rules, pre-registered; B kept unless beaten by ≥ 0.02 in CV.
+- **Action:** C2 = LightGBM with XGBoost's leaf limit; D = 1D CNN over ±2.4 m windows on the Apple GPU; documented all 13 finalists' methods from the organisers' retrospective and code.
+- **Result:** C2 CV −0.679 (level with XGBoost); D CV −0.944 (far behind); B stays. 11 of 12 in-range finalists used tree ensembles; none of the top three used the penalty matrix in training.
+- **Talking point:** One matched safeguard took LightGBM from collapse to parity, and a CNN confirmed what the 2020 competition found: trees with context win on 98 wells.
+
 ## [0.5.0] — 2026-11-07 — Pages live; share previews
 **Files:** docs/index.html, docs/build.html, docs/data/page_data.js, docs/assets/, scripts/export_page_data.py, tests/browser/hover_test.js, tests/browser/preview.js, configs/force2020_finalists.json, Makefile
 - **Situation:** P0–P2 results existed only as JSON files and ADR tables.

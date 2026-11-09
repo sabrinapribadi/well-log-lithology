@@ -274,6 +274,19 @@ details.sources > summary { font-size: 13px; font-weight: 500; padding: 4px 0; }
     </div></details>
   </div>
 
+  <div class="chart" id="w-ks3">
+    <h3>Does it work in Kansas? No: 0 of 6 units passed</h3>
+    <p class="sub">Share of each named unit's depth predicted as the rock geology says it is (median well). Pass needs ≥ 50% and lift ≥ 2. Hover a bar.</p>
+    <div class="hscroll"><svg class="plot" id="c-ks3" viewBox="0 0 720 250" role="img" aria-label="Kansas unit agreement"></svg></div>
+    <div class="tip"></div>
+    <div class="scroll small"><table><thead><tr><th>Why carbonates fail (median logs)</th><th class="num">Gamma ray</th><th class="num">Density</th><th class="num">Neutron</th><th class="num">Sonic</th><th class="num">Resistivity</th></tr></thead><tbody id="t-diag"></tbody></table></div>
+    <details class="how"><summary>? How to read this</summary><div class="body">
+      <span><b>Agreement:</b> share of a unit's depth labelled as its known rock, e.g. Hutchinson Salt → halite.</span>
+      <span><b>Lift:</b> how much more often that rock is predicted inside the unit than elsewhere in the same wells; 2 means twice as often.</span>
+      <span><b>So what:</b> old Kansas carbonates are tighter than any North Sea limestone and match its sandstone on gamma ray, so the model calls them sandstone. Use it on the North Sea only.</span>
+    </div></details>
+  </div>
+
   <div class="cols">
     <div class="small" style="display:grid;gap:8px">
       <span class="eyebrow">Where the penalty comes from (hidden wells)</span>
@@ -284,12 +297,15 @@ details.sources > summary { font-size: 13px; font-weight: 500; padding: 4px 0; }
       <ul>
         <li>Labels are interpretations, not core; interpreters disagree too.</li>
         <li>Ten hidden wells: one unusual well moves the score.</li>
-        <li>Kansas transfer is not tested yet (P3); North Sea results only.</li>
+        <li>Kansas transfer failed (P3): North Sea results only.</li>
+        <li>Seed noise: retraining with other seeds moves the hidden score by up to 0.18.</li>
       </ul>
       <details><summary>FAQ</summary><div class="body">
         <span><b>Why not accuracy?</b> Shale is 59–62% of samples; "all shale" is 59% accurate yet useless.</span>
         <span><b>Why not a random split?</b> It scored <span id="faq-rand"></span>, about 3× better than blind wells: a leak.</span>
         <span><b>Why not tune on hidden wells?</b> Then the score would describe those 10 wells, not new ones.</span>
+        <span><b>Why doesn't it work in Kansas?</b> Its rocks and logging differ: Kansas logs sit outside the North Sea range in every archive year (P4).</span>
+        <span><b>Is −0.504 stable?</b> Not to three decimals: seeds 1–3 give <span id="faq-seeds"></span>. Treat ranks among the finalists as approximate.</span>
       </div></details>
     </div>
   </div>
@@ -316,8 +332,19 @@ details.sources > summary { font-size: 13px; font-weight: 500; padding: 4px 0; }
       <div class="small" style="display:grid;gap:8px" id="ks-facts"></div>
     </div>
   </div></details>
-  <details class="more" id="more-log"><summary>Decision log and deviations</summary><div class="body small">
+  <details class="more" id="more-quality"><summary>Kansas log quality and drift by year (P4)</summary><div class="body">
+    <div class="small" id="q-facts"></div>
+    <div class="chart" id="w-drift">
+      <h3>Which inputs drift, year by year</h3>
+      <p class="sub">PSI of each archive year against all earlier years. Grey stable (&lt; 0.10), ochre watch, red alert (&gt; 0.25). Hover a cell.</p>
+      <div class="hscroll"><svg class="plot" id="c-drift" viewBox="0 0 720 200" role="img" aria-label="Drift by input and year"></svg></div>
+      <div class="tip"></div>
+    </div>
+  </div></details>
+  <details class="more" id="more-ops"><summary>Copilot, API and the cloud job (P5–P6)</summary><div class="body small" id="ops-body"></div></details>
+  <details class="more" id="more-log"><summary>Decision log, deviations and the finalists' methods</summary><div class="body small">
     <ul id="dev-list"></ul>
+    <div class="scroll"><table><thead><tr><th>2020 finalist</th><th class="num">Hidden</th><th>Method (organisers' retrospective; team code)</th></tr></thead><tbody id="t-fin-methods"></tbody></table></div>
     <p>Full records: <a href="https://github.com/sabrinapribadi/well-log-lithology/blob/main/docs/adr/ADR-002-validation-and-gates.md">ADR-002 deviations</a>.</p>
   </div></details>
   <details class="more" id="more-appendix"><summary>Technical appendix: gates, CV folds, per-well scores</summary><div class="body small">
@@ -375,7 +402,9 @@ const txt = (parent, x, y, s, anchor = "start", extra = {}) => { const t = mk("t
 const chipFor = (ok, label) => `<span class="chip ${ok === null ? "run" : ok ? "pass" : "fail"}">${esc(label)}</span>`;
 $("#status").innerHTML = [chipFor(true, "P0 data: passed"), chipFor(false, `P1 baseline: failed by ${(P.p1.gate - P.p1.hidden_test.penalty).toFixed(3)}`),
   p2 ? chipFor(p2.gate_passed, `P2 model choice: ${p2.gate_passed ? "passed" : "failed"}`) : chipFor(null, "P2 model choice: running"),
-  '<span class="chip plan">P3–P6 planned</span>'].join(" ");
+  P.p3 ? chipFor(P.p3.gate_passed, `P3 Kansas transfer: ${P.p3.gate_passed ? "passed" : `failed (${P.p3.units_passed} of ${P.p3.units_gated})`}`) : "",
+  P.p4 ? chipFor(P.p4.gate_passed, "P4 log quality: passed") : "", P.p5 ? chipFor(P.p5.gate_notes, "P5 copilot: passed") : "",
+  P.p6 ? chipFor(false, "P6 cloud job: failed on parity") : ""].join(" ");
 const metresRight = Math.round(bestHidden.accuracy * H.logged_m);
 $("#glance").innerHTML = [
   ["Data", "118 wells", "North Sea, 1.43M labelled depth samples · plus 28,906 Kansas LAS files"],
@@ -402,7 +431,9 @@ if (p2) {
   rows.push(["Features (A)", "Logs as provided (P1)", "Engineered: context, bad hole, per-well gamma ray", `CV mean ${f3(cv.A)} for A`]);
   rows.push(["Decision rule (B)", "Most probable rock (A)", cv.B > cv.A ? "Lowest expected penalty (B)" : "Most probable rock (A)", `CV ${f3(cv.A)} (A) vs ${f3(cv.B)} (B)`]);
   rows.push(["Library (C)", "LightGBM", cv.C > Math.max(cv.A, cv.B) ? "LightGBM" : "XGBoost", `CV ${f3(cv.C)} for LightGBM`]);
-  rows.push(["Chosen", "A, B, C", `Candidate ${best}`, `Hidden ${f3(bestHidden.penalty)} (${sgn(p2.gain.hidden_test)} vs P1; bar +0.020)`]);
+  if (P.p2b) { rows.push(["Library, fair (C2)", "LightGBM with XGBoost's leaf limit", "XGBoost (B)", `CV ${f3(P.p2b.C2.cv)} vs ${f3(cv.B)}: level`]);
+    rows.push(["Deep model (D)", "1D CNN over ±2.4 m windows", "XGBoost (B)", `CV ${f3(P.p2b.D.cv)} vs ${f3(cv.B)}: far behind`]); }
+  rows.push(["Chosen", "A, B, C, C2, D", `Candidate ${best}`, `Hidden ${f3(bestHidden.penalty)} (${sgn(p2.gain.hidden_test)} vs P1; bar +0.020)`]);
 } else rows.push(["Model choice (P2)", "A, B, C (named in ADR-004)", "running", "—"]);
 $("#t-choice").innerHTML = rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td><b>${esc(r[2])}</b></td><td class="mono small">${esc(r[3])}</td></tr>`).join("");
 
@@ -516,7 +547,8 @@ const passed = p2 && p2.gate_passed;
 $("#take-body").innerHTML = (p2 ? [
   `<p><b>${passed ? "Use it as a first pass." : "Not yet good enough to replace the baseline."}</b> On 10 unseen wells the ${esc(modelName)} scores ${f3(bestHidden.penalty)}: ${passed ? "a clear step over the baseline" : `${sgn(p2.gain.hidden_test)} vs the baseline, short of the +0.020 bar`}.</p>`,
   `<p>Review effort can be targeted: flagging the least-confident quarter of depth catches most mistakes.</p>`,
-  `<p><b>What would change our mind:</b> Kansas wells failing the formation-top test (P3) would limit the model to the North Sea.</p>`]
+  `<p><b>North Sea only.</b> In Kansas it failed all 6 geology checks: old carbonates read as sandstone. Kansas needs its own labels.</p>`,
+  `<p><b>What would change our mind:</b> a multi-seed comparison where B no longer beats the baseline; seed noise (up to 0.18) exceeds P2's margin.</p>`]
  : [`<p><b>Baseline only so far.</b> The untuned baseline lands 0.014 below the finalists; P2 tests whether engineered features close the gap.</p>`])
  .join("");
 
@@ -550,11 +582,69 @@ $("#take-body").innerHTML = (p2 ? [
 $("#dev-list").innerHTML = ["Kansas: 1,633 header longitudes lacked their minus sign; restored to west (P0).",
   "P1 miss checked for pipeline faults as ADR-002 requires: none found; the failure stands.",
   "Candidate A builds bad-hole size but not the promised flag; logged before P2 results.",
-  "A CV fold without basement samples crashed the run; probabilities now kept for all 12 rocks."].map(s => `<li>${esc(s)}</li>`).join("");
+  "A CV fold without basement samples crashed the run; probabilities now kept for all 12 rocks.",
+  "P3 failed, so P5 and P6 were re-scoped before building: serve North Sea lithology and Kansas quality only.",
+  "Databricks drift reference changed from equal-weight years to a uniform sample, matching P4's weights."].map(s => `<li>${esc(s)}</li>`).join("");
 $("#t-gates").innerHTML = [["P0 data", "exact splits; ≥ 99% Kansas headers", "passed (99.86%)"], ["P1 baseline", "≥ −0.526 on hidden wells", `failed (${f3(P.p1.hidden_test.penalty)})`],
   ["P2 model choice", "+0.020 on hidden and better on open", p2 ? `${p2.gate_passed ? "passed" : "failed"} (${sgn(p2.gain.hidden_test)} hidden, ${sgn(p2.gain.open_test)} open)` : "running"],
-  ["P3 Kansas transfer", "agreement with named units (ADR first)", "planned"]].map(r => `<tr><td>${r[0]}</td><td>${esc(r[1])}</td><td class="mono">${esc(r[2])}</td></tr>`).join("");
+  ["P3 Kansas transfer", "≥ 50% and lift ≥ 2 in 4 of 6 units", P.p3 ? `failed (${P.p3.units_passed} of ${P.p3.units_gated})` : "planned"],
+  ["P4 log quality", "≥ 99% of Kansas files; drift every year", P.p4 ? `passed (${pct(P.p4.processed_share, 2)})` : "planned"],
+  ["P5 copilot", "contracts; grounded notes; budgets", P.p5 ? `passed (${pct(P.p5.served_grounded_rate)} grounded, $${P.p5.cost_per_1000_usd.toFixed(3)} per 1,000)` : "planned"],
+  ["P6 cloud job", "parity to 3 decimals; registry; drift", P.p6 ? `failed on parity (${f3(P.p6.parity.hidden_score_databricks)} vs ${f3(P.p6.parity.hidden_score_local)}); registry and drift passed` : "planned"],
+  ["P7 pages", "live; browser tests in 3 modes", "passed"]].map(r => `<tr><td>${r[0]}</td><td>${esc(r[1])}</td><td class="mono">${esc(r[2])}</td></tr>`).join("");
 $("#t-cand").innerHTML = p2 ? Object.keys(p2.cv_mean).map(c => `<tr><td>${c}${c === best ? " (chosen)" : ""}</td><td class="num">${f3(p2.cv_mean[c])}</td><td class="num">${f3(p2.candidates[c].open_test.penalty)}</td><td class="num">${f3(p2.candidates[c].hidden_test.penalty)}</td></tr>`).join("")
   : `<tr><td colspan="4" class="muted">P2 running.</td></tr>`;
 $("#t-wells").innerHTML = Object.keys(P.p1.hidden_test.per_well).map(w => `<tr><td>${esc(w)}</td><td class="num">${f3(P.p1.hidden_test.per_well[w])}</td><td class="num">${p2 ? f3(p2.chosen_detail.hidden_test.per_well[w]) : "—"}</td></tr>`).join("");
+
+// ---------- Kansas transfer (P3)
+if (P.p3) (function () {
+  const svg = $("#c-ks3"), us = P.p3.units.filter(u => u.gated), x0 = 250, x1 = 640, X = v => x0 + v * (x1 - x0), rowH = 34;
+  [0, 0.25, 0.5, 0.75, 1].forEach(v => { mk("line", {class: "grid", x1: X(v), x2: X(v), y1: 4, y2: 6 + us.length * rowH}, svg); txt(svg, X(v), 20 + us.length * rowH, pct(v), "middle"); });
+  mk("line", {x1: X(0.5), x2: X(0.5), y1: 4, y2: 6 + us.length * rowH, stroke: "var(--fg)", "stroke-dasharray": "4 3"}, svg);
+  txt(svg, X(0.5) + 4, 240, "pass bar 50%");
+  us.forEach((u, i) => { const y = 8 + i * rowH, a = u.median_agreement || 0;
+    txt(svg, x0 - 8, y + 17, `${u.unit} → ${u.expected_rock.toLowerCase()}`, "end", {fill: "var(--fg)"});
+    mk("rect", {"data-k": i, x: x0, y: y + 4, width: Math.max(3, X(a) - x0), height: rowH - 12, fill: col(CLS.indexOf(u.expected_rock)), tabindex: 0}, svg);
+    txt(svg, Math.max(X(a), x0 + 3) + 6, y + 18, `${pct(a)} · lift ${u.lift == null ? "—" : u.lift.toFixed(1)}`); });
+  bindTips(svg, el => { const u = us[+el.dataset.k], mix = Object.entries(u.mix).slice(0, 3).map(([r, v]) => `${r.toLowerCase()} ${pct(v)}`).join(", ");
+    return `<b>${esc(u.unit)}: ${pct(u.median_agreement || 0)} ${esc(u.expected_rock.toLowerCase())}</b>Lift ${u.lift == null ? "—" : u.lift.toFixed(1)} (bar 2) in ${u.wells_scored} wells. Predicted inside: ${esc(mix)}.`; });
+  const d = P.p3.diag, r = (n, m) => `<tr><td>${n}</td><td class="num">${m.GR.toFixed(0)} API</td><td class="num">${m.RHOB.toFixed(2)} g/cm³</td><td class="num">${m.NPHI.toFixed(2)}</td><td class="num">${m.DTC.toFixed(0)} µs/ft</td><td class="num">${m.RDEP.toFixed(1)} Ω·m</td></tr>`;
+  $("#t-diag").innerHTML = r("Kansas Lansing–Kansas City (limestone)", d.kansas_lkc) + r("North Sea limestone", d.force_limestone) + r("North Sea sandstone", d.force_sandstone);
+})();
+if (P.p6 && P.p6.seed_spread) $("#faq-seeds").textContent = Object.values(P.p6.seed_spread.hidden_by_seed).map(f3).join(", ");
+
+// ---------- Kansas quality and drift (P4)
+if (P.p4) (function () {
+  const q = P.p4, old = q.by_year.filter(y => y.archive <= "2011").map(y => y.coverage), recent = q.by_year.filter(y => y.archive >= "2015").map(y => y.coverage);
+  $("#q-facts").innerHTML = `<ul><li>${N.format(q.files_processed)} of ${N.format(q.files_readable)} readable files measured (${pct(q.processed_share, 2)}), ${N.format(q.wells)} wells.</li>
+    <li>Gamma ray, neutron and density together cover a median ${pct(q.coverage_core3_median)} of each file's depth: ${pct(Math.max(...old))} in 1999–2011, ${pct(Math.min(...recent))}–${pct(Math.max(...recent))} since 2015.</li>
+    <li>Hole condition is knowable for ${pct((q.bad_hole_basis.DRHO + q.bad_hole_basis.caliper) / q.files_processed, 1)} of files; there, a median ${pct(q.bad_hole_median, 1)} of depth is washed out.</li>
+    <li>Against the North Sea training wells, density, neutron, sonic and resistivity alert in nearly every year: Kansas is out of range.</li></ul>`;
+  const svg = $("#c-drift"), ins = ["GR", "RHOB", "NPHI", "DTC", "RDEP", "T_CONF"], names = {GR: "gamma ray", RHOB: "density", NPHI: "neutron", DTC: "sonic", RDEP: "resistivity", T_CONF: "model confidence"};
+  const years = [...new Set(q.drift.map(d => d.archive))], cw = (700 - 130) / years.length, ch = 26;
+  const ok = v => v != null && isFinite(v), band = v => !ok(v) ? "var(--tint)" : v > 0.25 ? "var(--bad)" : v > 0.10 ? "var(--accent)" : "var(--line)";
+  ins.forEach((c, i) => { txt(svg, 122, 22 + i * ch, names[c], "end", {fill: "var(--fg)"});
+    years.forEach((y, j) => { const d = q.drift.find(e => e.archive === y && e.input === c);
+      mk("rect", {"data-k": `${c}|${y}`, x: 130 + j * cw, y: 6 + i * ch, width: cw - 2, height: ch - 3, rx: 2, fill: band(d.earlier), tabindex: (i + j) % 5 ? -1 : 0}, svg); }); });
+  years.forEach((y, j) => { if (j % 3 === 0) txt(svg, 130 + j * cw + cw / 2, 6 + ins.length * ch + 14, y.slice(0, 4), "middle"); });
+  bindTips(svg, el => { const [c, y] = el.dataset.k.split("|"), d = q.drift.find(e => e.archive === y && e.input === c);
+    const f = v => !ok(v) ? "—" : v.toFixed(2);
+    return `<b>${esc(names[c])}, ${esc(y)}</b>PSI ${f(d.earlier)} vs earlier years; ${f(d.force)} vs the North Sea wells. Over 0.25: the distribution has clearly shifted.`; });
+})();
+
+// ---------- copilot and cloud job (P5–P6)
+if (P.p5 || P.p6) $("#ops-body").innerHTML = [
+  P.p5 ? `<span class="eyebrow">Copilot and API (P5)</span><ul>
+    <li>Tools for apps and AI assistants (REST and MCP): a North Sea well's rock column, a Kansas well's log quality, the Kansas test result, a short note.</li>
+    <li>${P.p5.cases} live notes: ${pct(P.p5.served_grounded_rate)} grounded (every number traced to the data); $${P.p5.cost_per_1000_usd.toFixed(3)} per 1,000 notes (budget $${P.p5.budgets.cost_per_1000.toFixed(2)}).</li>
+    <li>Latency: p95 ${(P.p5.p95_ms_live / 1000).toFixed(1)} s live (budget ${(P.p5.budgets.p95_ms_live / 1000).toFixed(0)} s); ${P.p5.p95_ms_cached.toFixed(2)} ms from cache.</li></ul>
+    ${P.p5.examples.map(e => `<p class="muted">“${esc(e.note)}”</p>`).join("")}` : "",
+  P.p6 ? `<span class="eyebrow">Cloud job on Databricks (P6)</span><ul>
+    <li>Retraining the chosen model in the cloud: ${f3(P.p6.parity.hidden_score_databricks)} vs ${f3(P.p6.parity.hidden_score_local)} on the laptop, ${pct(P.p6.parity.identical_predictions_share, 1)} of predictions identical: <b>parity failed</b>.</li>
+    <li>Inputs were bit-identical; the difference behaves like a random seed. On the laptop alone, seeds give ${f3(P.p6.seed_spread.max)} to ${f3(P.p6.seed_spread.min)}.</li>
+    <li>Models registered in Unity Catalog: ${esc(P.p6.registry.lithology_b.registered)} and ${esc(P.p6.registry.lithology_t.registered)} (alias champion).</li>
+    <li>Yearly job on the ${esc(P.p6.archive_quality.archive)} archive: ${P.p6.archive_quality.processed} of ${P.p6.archive_quality.files} files measured with Spark; quality and drift match the laptop.</li></ul>` : ""].join("");
+
+// ---------- finalists' methods
+$("#t-fin-methods").innerHTML = fin.map(f => `<tr><td>#${f.final_rank} ${esc(f.team)}</td><td class="num">${f3(f.hidden_test)}</td><td>${esc(f.method || "")}</td></tr>`).join("");
 </script>

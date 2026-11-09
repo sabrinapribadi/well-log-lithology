@@ -135,6 +135,37 @@ def main() -> None:
     page["confidence"] = {"model": "P2" if pr2 is not None else "P1", "curve": confidence_curve(h.y.to_numpy(), h.p.to_numpy(), h.pmax.to_numpy())}
     page["confusions"] = {"model": page["confidence"]["model"], "rows": costly_confusions(h.y.to_numpy(), h.p.to_numpy())}
 
+    # P2b method comparison (ADR-009)
+    c2, cnn = load("p2b_lightgbm_fair.json"), load("p2b_cnn.json")
+    page["p2b"] = None if not (c2 and cnn) else {k: {"cv": v["cv_mean"], "open": v["open_test"]["penalty_score"], "hidden": v["hidden_test"]["penalty_score"],
+                                                    "accuracy": v["hidden_test"]["accuracy"]} for k, v in (("C2", c2), ("D", cnn))}
+    # P3 Kansas transfer (ADR-005) and its diagnostic
+    p3, p3t, p3d = load("p3_kansas_transfer.json"), load("p3_transfer_model.json"), load("p3_diagnostic.json")
+    if p3:
+        page["p3"] = {"gate_passed": p3["gate_passed"], "units_passed": p3["units_passed"], "units_gated": p3["units_gated"], "files": p3["files"],
+                      "units": [{"unit": u, **{k: v[k] for k in ("expected_rock", "gated", "wells_scored", "median_agreement", "lift", "passed")},
+                                 "lift": (None if v["lift"] is None or not np.isfinite(v["lift"]) else v["lift"]),
+                                 "mix": v["predicted_mix_inside"]} for u, v in p3["units"].items()],
+                      "t_hidden": p3t["hidden_test"]["penalty_score"], "t_cost": p3t["cost_vs_b_hidden"],
+                      "diag": {"kansas_lkc": p3d["kansas_unit_medians"]["Lansing-Kansas City"], "force_limestone": p3d["force_rock_medians"]["Limestone"],
+                               "force_sandstone": p3d["force_rock_medians"]["Sandstone"], "kansas_salt": p3d["kansas_unit_medians"]["Hutchinson Salt"],
+                               "force_halite": p3d["force_rock_medians"]["Halite"]}}
+    # P4 quality and drift (ADR-006)
+    p4 = load("p4_quality.json")
+    if p4:
+        page["p4"] = {k: p4[k] for k in ("files_readable", "files_processed", "processed_share", "wells", "coverage_core3_median", "out_of_range_median",
+                                         "bad_hole_median", "t_conf_median", "gate_passed", "bad_hole_basis", "by_year")}
+        page["p4"]["drift"] = [{"archive": d["archive"], "input": d["input"], "earlier": d["psi_vs_earlier"], "force": d["psi_vs_force"]} for d in p4["drift"]]
+    # P5 serving (ADR-007) and P6 Databricks (ADR-008)
+    p5 = load("p5_notes_eval.json")
+    if p5:
+        page["p5"] = {k: p5[k] for k in ("cases", "live_draft_pass_rate", "served_grounded_rate", "required_fact_coverage", "cost_per_1000_usd",
+                                         "p50_ms_live", "p95_ms_live", "p95_ms_cached", "budgets", "gate_notes")}
+        page["p5"]["examples"] = [{"subject": e["subject"], "note": e["note"]} for e in (p5["examples"][1], p5["examples"][4])]
+    par, reg, aq, dr, ss = load("p6_parity.json"), load("p6_registry.json"), load("p6_archive_quality.json"), load("p6_drift.json"), load("p6_seed_spread.json")
+    if par:
+        page["p6"] = {"parity": par, "registry": reg, "archive_quality": aq, "drift": dr["rows"] if dr else None, "seed_spread": ss}
+
     ev = load("references_evidence.json")
     page["evidence_retrieved"] = ev["retrieved"] if ev else None
     (ROOT / "docs" / "data").mkdir(parents=True, exist_ok=True)

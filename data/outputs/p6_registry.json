@@ -1,0 +1,15 @@
+{
+ "design": "ADR-008 register",
+ "lithology_b": {
+  "registered": "workspace.og2.lithology_b",
+  "version": 1,
+  "alias": "champion",
+  "inputs": 43
+ },
+ "lithology_t": {
+  "registered": "workspace.og2.lithology_t",
+  "version": 1,
+  "alias": "champion",
+  "inputs": 27
+ }
+}

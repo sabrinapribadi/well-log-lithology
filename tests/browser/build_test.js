@@ -24,7 +24,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
       const n = await page.$$eval("#swim g.step", (gs) => gs.length);
       ok(n >= 3, `${mode} ${id}: has steps (${n})`);
       for (let i = 0; i < n; i++) {
-        const g = await page.$(`#swim g.step[data-i="${i}"]`); await g.scrollIntoView(); await wait(30);
+        const g = await page.$(`#swim g.step[data-i="${i}"]`); await g.scrollIntoView(); await wait(150);   // let scroll events settle: they hide the tooltip by design
         const bb = await g.boundingBox(); await page.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2); await wait(40);
         const t = await page.$eval("#tip", (t) => ({ shown: !t.hidden, text: t.textContent.trim() }));
         ok(t.shown && t.text.startsWith(`${i + 1}.`), `${mode} ${id}: step ${i + 1} tooltip (${t.text.slice(0, 30)})`);

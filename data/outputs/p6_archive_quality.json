@@ -1,0 +1,10 @@
+{
+ "design": "ADR-008 amendment 1, quality_archive",
+ "archive": "2026",
+ "files": 374,
+ "processed": 374,
+ "processed_share": 1.0,
+ "coverage_core3_median": 0.9870689446895357,
+ "out_of_range_median": 0.0008946350754667975,
+ "t_conf_median": 0.7772077918052673
+}
