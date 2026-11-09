@@ -1,6 +1,6 @@
 # ADR-009: P2b Method Comparison — Fair LightGBM, a 1D Convolutional Network, and the Finalists' Methods
 
-**Status:** Accepted — written and pushed before either new candidate runs
+**Status:** Accepted — written and pushed before either new candidate ran; results appended
 **Date:** 2026-11-08
 **Deciders:** Sabrina Pribadi
 
@@ -44,6 +44,19 @@
 ### Finalists' methods (documentation)
 
 - Each of the 13 finalists' model families, from the organisers' technical retrospective and each team's public code in the organisers' repository. Recorded in ADR-004's SOTA table and on the results page.
+
+## Empirical results (2026-11-08; the decision above is unchanged)
+
+| Candidate | CV mean | Open test | Hidden test | Hidden accuracy |
+|---|---|---|---|---|
+| **B (XGBoost, chosen)** | **−0.670** | **−0.521** | **−0.504** | 79.4% |
+| C2 LightGBM, matched leaf limit | −0.679 | −0.536 | −0.495 | 80.0% |
+| D 1D CNN, 33-sample windows (Apple GPU, 55 min) | −0.944 | −0.829 | −0.945 | 64.0% |
+
+- **B stays the chosen model:** neither candidate beats its CV mean by ≥ 0.02.
+- **C2:** matching one safeguard took LightGBM from collapse (−1.03) to level with XGBoost. On the 10 hidden wells it scores 0.009 better than B and on the open wells 0.015 worse: a reminder of why selection uses CV, not one set of 10 wells.
+- **D:** a small CNN trained for a fixed 6 epochs falls well short of trees with engineered context on 98 wells, as in the 2020 competition (11 of the 12 in-range finalists used tree ensembles).
+- **Finalists' methods:** recorded with sources in `configs/force2020_finalists.json` and ADR-004's SOTA table.
 
 ## Considered Options
 

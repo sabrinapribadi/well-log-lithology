@@ -67,6 +67,14 @@
 - **Positive:** a registry-backed, scheduled job that scores new Kansas wells and watches drift, as an operator would run it.
 - **Negative:** Free Edition quotas cap scale; only one archive is scored on the platform.
 
+## Amendment 1 (2026-11-09, after P3 failed, before P6 runs): the yearly job reports quality and drift, not lithology
+
+- **Why:** P3 withdrew the Kansas transfer claim (ADR-005).
+- **`parity_b` and `register`:** unchanged.
+- **`score_archive` → `quality_archive`:** parse every LAS file of the newest archive in parallel with Spark and compute ADR-006's per-file quality measures (and T's confidence, labelled as a drift signal only). Output table `workspace.og2.kansas_quality`.
+- **`monitor_drift`:** unchanged in method; its reference is a down-sampled P4 drift sample (≤ 20,000 rows per year), uploaded once.
+- **Gate:** unchanged (parity to three decimals; models registered; drift task runs).
+
 ## Related Decisions
 
 - ADR-001 (scale), ADR-002 (P6 gate), ADR-004 (B), ADR-005 (T and reading rules), ADR-006 (PSI bands)

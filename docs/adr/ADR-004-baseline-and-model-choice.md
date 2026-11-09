@@ -54,8 +54,30 @@ The chosen candidate beats P1 by ≥ 0.02 on the hidden test and scores better t
 |---|---|---|---|
 | Gradient-boosted trees | XGBoost (competition winner's family), LightGBM | Yes | — |
 | Decision rule | Expected-penalty (Bayes) decision on class probabilities | Yes | — |
-| Deep sequence models | Semi-supervised contrastive + Transformer (Natural Resources Research 2025) | No (P2) | Needs a GPU-scale training budget; considered after P2 if the gap to the winner stays large |
+| Gradient-boosted trees, fair LightGBM | LightGBM with XGBoost's leaf safeguard (ADR-009, C2) | Yes (P2b) | CV −0.679, hidden −0.495: level with XGBoost |
+| Deep, convolutional | 1D CNN over depth windows (Imamverdiyev and Sukhostat 2019; ADR-009, D) | Yes (P2b) | CV −0.944, hidden −0.945: far behind trees |
+| Deep sequence models | Semi-supervised contrastive + Transformer (Natural Resources Research 2025) | No | Needs a GPU-scale training budget; a small CNN already trails trees by 0.27 in CV |
 | Foundation models | Well-log foundation model (WLFM); tabular foundation models | No | Recent preprints; a later comparison on the same blind wells |
+
+### What the 2020 finalists used (organisers' technical retrospective; each team's code in the organisers' repository)
+
+| Final rank | Team | Hidden score | Method |
+|---|---|---|---|
+| 1 | Olawale Ibrahim | −0.469 | XGBoost; 10-fold stratified CV; rare curves dropped; window and gradient features; no imputation |
+| 2 | GIR Team | −0.479 | XGBoost; physics-guided imputation of missing curves; gradient and polynomial features |
+| 3 | Lab.ICA-Team | −0.495 | Random forest; 5-fold CV; normalised GR and RHOB, gradients, formation; median fill |
+| 4 | H3G | −0.505 | CatBoost and XGBoost; iterative imputation |
+| 5 | ISPL Team | −0.508 | XGBoost |
+| 6 | Jiampiers C. | −0.509 | scikit-learn model (family not stated in the published code) |
+| 7 | José Bermúdez | −0.509 | Random forest |
+| 8 | Bohdan Pavlyshenko | −0.517 | LightGBM with a logistic-regression stack |
+| 9 | Jeremy Zhao | −0.517 | XGBoost and random forest; iterative imputation |
+| 10 | Campbell Hutcheson | −0.522 | XGBoost |
+| 11 | David P. | −0.526 | LightGBM |
+| 12 | SoftServe Team | −0.526 | Ensemble of LightGBM models; LightGBM imputation |
+| 13 | Dapo Awolayo | −0.944 | LightGBM |
+
+- None of the top three used the penalty matrix in training (retrospective). Candidate B uses it in the decision step (+0.005).
 
 ## Falsification
 

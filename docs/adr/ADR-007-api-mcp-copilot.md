@@ -80,6 +80,15 @@
 - **Positive:** answers are traceable to the same store the pages use.
 - **Negative:** notes are only as good as P3–P4; they explain the model, they do not interpret the rock independently.
 
+## Amendment 1 (2026-11-09, after P3 failed, before P5 is built): serve validated outputs only
+
+- **Why:** P3 withdrew the Kansas transfer claim (ADR-005). Serving Kansas lithology would ship predictions known to be poor.
+- **Lithology:** served for the FORCE wells only, from model B (validated on hidden wells, −0.504). `predict_lithology(well_id)` takes a FORCE well name.
+- **Kansas:** served as data quality, from P4: `well_quality(kgs_id)` with coverage, ranges, hole condition, and T's confidence labelled "not a lithology prediction".
+- **`unit_agreement(unit)`:** kept, reporting P3's failed agreement and lift as the honest answer to "does it work in Kansas?".
+- **`POST /predict`:** returns model B's curve only for files with FORCE-style inputs; for other LAS files it returns a quality report and states that lithology is not validated there.
+- **Notes:** explain a FORCE well's column (rocks, doubtful intervals, blind score) or a Kansas well's quality; the budgets and the gate are unchanged.
+
 ## Related Decisions
 
 - ADR-002 (P5 gate), ADR-005 (Kansas predictions), ADR-006 (quality measures)

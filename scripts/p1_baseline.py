@@ -23,7 +23,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from src.features import baseline_matrix, labels, strat_codes  # noqa: E402
-from src.scoring import NAMES, penalty_score  # noqa: E402
+from src.scoring import penalty_score, report  # noqa: E402,F401 — report re-exported for P2 scripts
 
 CFG = yaml.safe_load((ROOT / "configs" / "default_config.yaml").read_text())
 DATA = Path(os.environ.get("WLL_DATA_DIR", "~/data/well-log-lithology")).expanduser()
@@ -34,11 +34,6 @@ GATE = -0.526
 log = lambda *a: print(time.strftime("%H:%M:%S"), *a, flush=True)
 
 
-def report(y: np.ndarray, p: np.ndarray, wells: np.ndarray) -> dict:
-    rec = {NAMES[k]: (float((p[y == k] == k).mean()) if (y == k).any() else None) for k in range(12)}
-    per_well = {w: penalty_score(y[wells == w], p[wells == w]) for w in np.unique(wells)}
-    return {"penalty_score": penalty_score(y, p), "accuracy": float((y == p).mean()), "recall": rec,
-            "support": {NAMES[k]: int((y == k).sum()) for k in range(12)}, "per_well": per_well}
 
 
 def main() -> None:

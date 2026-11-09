@@ -1,0 +1,175 @@
+{
+ "design": "ADR-005 falsification diagnostic",
+ "kansas_unit_medians": {
+  "Arbuckle": {
+   "GR": 25.212,
+   "RHOB": 2.645,
+   "NPHI": 0.129,
+   "DTC": 53.293,
+   "RDEP": 12.506,
+   "PEF": 2.906,
+   "has_PEF_share": 0.35
+  },
+  "Cherokee": {
+   "GR": 78.979,
+   "RHOB": 2.596,
+   "NPHI": 0.144,
+   "DTC": 68.395,
+   "RDEP": 8.322,
+   "PEF": 3.713,
+   "has_PEF_share": 0.425
+  },
+  "Heebner": {
+   "GR": 169.488,
+   "RHOB": 2.441,
+   "NPHI": 0.258,
+   "DTC": 88.133,
+   "RDEP": 6.988,
+   "PEF": 3.325,
+   "has_PEF_share": 0.225
+  },
+  "Hutchinson Salt": {
+   "GR": 44.33,
+   "RHOB": 2.598,
+   "NPHI": 0.151,
+   "DTC": 74.419,
+   "RDEP": 6.403,
+   "PEF": 3.821,
+   "has_PEF_share": 0.55
+  },
+  "Lansing-Kansas City": {
+   "GR": 43.912,
+   "RHOB": 2.605,
+   "NPHI": 0.077,
+   "DTC": 59.165,
+   "RDEP": 12.39,
+   "PEF": 4.433,
+   "has_PEF_share": 0.35
+  },
+  "Mississippian": {
+   "GR": 41.6,
+   "RHOB": 2.508,
+   "NPHI": 0.129,
+   "DTC": 67.63,
+   "RDEP": 8.262,
+   "PEF": 3.625,
+   "has_PEF_share": 0.475
+  },
+  "Precambrian": {
+   "GR": 134.967,
+   "RHOB": 2.605,
+   "NPHI": 0.014,
+   "DTC": 56.575,
+   "RDEP": 232.955,
+   "PEF": 3.35,
+   "has_PEF_share": 0.375
+  },
+  "Stone Corral": {
+   "GR": 25.098,
+   "RHOB": 2.199,
+   "NPHI": 0.134,
+   "DTC": 68.443,
+   "RDEP": 9.822,
+   "PEF": 2.94,
+   "has_PEF_share": 0.375
+  }
+ },
+ "force_rock_medians": {
+  "Anhydrite": {
+   "GR": 14.578,
+   "RHOB": 2.92,
+   "NPHI": -0.001,
+   "DTC": 53.088,
+   "RDEP": 85.482,
+   "PEF": 5.099
+  },
+  "Basement": {
+   "GR": 34.407,
+   "RHOB": 2.902,
+   "NPHI": 0.151,
+   "DTC": 47.249,
+   "RDEP": 24.007,
+   "PEF": NaN
+  },
+  "Chalk": {
+   "GR": 12.65,
+   "RHOB": 2.411,
+   "NPHI": 0.167,
+   "DTC": 79.812,
+   "RDEP": 1.417,
+   "PEF": 5.356
+  },
+  "Coal": {
+   "GR": 64.856,
+   "RHOB": 1.877,
+   "NPHI": 0.441,
+   "DTC": 106.919,
+   "RDEP": 6.121,
+   "PEF": 3.706
+  },
+  "Dolomite": {
+   "GR": 49.755,
+   "RHOB": 2.438,
+   "NPHI": 0.293,
+   "DTC": 100.582,
+   "RDEP": 1.549,
+   "PEF": 4.314
+  },
+  "Halite": {
+   "GR": 9.272,
+   "RHOB": 2.072,
+   "NPHI": 0.041,
+   "DTC": 68.446,
+   "RDEP": 1954.211,
+   "PEF": 15.141
+  },
+  "Limestone": {
+   "GR": 31.247,
+   "RHOB": 2.52,
+   "NPHI": 0.177,
+   "DTC": 75.302,
+   "RDEP": 2.682,
+   "PEF": 5.149
+  },
+  "Marl": {
+   "GR": 55.666,
+   "RHOB": 2.484,
+   "NPHI": 0.279,
+   "DTC": 90.62,
+   "RDEP": 1.951,
+   "PEF": 4.714
+  },
+  "Sandstone": {
+   "GR": 43.847,
+   "RHOB": 2.257,
+   "NPHI": 0.229,
+   "DTC": 95.541,
+   "RDEP": 1.092,
+   "PEF": 3.885
+  },
+  "Sandstone/Shale": {
+   "GR": 62.762,
+   "RHOB": 2.41,
+   "NPHI": 0.278,
+   "DTC": 94.509,
+   "RDEP": 1.971,
+   "PEF": 4.492
+  },
+  "Shale": {
+   "GR": 78.89,
+   "RHOB": 2.27,
+   "NPHI": 0.374,
+   "DTC": 124.572,
+   "RDEP": 1.36,
+   "PEF": 4.208
+  },
+  "Tuff": {
+   "GR": 52.453,
+   "RHOB": 2.146,
+   "NPHI": 0.442,
+   "DTC": 125.486,
+   "RDEP": 0.965,
+   "PEF": 4.636
+  }
+ }
+}

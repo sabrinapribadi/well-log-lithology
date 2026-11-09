@@ -24,3 +24,10 @@ def penalty_score(y_true, y_pred) -> float:
     """Official score on class indices: 0 is perfect; more negative is worse (vectorised official formula)."""
     t, p = np.asarray(y_true, dtype=int), np.asarray(y_pred, dtype=int)
     return float(-A[t, p].mean())
+
+def report(y: np.ndarray, p: np.ndarray, wells: np.ndarray) -> dict:
+    """Penalty score, accuracy, recall and support per lithology, and per-well scores."""
+    rec = {NAMES[k]: (float((p[y == k] == k).mean()) if (y == k).any() else None) for k in range(12)}
+    per_well = {w: penalty_score(y[wells == w], p[wells == w]) for w in np.unique(wells)}
+    return {"penalty_score": penalty_score(y, p), "accuracy": float((y == p).mean()), "recall": rec,
+            "support": {NAMES[k]: int((y == k).sum()) for k in range(12)}, "per_well": per_well}

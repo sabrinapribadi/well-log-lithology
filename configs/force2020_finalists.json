@@ -8,91 +8,118 @@
    "team": "Olawale Ibrahim",
    "open_test": -0.5118,
    "leaderboard_rank": 24,
-   "hidden_test": -0.469
+   "hidden_test": -0.469,
+   "method": "XGBoost; 10-fold stratified CV; rare curves dropped; window and gradient features; no imputation",
+   "method_source": "organisers' technical retrospective"
   },
   {
    "final_rank": 2,
    "team": "GIR Team",
    "open_test": -0.5037,
    "leaderboard_rank": 11,
-   "hidden_test": -0.4792
+   "hidden_test": -0.4792,
+   "method": "XGBoost; physics-guided imputation of missing curves; gradient and polynomial features",
+   "method_source": "organisers' technical retrospective"
   },
   {
    "final_rank": 3,
    "team": "Lab.ICA-Team / Smith A.",
    "open_test": -0.4943,
    "leaderboard_rank": 6,
-   "hidden_test": -0.4954
+   "hidden_test": -0.4954,
+   "method": "Random forest; 5-fold stratified CV; normalised GR and RHOB, gradients, formation; median fill",
+   "method_source": "organisers' technical retrospective"
   },
   {
    "final_rank": 4,
    "team": "H3G (Haoyuan Zhang, Harry Brandsen, Gregory Barrere, Helena Nandi Formentin)",
    "open_test": -0.509,
    "leaderboard_rank": 17,
-   "hidden_test": -0.5045
+   "hidden_test": -0.5045,
+   "method": "CatBoost and XGBoost; iterative imputation of missing curves",
+   "method_source": "team code in the organisers' repository"
   },
   {
    "final_rank": 5,
    "team": "ISPL Team",
    "open_test": -0.4885,
    "leaderboard_rank": 2,
-   "hidden_test": -0.5084
+   "hidden_test": -0.5084,
+   "method": "XGBoost",
+   "method_source": "team code in the organisers' repository"
   },
   {
    "final_rank": 6,
    "team": "Jiampiers C.",
    "open_test": -0.5014,
    "leaderboard_rank": 9,
-   "hidden_test": -0.5087
+   "hidden_test": -0.5087,
+   "method": "scikit-learn model (family not stated in the published inference code)",
+   "method_source": "team code in the organisers' repository"
   },
   {
    "final_rank": 7,
-   "team": "Jos\u00e9 Berm\u00fadez",
+   "team": "José Bermúdez",
    "open_test": -0.5052,
    "leaderboard_rank": 14,
-   "hidden_test": -0.5091
+   "hidden_test": -0.5091,
+   "method": "Random forest",
+   "method_source": "team code in the organisers' repository"
   },
   {
    "final_rank": 8,
    "team": "Bohdan Pavlyshenko",
    "open_test": -0.5112,
    "leaderboard_rank": 22,
-   "hidden_test": -0.5171
+   "hidden_test": -0.5171,
+   "method": "LightGBM with a logistic-regression stack",
+   "method_source": "team code in the organisers' repository"
   },
   {
    "final_rank": 9,
    "team": "Jeremy Zhao",
    "open_test": -0.5264,
    "leaderboard_rank": 31,
-   "hidden_test": -0.5173
+   "hidden_test": -0.5173,
+   "method": "XGBoost and random forest; iterative imputation (an LSTM also appears in the code)",
+   "method_source": "team code in the organisers' repository"
   },
   {
    "final_rank": 10,
    "team": "Campbell Hutcheson",
    "open_test": -0.505,
    "leaderboard_rank": 13,
-   "hidden_test": -0.5221
+   "hidden_test": -0.5221,
+   "method": "XGBoost",
+   "method_source": "team code in the organisers' repository"
   },
   {
    "final_rank": 11,
    "team": "David P.",
    "open_test": -0.4775,
    "leaderboard_rank": 1,
-   "hidden_test": -0.5256
+   "hidden_test": -0.5256,
+   "method": "LightGBM",
+   "method_source": "team code in the organisers' repository"
   },
   {
    "final_rank": 12,
    "team": "SoftServe Team",
    "open_test": -0.4936,
    "leaderboard_rank": 3,
-   "hidden_test": -0.5263
+   "hidden_test": -0.5263,
+   "method": "Ensemble of LightGBM models; LightGBM imputation; holdout wells similar to the test wells",
+   "method_source": "team README in the organisers' repository"
   },
   {
    "final_rank": 13,
    "team": "Dapo Awolayo",
    "open_test": -0.5121,
    "leaderboard_rank": 25,
-   "hidden_test": -0.9441
+   "hidden_test": -0.9441,
+   "method": "LightGBM",
+   "method_source": "team code in the organisers' repository"
   }
- ]
+ ],
+ "methods_note": "None of the top three used the penalty matrix in training (organisers' retrospective). Of the 12 finalists within −0.469 to −0.526, 11 used tree ensembles; one team's published code does not state its model family."
 }

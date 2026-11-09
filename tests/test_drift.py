@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from scripts.p4_quality import psi
+from src.drift import psi
 
 
 def test_psi_is_near_zero_for_same_distribution_and_large_for_a_shift():

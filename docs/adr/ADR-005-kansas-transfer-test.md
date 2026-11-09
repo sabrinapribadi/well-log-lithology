@@ -1,6 +1,6 @@
 # ADR-005: P3 Kansas Transfer Test
 
-**Status:** Accepted — written and pushed before any Kansas prediction
+**Status:** Accepted — written and pushed before any Kansas prediction; results appended (P3 failed)
 **Date:** 2026-11-08
 **Deciders:** Sabrina Pribadi
 
@@ -74,6 +74,36 @@
 ### 7. Deliverable
 
 - Lithology and probability curves per scored well, written as LAS 2.0 (curves `LITH` code, `LITH_PROB`). Outputs stay outside the repository; three example wells are committed under `docs/data/las/`.
+
+## Empirical results (2026-11-08; the decision above is unchanged)
+
+**P3 failed: 0 of 6 units passed.** 1,915 files scored, 0 errors. The transfer claim is withdrawn (ADR-002): this is a North Sea-only model.
+
+| Unit | Expected | Wells scored | Median agreement | Lift | Predicted inside the unit (top) |
+|---|---|---|---|---|---|
+| Heebner | Shale | 289 | 90% | 1.57 | shale 78%, sandstone 11% |
+| Cherokee | Shale | 292 | 61% | 1.31 | shale 60%, sandstone 21% |
+| Stone Corral | Anhydrite | 212 | 34% | 88 | anhydrite 34%, sandstone 28%, shale 23% |
+| Lansing–Kansas City | Limestone | 296 | 0.2% | 1.03 | sandstone 56%, shale 26% |
+| Arbuckle | Dolomite | 196 | 0% (carbonate family 0%) | — | sandstone 67%, shale 19% |
+| Hutchinson Salt | Halite | 137 | 0% | 1.44 | shale 38%, sandstone 26%, anhydrite 19% |
+| Mississippian (reported) | Limestone | 247 | 0% | 1.15 | sandstone 74% |
+| Precambrian (reported) | Basement | 17 | 0% | — | shale 70% |
+
+**Model T on the FORCE hidden wells (reported):** −0.672 vs B's −0.504; dropping position and North Sea stratigraphy costs 0.168.
+
+### Falsification diagnostic (training data and Kansas logs only; `data/outputs/p3_diagnostic.json`)
+
+- **No pipeline fault found:** Kansas log values inside the units are physically plausible (e.g. Heebner gamma ray 169 API: a hot shale).
+- **Carbonates fall outside the training range.** Lansing–Kansas City median: density 2.60 g/cm³, neutron 0.08, sonic 59 µs/ft, resistivity 12 Ω·m. FORCE limestone: 2.52, 0.18, 75, 2.7. These Paleozoic carbonates are tighter than any North Sea limestone; their gamma ray (44 API) equals FORCE sandstone's median, so the model calls them sandstone. PEF, which separates limestone from sandstone, exists in only 35% of these wells.
+- **The evaporite intervals do not read as evaporites:** median density 2.60 inside the Hutchinson Salt (halite ≈ 2.03) and 2.20 inside the Stone Corral (FORCE anhydrite 2.92). Interbeds, picks or hole condition, not the model, set the ceiling there; P4's quality measures will tell which.
+- **Shales are recognised but the lift bar fails:** the model calls 78% of the Heebner shale, but also half of all other Kansas depth.
+
+### What would be needed (not run; each would be a new pre-registered decision)
+
+- Kansas labels from cored or described intervals, to train or adapt on Kansas rocks.
+- Domain adaptation of log distributions between basins (cited in Considered Options).
+- Restricting evaporite tests to intervals whose logs pass P4 quality checks.
 
 ## Considered Options
 
