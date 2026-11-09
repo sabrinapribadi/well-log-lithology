@@ -1,0 +1,513 @@
+{
+"version": 1,
+"force": {
+"15/9-23": {
+"well": "15/9-23",
+"split": "hidden",
+"model": "B (P2 choice, XGBoost)",
+"top_m": 1518.3,
+"base_m": 3212.6,
+"logged_m": 1682,
+"blind_score": -0.395,
+"share_as_interpreted": 0.829,
+"rock_shares": {
+"Shale": 0.722,
+"Limestone": 0.172,
+"Sandstone": 0.063,
+"Marl": 0.037,
+"Coal": 0.004
+},
+"doubtful_m": 45,
+"doubtful_intervals": 161,
+"intervals": [
+{
+"rock": "Shale",
+"top_m": 1518.3,
+"base_m": 1836.0,
+"probability": 0.99
+},
+{
+"rock": "Limestone",
+"top_m": 1836.0,
+"base_m": 1836.1,
+"probability": 0.6
+},
+{
+"rock": "Shale",
+"top_m": 1836.1,
+"base_m": 1990.8,
+"probability": 0.99
+},
+{
+"rock": "Limestone",
+"top_m": 1990.8,
+"base_m": 1991.8,
+"probability": 0.68
+},
+{
+"rock": "Shale",
+"top_m": 1991.8,
+"base_m": 2032.0,
+"probability": 0.98
+},
+{
+"rock": "Limestone",
+"top_m": 2032.0,
+"base_m": 2032.2,
+"probability": 0.5
+},
+{
+"rock": "Shale",
+"top_m": 2032.2,
+"base_m": 2043.4,
+"probability": 0.98
+},
+{
+"rock": "Limestone",
+"top_m": 2043.4,
+"base_m": 2043.9,
+"probability": 0.59
+},
+{
+"rock": "Shale",
+"top_m": 2043.9,
+"base_m": 2102.7,
+"probability": 0.98
+},
+{
+"rock": "Sandstone",
+"top_m": 2102.7,
+"base_m": 2107.7,
+"probability": 0.92
+},
+{
+"rock": "Shale",
+"top_m": 2107.7,
+"base_m": 2108.2,
+"probability": 0.64
+},
+{
+"rock": "Sandstone",
+"top_m": 2108.2,
+"base_m": 2110.0,
+"probability": 0.85
+},
+{
+"rock": "Shale",
+"top_m": 2110.0,
+"base_m": 2137.2,
+"probability": 0.98
+},
+{
+"rock": "Sandstone",
+"top_m": 2137.2,
+"base_m": 2161.2,
+"probability": 0.97
+},
+{
+"rock": "Shale",
+"top_m": 2161.2,
+"base_m": 2228.1,
+"probability": 0.95
+},
+{
+"rock": "Limestone",
+"top_m": 2228.1,
+"base_m": 2228.4,
+"probability": 0.67
+},
+{
+"rock": "Shale",
+"top_m": 2228.4,
+"base_m": 2303.8,
+"probability": 0.97
+},
+{
+"rock": "Limestone",
+"top_m": 2303.8,
+"base_m": 2304.1,
+"probability": 0.66
+},
+{
+"rock": "Shale",
+"top_m": 2304.1,
+"base_m": 2328.9,
+"probability": 0.95
+},
+{
+"rock": "Limestone",
+"top_m": 2328.9,
+"base_m": 2329.4,
+"probability": 0.66
+}
+],
+"doubtful": [
+{
+"top_m": 2032.0,
+"base_m": 2032.2
+},
+{
+"top_m": 2109.9,
+"base_m": 2110.0
+},
+{
+"top_m": 2328.7,
+"base_m": 2328.9
+},
+{
+"top_m": 2329.4,
+"base_m": 2329.8
+},
+{
+"top_m": 2332.8,
+"base_m": 2333.2
+}
+]
+},
+"35/9-7": {
+"well": "35/9-7",
+"split": "hidden",
+"model": "B (P2 choice, XGBoost)",
+"top_m": 1351.2,
+"base_m": 2973.9,
+"logged_m": 1623,
+"blind_score": -0.367,
+"share_as_interpreted": 0.861,
+"rock_shares": {
+"Shale": 0.742,
+"Sandstone/Shale": 0.138,
+"Sandstone": 0.078,
+"Limestone": 0.039,
+"Coal": 0.003
+},
+"doubtful_m": 41,
+"doubtful_intervals": 154,
+"intervals": [
+{
+"rock": "Shale",
+"top_m": 1351.2,
+"base_m": 1362.7,
+"probability": 0.92
+},
+{
+"rock": "Sandstone",
+"top_m": 1362.7,
+"base_m": 1362.9,
+"probability": 0.58
+},
+{
+"rock": "Shale",
+"top_m": 1362.9,
+"base_m": 1363.5,
+"probability": 0.77
+},
+{
+"rock": "Sandstone",
+"top_m": 1363.5,
+"base_m": 1363.6,
+"probability": 0.52
+},
+{
+"rock": "Shale",
+"top_m": 1363.6,
+"base_m": 1363.9,
+"probability": 0.57
+},
+{
+"rock": "Sandstone",
+"top_m": 1363.9,
+"base_m": 1366.4,
+"probability": 0.79
+},
+{
+"rock": "Shale",
+"top_m": 1366.4,
+"base_m": 1366.5,
+"probability": 0.53
+},
+{
+"rock": "Sandstone",
+"top_m": 1366.5,
+"base_m": 1367.1,
+"probability": 0.59
+},
+{
+"rock": "Shale",
+"top_m": 1367.1,
+"base_m": 1450.3,
+"probability": 0.82
+},
+{
+"rock": "Sandstone",
+"top_m": 1450.3,
+"base_m": 1450.6,
+"probability": 0.53
+},
+{
+"rock": "Shale",
+"top_m": 1450.6,
+"base_m": 1450.7,
+"probability": 0.54
+},
+{
+"rock": "Sandstone",
+"top_m": 1450.7,
+"base_m": 1456.0,
+"probability": 0.68
+},
+{
+"rock": "Shale",
+"top_m": 1456.0,
+"base_m": 1456.2,
+"probability": 0.57
+},
+{
+"rock": "Sandstone",
+"top_m": 1456.2,
+"base_m": 1464.7,
+"probability": 0.82
+},
+{
+"rock": "Shale",
+"top_m": 1464.7,
+"base_m": 1465.0,
+"probability": 0.55
+},
+{
+"rock": "Sandstone",
+"top_m": 1465.0,
+"base_m": 1469.0,
+"probability": 0.7
+},
+{
+"rock": "Shale",
+"top_m": 1469.0,
+"base_m": 1491.3,
+"probability": 0.92
+},
+{
+"rock": "Sandstone",
+"top_m": 1491.3,
+"base_m": 1497.1,
+"probability": 0.78
+},
+{
+"rock": "Shale",
+"top_m": 1497.1,
+"base_m": 1497.8,
+"probability": 0.59
+},
+{
+"rock": "Sandstone",
+"top_m": 1497.8,
+"base_m": 1500.1,
+"probability": 0.77
+}
+],
+"doubtful": [
+{
+"top_m": 1450.9,
+"base_m": 1451.0
+},
+{
+"top_m": 1469.3,
+"base_m": 1469.4
+},
+{
+"top_m": 1505.3,
+"base_m": 1505.4
+},
+{
+"top_m": 1505.9,
+"base_m": 1506.0
+},
+{
+"top_m": 1538.6,
+"base_m": 1539.2
+}
+]
+}
+},
+"kansas": {
+"1001184201": {
+"kgs_id": "1001184201",
+"archive": "2001_2005",
+"logged_samples": 201,
+"curves": [
+"GR",
+"NPHI",
+"RDEP",
+"CALI"
+],
+"coverage_gr_neutron_density": 0.0,
+"out_of_range_share": 0.3333,
+"bad_hole_share": null,
+"bad_hole_basis": "unknown",
+"model_t_confidence_median": null,
+"lithology_validated": false
+},
+"1001186808": {
+"kgs_id": "1001186808",
+"archive": "2014",
+"logged_samples": 8301,
+"curves": [
+"GR"
+],
+"coverage_gr_neutron_density": 0.0,
+"out_of_range_share": 0.0002,
+"bad_hole_share": null,
+"bad_hole_basis": "unknown",
+"model_t_confidence_median": null,
+"lithology_validated": false
+},
+"1001186847": {
+"kgs_id": "1001186847",
+"archive": "2006_2011",
+"logged_samples": 8305,
+"curves": [
+"GR",
+"NPHI"
+],
+"coverage_gr_neutron_density": 0.0,
+"out_of_range_share": 0.4892,
+"bad_hole_share": null,
+"bad_hole_basis": "unknown",
+"model_t_confidence_median": null,
+"lithology_validated": false
+}
+},
+"units": {
+"Heebner": {
+"unit": "Heebner",
+"expected_rock": "Shale",
+"gated": true,
+"wells_scored": 289,
+"median_agreement": 0.9,
+"lift": 1.57,
+"passed": false,
+"predicted_mix_inside": {
+"Shale": 0.78,
+"Sandstone": 0.11,
+"Coal": 0.07,
+"Sandstone/Shale": 0.03,
+"Limestone": 0.01
+}
+},
+"Stone Corral": {
+"unit": "Stone Corral",
+"expected_rock": "Anhydrite",
+"gated": true,
+"wells_scored": 212,
+"median_agreement": 0.342,
+"lift": 87.97,
+"passed": false,
+"predicted_mix_inside": {
+"Anhydrite": 0.34,
+"Sandstone": 0.28,
+"Shale": 0.23,
+"Sandstone/Shale": 0.06,
+"Limestone": 0.05
+}
+},
+"Lansing-Kansas City": {
+"unit": "Lansing-Kansas City",
+"expected_rock": "Limestone",
+"gated": true,
+"wells_scored": 296,
+"median_agreement": 0.002,
+"lift": 1.03,
+"passed": false,
+"predicted_mix_inside": {
+"Sandstone": 0.56,
+"Shale": 0.26,
+"Sandstone/Shale": 0.12,
+"Coal": 0.03,
+"Limestone": 0.03
+}
+},
+"Cherokee": {
+"unit": "Cherokee",
+"expected_rock": "Shale",
+"gated": true,
+"wells_scored": 292,
+"median_agreement": 0.614,
+"lift": 1.31,
+"passed": false,
+"predicted_mix_inside": {
+"Shale": 0.6,
+"Sandstone": 0.21,
+"Sandstone/Shale": 0.11,
+"Coal": 0.06,
+"Limestone": 0.02
+}
+},
+"Mississippian": {
+"unit": "Mississippian",
+"expected_rock": "Limestone",
+"gated": false,
+"wells_scored": 247,
+"median_agreement": 0.0,
+"lift": 1.15,
+"passed": false,
+"predicted_mix_inside": {
+"Sandstone": 0.74,
+"Shale": 0.13,
+"Sandstone/Shale": 0.06,
+"Limestone": 0.04,
+"Coal": 0.03
+}
+},
+"Arbuckle": {
+"unit": "Arbuckle",
+"expected_rock": "Dolomite",
+"gated": true,
+"wells_scored": 196,
+"median_agreement": 0.0,
+"lift": 4.96,
+"passed": false,
+"predicted_mix_inside": {
+"Sandstone": 0.67,
+"Shale": 0.19,
+"Limestone": 0.06,
+"Sandstone/Shale": 0.05,
+"Coal": 0.03
+}
+},
+"Precambrian": {
+"unit": "Precambrian",
+"expected_rock": "Basement",
+"gated": false,
+"wells_scored": 17,
+"median_agreement": 0.0,
+"lift": null,
+"passed": false,
+"predicted_mix_inside": {
+"Shale": 0.7,
+"Sandstone": 0.19,
+"Limestone": 0.05,
+"Sandstone/Shale": 0.03,
+"Anhydrite": 0.02
+}
+},
+"Hutchinson Salt": {
+"unit": "Hutchinson Salt",
+"expected_rock": "Halite",
+"gated": true,
+"wells_scored": 137,
+"median_agreement": 0.0,
+"lift": 1.44,
+"passed": false,
+"predicted_mix_inside": {
+"Shale": 0.38,
+"Sandstone": 0.26,
+"Anhydrite": 0.19,
+"Limestone": 0.11,
+"Sandstone/Shale": 0.04
+}
+}
+},
+"meta": {
+"p3_gate_passed": false,
+"model_b_hidden_score": -0.504
+}
+}

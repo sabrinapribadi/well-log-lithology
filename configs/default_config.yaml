@@ -11,3 +11,17 @@ paths:
 # FORCE 2020 lithology codes → class index used by the official penalty matrix (lithology_competition/data/test_code.py)
 lithology_codes: {30000: 0, 65030: 1, 65000: 2, 80000: 3, 74000: 4, 70000: 5, 70032: 6, 88000: 7, 86000: 8, 99000: 9, 90000: 10, 93000: 11}
 lithology_names: [Sandstone, Sandstone/Shale, Shale, Marl, Dolomite, Limestone, Chalk, Halite, Anhydrite, Tuff, Coal, Basement]
+
+# ----- P5 notes (ADR-007, rule R13). Prices: developers.openai.com/api/docs/pricing, retrieved 2026-11-09 (USD per 1M tokens) -----
+notes:
+  provider: openai                   # one line to swap; no key → template notes only
+  model: gpt-6-luna
+  reasoning_effort: none
+  price_input_per_m: 0.10
+  price_cached_input_per_m: 0.01
+  price_output_per_m: 0.50
+  max_output_tokens: 200
+  timeout_s: 10
+  budget_cost_per_1000: 0.20         # USD per 1,000 live notes (ADR-007)
+  budget_p95_ms_live: 5000
+  budget_p95_ms_cached: 50

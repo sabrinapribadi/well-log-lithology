@@ -1,0 +1,57 @@
+# Databricks Asset Bundle for P6 (ADR-008): parity of model B, Unity Catalog registry, Spark scoring of the newest
+# Kansas archive with model T, and drift. Serverless compute; the workspace comes from the CLI profile.
+#   bash scripts/databricks_prepare_inputs.sh            # uploads FORCE Parquet, model T, the 2026 archive, drift reference
+#   databricks bundle deploy -p portfolio && databricks bundle run og2_p6 -p portfolio
+bundle:
+  name: well-log-lithology
+
+sync:
+  include:
+    - src/**
+    - configs/**
+    - scripts/databricks_p6.py
+    - scripts/p1_baseline.py
+  exclude:
+    - docs/**
+    - tests/**
+    - data/**
+
+targets:
+  dev:
+    mode: development
+    default: true
+
+resources:
+  jobs:
+    og2_p6:
+      name: og2-p6-yearly-scoring
+      description: Model B parity with the laptop, registry (B and T), Spark quality measures for the newest KGS archive, PSI drift vs earlier years (ADR-008 amendment 1).
+      max_concurrent_runs: 1
+      schedule:                       # yearly, after KGS publishes its annual LAS archive (ADR-008)
+        quartz_cron_expression: "0 0 6 15 2 ?"
+        timezone_id: UTC
+        pause_status: PAUSED          # Free Edition quota: run on demand
+      tasks:
+        - task_key: parity_b
+          environment_key: parity
+          spark_python_task: {python_file: scripts/databricks_p6.py, parameters: ["--task", "parity_b"]}
+        - task_key: register
+          depends_on: [{task_key: parity_b}]
+          environment_key: ml
+          spark_python_task: {python_file: scripts/databricks_p6.py, parameters: ["--task", "register"]}
+        - task_key: quality_archive
+          environment_key: ml
+          spark_python_task: {python_file: scripts/databricks_p6.py, parameters: ["--task", "quality_archive"]}
+        - task_key: monitor_drift
+          depends_on: [{task_key: quality_archive}]
+          environment_key: ml
+          spark_python_task: {python_file: scripts/databricks_p6.py, parameters: ["--task", "monitor_drift"]}
+      environments:
+        - environment_key: parity        # the laptop's exact versions (ADR-008 falsification: pin versions)
+          spec:
+            environment_version: "6"
+            dependencies: [xgboost==3.4.1, pandas==3.0.6, numpy==2.5.4, pyarrow==26.0.0, pyyaml]
+        - environment_key: ml
+          spec:
+            environment_version: "6"
+            dependencies: [xgboost==3.4.1, pyyaml, mlflow==3.17.0]

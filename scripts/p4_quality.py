@@ -27,12 +27,10 @@ sys.path.insert(0, str(ROOT))
 from scripts.p2_model_choice import CFG, DATA, DER  # noqa: E402
 from src.drift import psi  # noqa: E402
 from src.features import transfer_matrix  # noqa: E402
-from src.kansas import parse_data, read_entry, resample, standardise  # noqa: E402
+from src.quality import DRIFT, PER_FILE, file_quality  # noqa: E402
 
 ZIPS = DATA / CFG["paths"]["kgs_las_zips"]
-RANGES = {"GR": (0, 300), "RHOB": (1.0, 3.2), "NPHI": (-0.15, 1.0), "DTC": (40, 240), "RDEP": (0.01, 100_000)}
-DRIFT = ["GR", "RHOB", "NPHI", "DTC", "RDEP", "T_CONF"]
-PER_FILE, BINS, WATCH, ALERT = 2000, 10, 0.10, 0.25
+BINS, WATCH, ALERT = 10, 0.10, 0.25
 log = lambda *a: print(time.strftime("%H:%M:%S"), *a, flush=True)
 _booster = None
 
@@ -43,46 +41,7 @@ def one_file(job: dict) -> dict:
     global _booster
     if _booster is None:
         _booster = xgb.Booster(); _booster.load_model(str(DATA / "models" / "p3_transfer_T.json"))
-    row = {"archive": job["archive"], "entry": job["entry"], "kgs_id": job["kgs_id"], "ok": False, "error": ""}
-    try:
-        h, df = parse_data(read_entry(str(ZIPS / f"{job['archive']}.zip"), job["entry"]))
-        raw = standardise(h, df)
-        w = resample(raw)
-    except Exception as e:  # noqa: BLE001 — every failure is recorded
-        row["error"] = repr(e)[:160]
-        return {"row": row, "sample": None}
-    if w.empty:
-        row["error"] = "no data rows"
-        return {"row": row, "sample": None}
-    row["ok"] = True
-    row["samples"] = len(w)
-    for c in ["GR", "RHOB", "NPHI", "DTC", "RDEP", "PEF", "CALI"]:
-        row[f"has_{c}"] = bool(c in w and w[c].notna().any())
-    core = [c for c in ("GR", "NPHI", "RHOB") if c in w]
-    row["coverage_core3"] = float(w[core].notna().all(axis=1).mean()) if len(core) == 3 else 0.0
-    vals, out = 0, 0
-    for c, (lo, hi) in RANGES.items():
-        if c in w:
-            v = w[c].dropna()
-            vals += len(v); out += int(((v < lo) | (v > hi)).sum())
-    row["out_of_range_share"] = out / vals if vals else None
-    if "DRHO" in w and w["DRHO"].notna().any():
-        d = w["DRHO"].dropna(); row["bad_hole_share"], row["bad_hole_basis"] = float((d.abs() > 0.15).mean()), "DRHO"
-    elif {"CALI", "BS"} <= set(w) and (w["CALI"] - w["BS"]).notna().any():
-        d = (w["CALI"] - w["BS"]).dropna(); row["bad_hole_share"], row["bad_hole_basis"] = float((d > 1.0).mean()), "caliper"
-    else:
-        row["bad_hole_share"], row["bad_hole_basis"] = None, "unknown"
-    w["WELL"] = job["kgs_id"]
-    X = transfer_matrix(w)
-    conf = _booster.predict(xgb.DMatrix(X)).max(1)
-    covered = w.loc[X.index, core].notna().all(axis=1).to_numpy() if len(core) == 3 else np.zeros(len(X), bool)
-    row["t_conf_median"] = float(np.median(conf[covered])) if covered.any() else None
-    s = w.loc[X.index].assign(T_CONF=conf)
-    s["RDEP"] = np.log10(s["RDEP"].clip(lower=1e-3)) if "RDEP" in s else np.nan
-    s = s[[c for c in DRIFT if c in s]]
-    if len(s) > PER_FILE:
-        s = s.iloc[np.sort(np.random.default_rng(42).choice(len(s), PER_FILE, replace=False))]
-    return {"row": row, "sample": s.assign(archive=job["archive"]).astype({c: "float32" for c in s.columns})}
+    return file_quality(str(ZIPS / f"{job['archive']}.zip"), job["entry"], job["kgs_id"], job["archive"], _booster)
 
 
 def main() -> None:
