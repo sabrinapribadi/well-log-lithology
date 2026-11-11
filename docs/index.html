@@ -298,7 +298,7 @@ details.sources > summary { font-size: 13px; font-weight: 500; padding: 4px 0; }
         <li>Labels are interpretations, not core; interpreters disagree too.</li>
         <li>Ten hidden wells: one unusual well moves the score.</li>
         <li>Kansas transfer failed (P3): North Sea results only.</li>
-        <li>Seed noise: retraining with other seeds moves the hidden score by up to 0.18.</li>
+        <li>Seed noise: one hidden well (17/4-1) moves the score by up to 0.18; B still beats the baseline on all 10 seeds tested.</li>
       </ul>
       <details><summary>FAQ</summary><div class="body">
         <span><b>Why not accuracy?</b> Shale is 59–62% of samples; "all shale" is 59% accurate yet useless.</span>
@@ -306,6 +306,7 @@ details.sources > summary { font-size: 13px; font-weight: 500; padding: 4px 0; }
         <span><b>Why not tune on hidden wells?</b> Then the score would describe those 10 wells, not new ones.</span>
         <span><b>Why doesn't it work in Kansas?</b> Its rocks and logging differ: Kansas logs sit outside the North Sea range in every archive year (P4).</span>
         <span><b>Is −0.504 stable?</b> Not to three decimals: seeds 1–3 give <span id="faq-seeds"></span>. Treat ranks among the finalists as approximate.</span>
+        <span><b>Does B really beat the baseline?</b> Yes: <span id="faq-multiseed"></span></span>
       </div></details>
     </div>
   </div>
@@ -548,7 +549,7 @@ $("#take-body").innerHTML = (p2 ? [
   `<p><b>${passed ? "Use it as a first pass." : "Not yet good enough to replace the baseline."}</b> On 10 unseen wells the ${esc(modelName)} scores ${f3(bestHidden.penalty)}: ${passed ? "a clear step over the baseline" : `${sgn(p2.gain.hidden_test)} vs the baseline, short of the +0.020 bar`}.</p>`,
   `<p>Review effort can be targeted: flagging the least-confident quarter of depth catches most mistakes.</p>`,
   `<p><b>North Sea only.</b> In Kansas it failed all 6 geology checks: old carbonates read as sandstone. Kansas needs its own labels.</p>`,
-  `<p><b>What would change our mind:</b> a multi-seed comparison where B no longer beats the baseline; seed noise (up to 0.18) exceeds P2's margin.</p>`]
+  `<p><b>What would change our mind:</b> new wells where B no longer beats the baseline. Over 10 seeds it won every time.</p>`]
  : [`<p><b>Baseline only so far.</b> The untuned baseline lands 0.014 below the finalists; P2 tests whether engineered features close the gap.</p>`])
  .join("");
 
@@ -611,6 +612,7 @@ if (P.p3) (function () {
   const d = P.p3.diag, r = (n, m) => `<tr><td>${n}</td><td class="num">${m.GR.toFixed(0)} API</td><td class="num">${m.RHOB.toFixed(2)} g/cm³</td><td class="num">${m.NPHI.toFixed(2)}</td><td class="num">${m.DTC.toFixed(0)} µs/ft</td><td class="num">${m.RDEP.toFixed(1)} Ω·m</td></tr>`;
   $("#t-diag").innerHTML = r("Kansas Lansing–Kansas City (limestone)", d.kansas_lkc) + r("North Sea limestone", d.force_limestone) + r("North Sea sandstone", d.force_sandstone);
 })();
+if (P.p2c) $("#faq-multiseed").textContent = `over ${P.p2c.seeds} seeds it wins ${P.p2c.b_wins} times, by ${sgn(P.p2c.diff_mean)} on average (95% interval ${sgn(P.p2c.diff_ci95[0])} to ${sgn(P.p2c.diff_ci95[1])}).`;
 if (P.p6 && P.p6.seed_spread) $("#faq-seeds").textContent = Object.values(P.p6.seed_spread.hidden_by_seed).map(f3).join(", ");
 
 // ---------- Kansas quality and drift (P4)

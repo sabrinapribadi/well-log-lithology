@@ -159,7 +159,8 @@ Raw data lives in `WLL_DATA_DIR` (OneDrive `github_project/data/well-log-litholo
 - Transfer failed (0 of 6 units): Kansas Paleozoic carbonates are tighter than any North Sea limestone and read as sandstone; evaporite intervals do not read as evaporites.
 - Kansas logs sit outside the North Sea training range in every archive year (P4 drift); gamma ray, neutron and density together cover a median 36% of depth.
 - Method comparison: a fair LightGBM is level with XGBoost; a 1D CNN trails by 0.27 in CV; 11 of 12 in-range finalists used tree ensembles.
-- Hidden-well scores move by up to 0.18 with the random seed alone; P2's +0.036 is within that noise.
+- Hidden-well scores move by up to 0.18 with the random seed alone, mostly through one well (17/4-1).
+- Over 10 paired seeds B still beats P1 every time: +0.134 on average (95% interval +0.055 to +0.213; ADR-010).
 - The copilot serves validated outputs only: 100% grounded notes at $0.066 per 1,000.
 - Databricks reproduces quality and drift exactly; retraining B differs like a seed change.
 

@@ -36,7 +36,8 @@
 - **Weak spots:** dolomite (22% of its metres found) and chalk (28%) need review; shale (94%) and halite (97%) are reliable.
 - **One candidate collapsed, then recovered.** LightGBM's loose default leaf limit let rare-rock leaves explode; with XGBoost's limit it is level with XGBoost (CV −0.679).
 - **A deep baseline trails.** A 1D CNN over ±2.4 m depth windows scores −0.944 in CV; 11 of 12 in-range 2020 finalists also used tree ensembles.
-- **Seed noise is large.** Retraining with other seeds moves the hidden score from −0.482 to −0.666; P2's +0.036 sits within that noise.
+- **B's lead holds over 10 seeds.** B beats P1 on all 10: +0.134 on average on the hidden wells (95% interval +0.055 to +0.213; ADR-010).
+- **One hidden well drives the seed noise.** Well 17/4-1 swings by up to 0.74 between seeds; the other nine stay within 0.08.
 - **Kansas transfer failed (0 of 6 units).** Old Kansas carbonates are tighter than any North Sea limestone and read as sandstone; evaporite intervals do not read as evaporites.
 - **Kansas data quality:** gamma ray, neutron and density together cover a median 36% of each file's depth; logs sit outside the North Sea range in every year.
 - **Copilot:** API and MCP tools serve validated outputs only; notes 100% grounded at $0.066 per 1,000.

@@ -392,6 +392,7 @@ const PHASES = [
     ["Evaluation", "Parity failed", "Databricks −0.486 vs laptop −0.504; 94.4% of predictions identical.", "Exactly what the gate tests.", "data/outputs/p6_parity.json", "fail"],
     ["Evaluation", "Causes ruled out", "Pinned versions, same ARM family, thread count, duplicates: none explains it. Features bit-identical.", "Isolate before concluding.", "data/outputs/p6_parity.json"],
     ["Evaluation", "Seed spread", "Laptop seeds 1, 2, 3, 42: −0.482, −0.666, −0.501, −0.504 (sd 0.086).", "The build difference acts like a seed change.", "scripts/p6_seed_spread.py"],
+    ["Evaluation", "Multi-seed check", "Seeds 0–9, paired: B beats P1 on all 10; +0.134 (95% interval +0.055 to +0.213). Well 17/4-1 drives the spread.", "Rule fixed in ADR-010 before the runs.", "scripts/p2c_multi_seed.py"],
     ["Platform", "Models registered", "workspace.og2.lithology_b and lithology_t, alias champion.", "Versioned models for scheduled use.", "scripts/databricks_p6.py"],
     ["Platform", "Spark quality job", "374 of 374 files of the 2026 archive; quality equal to the laptop to four decimals.", "The yearly cadence, end to end.", "scripts/databricks_p6.py"],
     ["Evaluation", "Drift reference bug", "pandas 3 dropped a column; equal-weight years shifted the bands.", "A reference must mirror the laptop's.", "scripts/p6_drift_reference.py", "fail"],
@@ -405,7 +406,7 @@ const PHASES = [
     ["Drift task crashed", "pandas 3 groupby.apply drops the grouping column", "Explicit sampling with an assert", "Assert the columns a reference must keep"],
     ["Cloud drift bands differed", "Equal-weight years changed the reference distribution", "Uniform sample, matching P4's weights", "Mirror the laptop's reference exactly"]
   ],
-  lessons: ["Seed noise (0.18) is larger than P2's gain (0.036): one seed cannot rank close models.", "Bit-identical inputs plus a seed study turn a parity failure into an explanation."],
+  lessons: ["Seed noise (0.18) is larger than P2's gain (0.036): one seed cannot rank close models; ten paired seeds can (B won all 10).", "Bit-identical inputs plus a seed study turn a parity failure into an explanation."],
   star: "When the cloud score differed, I proved the inputs were bit-identical and showed the gap was smaller than the model's own seed noise."
 },
 {

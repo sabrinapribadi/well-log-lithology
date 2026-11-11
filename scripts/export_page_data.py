@@ -166,6 +166,11 @@ def main() -> None:
     if par:
         page["p6"] = {"parity": par, "registry": reg, "archive_quality": aq, "drift": dr["rows"] if dr else None, "seed_spread": ss}
 
+    ms = load("p2c_multi_seed.json")
+    if ms:
+        page["p2c"] = {"seeds": len(ms["runs"]), **{k: ms["summary"]["hidden_test"][k] for k in ("P1_mean", "B_mean", "diff_mean", "diff_ci95", "b_wins")},
+                       "reliably_better": ms["summary"]["b_reliably_better"]}
+
     ev = load("references_evidence.json")
     page["evidence_retrieved"] = ev["retrieved"] if ev else None
     (ROOT / "docs" / "data").mkdir(parents=True, exist_ok=True)

@@ -2,6 +2,14 @@
 
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
+## [0.12.0] — 2026-11-11 — Multi-seed comparison: B reliably beats the baseline (ADR-010)
+**Files:** scripts/p2c_multi_seed.py, data/outputs/p2c_multi_seed.json, scripts/export_page_data.py, docs/data/page_data.js, docs/index.html, docs/build.html, docs/adr/ADR-010, ADR-002, docs/PRD.md, README.md
+- **Situation:** P2's +0.036 over the baseline came from one seed, and P6 showed seed noise up to 0.18.
+- **Task:** Settle whether B beats P1 beyond seed noise, with the rule fixed before the runs (ADR-010).
+- **Action:** Retrained P1 and B on seeds 0–9 with identical settings; paired the hidden-well scores by seed; traced the spread to single wells.
+- **Result:** B wins all 10 seeds: +0.134 on average (95% interval +0.055 to +0.213), so the rule is met. Well 17/4-1 drives the spread; seed 42 was a good draw for P1, so P2 understated B's lead.
+- **Talking point:** "One seed said the gain was within noise; ten paired seeds showed it was four times larger, and named the one well causing the noise."
+
 ## [0.11.0] — 2026-11-11 — Public API and remote MCP, prompt-injection tests, GenAI traces
 **Files:** src/serving/public.py, src/serving/telemetry.py, src/serving/tools.py, src/serving/notes.py, scripts/build_deploy.py, scripts/trace_notes.py, deploy/, tests/test_safety_and_traces.py, data/outputs/traces_*.json*, docs/adr/ADR-011
 - **Situation:** P5's tools ran only on a laptop; the portfolio rules now require free hosting, CI/CD and a technology assessment (R19–R21).

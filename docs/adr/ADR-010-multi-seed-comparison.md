@@ -1,6 +1,6 @@
 # ADR-010: Multi-Seed Comparison of the Baseline (P1) and the Chosen Model (B)
 
-**Status:** Accepted — written and pushed before any new seed runs
+**Status:** Accepted — written and pushed before any new seed runs; result: **B is reliably better** (2026-11-11)
 **Date:** 2026-11-11
 **Deciders:** Sabrina Pribadi
 
@@ -43,6 +43,23 @@
 | Mean difference ≥ 0.02, interval excludes 0 | B's features and decision help beyond noise | Pages keep "B beats P1", now with an interval |
 | Interval includes 0 | One seed could not separate them | Pages say so; a seed ensemble as a pre-registered follow-up |
 | One hidden well drives most of the spread | The score depends on one unusual well | Report that well; per-well view on the page |
+
+## Empirical results (2026-11-11)
+
+Scores are FORCE penalty scores: 0 is perfect, higher (less negative) is better. Source: `data/outputs/p2c_multi_seed.json`.
+
+| Measure | P1 | B | B − P1 (95% interval) |
+|---|---|---|---|
+| Hidden wells, mean ± sd over 10 seeds | −0.645 ± 0.112 | −0.511 ± 0.056 | **+0.134 (+0.055 to +0.213)** |
+| Open wells, mean ± sd | −0.575 ± 0.007 | −0.523 ± 0.005 | +0.053 (+0.046 to +0.059) |
+| Worst seed, hidden wells | −0.743 (seed 3) | −0.666 (seed 2) | |
+| Seeds where B wins (hidden; open) | | | 10 of 10; 10 of 10 |
+
+- **Rule met:** mean difference +0.134 ≥ +0.020 and the interval excludes 0, so B is reliably better than P1.
+- **One well drives the spread:** across seeds, well 17/4-1's score has sd 0.74 (P1) and 0.39 (B); every other hidden well stays within 0.08.
+- **P1's hidden score has two modes:** about −0.51 or about −0.73, depending on 17/4-1. Seed 42 fell in P1's good mode, so P2's +0.036 understated B's lead.
+- **Caveat:** with two modes, the t-interval is approximate. Also reported, not pre-registered: B wins all 10 paired seeds (sign test p = 0.002).
+- **Pages:** "B beats P1" stays, now with the interval; the seed caveat now names 17/4-1.
 
 ## Related Decisions
 

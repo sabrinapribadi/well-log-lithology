@@ -51,6 +51,7 @@ Logged here when found, with evidence.
 
 - Retraining B with seeds 1, 2, 3 (and 42) gives −0.482, −0.666, −0.501, −0.504 on the hidden wells: sd 0.086 (`data/outputs/p6_seed_spread.json`).
 - P2's gain over P1 (+0.036) is smaller than one seed's sd. P2's gate result stands as pre-registered, but one seed cannot separate B from P1 with confidence; a multi-seed comparison would be a new pre-registered decision.
+- **Multi-seed result (ADR-010, 2026-11-11):** over seeds 0–9, B beats P1 on every seed; mean +0.134 on the hidden wells (95% interval +0.055 to +0.213). Most of the spread comes from one hidden well, 17/4-1.
 
 ## Gate results (updated as phases finish)
 
