@@ -11,3 +11,4 @@
 | [ADR-007](ADR-007-api-mcp-copilot.md) | P5 API, MCP tools, grounded copilot | Accepted | One store for API, MCP and notes; grader + template fallback; budgets $0.20 per 1,000 notes, p95 5 s live, 50 ms cached. |
 | [ADR-008](ADR-008-databricks-job.md) | P6 Databricks job | Accepted | Parity of B to three decimals, Unity Catalog registry, Spark scoring of the newest archive, PSI drift; yearly schedule paused on Free Edition. |
 | [ADR-009](ADR-009-method-comparison.md) | P2b method comparison | Accepted | Fair LightGBM (one documented fix) and a 1D CNN over depth windows, same CV and hidden-well rule; B stays unless beaten by ≥ 0.02 in CV; finalists' methods documented. |
+| [ADR-010](ADR-010-multi-seed-comparison.md) | Multi-seed comparison of P1 and B | Accepted | Seeds 0–9 for both; B reliably better only if the mean hidden-well gain is ≥ 0.02 and its 95% interval excludes 0; robustness check, not a new choice. |
