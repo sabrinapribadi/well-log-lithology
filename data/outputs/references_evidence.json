@@ -1,5 +1,5 @@
 {
- "retrieved": "2026-11-07",
+ "retrieved": "2026-11-11",
  "source": "OpenAlex",
  "references": [
   {
@@ -8,8 +8,8 @@
    "venue": "Zenodo (dataset, CC BY 4.0)",
    "peer_reviewed": false,
    "year": 2020,
-   "citations": 15,
-   "citations_per_year": 2.1,
+   "citations": 16,
+   "citations_per_year": 2.3,
    "role": "data, official splits and penalty matrix",
    "used_in": [
     "ADR-001",
@@ -24,8 +24,8 @@
    "venue": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)",
    "peer_reviewed": true,
    "year": 2016,
-   "citations": 61163,
-   "citations_per_year": 5560.3,
+   "citations": 62643,
+   "citations_per_year": 5694.8,
    "role": "P1 baseline and candidates A, B",
    "used_in": [
     "ADR-004"
@@ -39,8 +39,8 @@
    "venue": "NeurIPS 2017 (OpenAlex primary copy is a mirror)",
    "peer_reviewed": true,
    "year": 2017,
-   "citations": 10513,
-   "citations_per_year": 1051.3,
+   "citations": 10515,
+   "citations_per_year": 1051.5,
    "role": "candidate C",
    "used_in": [
     "ADR-004"
@@ -54,8 +54,8 @@
    "venue": "Natural Resources Research",
    "peer_reviewed": true,
    "year": 2025,
-   "citations": 33,
-   "citations_per_year": 16.5,
+   "citations": 32,
+   "citations_per_year": 16.0,
    "role": "cited alternative (semi-supervised contrastive + Transformer)",
    "used_in": [
     "ADR-004"
@@ -84,8 +84,8 @@
    "venue": "arXiv 2606.30410",
    "peer_reviewed": false,
    "year": 2026,
-   "citations": 25,
-   "citations_per_year": 25.0,
+   "citations": 27,
+   "citations_per_year": 27.0,
    "role": "cited alternative (tabular foundation models off IID data)",
    "used_in": [
     "ADR-004"
@@ -99,13 +99,58 @@
    "venue": "Social Psychological and Personality Science",
    "peer_reviewed": true,
    "year": 2017,
-   "citations": 2617,
-   "citations_per_year": 261.7,
+   "citations": 2671,
+   "citations_per_year": 267.1,
    "role": "practice of a pre-set smallest worthwhile difference (the +0.02 margin is our own choice)",
    "used_in": [
     "ADR-002"
    ],
    "openalex_id": "https://openalex.org/W2610765860",
+   "kind": "paper"
+  },
+  {
+   "key": "imamverdiyev_2019",
+   "title": "Lithological facies classification using deep convolutional neural network",
+   "venue": "Journal of Petroleum Science and Engineering",
+   "peer_reviewed": true,
+   "year": 2018,
+   "citations": 230,
+   "citations_per_year": 25.6,
+   "role": "1D CNN on well logs (candidate D)",
+   "used_in": [
+    "ADR-009"
+   ],
+   "openalex_id": "https://openalex.org/W2901691125",
+   "kind": "paper"
+  },
+  {
+   "key": "geophysics_2021",
+   "title": "Lithology identification from well-log curves via neural networks with additional geologic constraint",
+   "venue": "Geophysics",
+   "peer_reviewed": true,
+   "year": 2021,
+   "citations": 103,
+   "citations_per_year": 17.2,
+   "role": "deep models on log curves with a geologic constraint (context)",
+   "used_in": [
+    "ADR-009"
+   ],
+   "openalex_id": "https://openalex.org/W3177129545",
+   "kind": "paper"
+  },
+  {
+   "key": "yurdakul_2020",
+   "title": "Statistical properties of the population stability index",
+   "venue": "The Journal of Risk Model Validation",
+   "peer_reviewed": true,
+   "year": 2020,
+   "citations": 57,
+   "citations_per_year": 8.1,
+   "role": "population stability index (drift bands)",
+   "used_in": [
+    "ADR-006"
+   ],
+   "openalex_id": "https://openalex.org/W3129493035",
    "kind": "paper"
   }
  ]
