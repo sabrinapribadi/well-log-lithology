@@ -2,7 +2,7 @@
 
 <!-- brief:start -->
 
-## For hiring teams: the project in 5W1H
+## At a glance
 
 1. **What:** A rock-type (lithology) model for well logs, served as a results page, an API, MCP tools and grounded notes.
 2. **Why:** Petrophysicists pick lithology by hand at every 0.152 m of every well; a checked first pass shows where to look first.
