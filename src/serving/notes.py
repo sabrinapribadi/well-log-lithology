@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from src.serving.contracts import Meter
+from src.serving.telemetry import chat_span, record_usage, span
 
 PROMPT_VERSION = "v2"   # v1 → v2: shares given and written as percentages (R17 plain units)
 MAX_WORDS = 75
@@ -139,15 +140,18 @@ class OpenAIWriter:
             from openai import OpenAI
             self._client = OpenAI(timeout=self.timeout)
         extra = {"reasoning": {"effort": self.reasoning_effort}} if self.reasoning_effort else {}
-        t0 = time.perf_counter()
-        r = self._client.responses.create(model=self.model, instructions=SYSTEM, input="Facts (JSON):\n" + json.dumps(facts, ensure_ascii=False),
-                                          max_output_tokens=self.max_output_tokens, **extra)
-        ms = (time.perf_counter() - t0) * 1000
-        u = getattr(r, "usage", None); it = int(getattr(u, "input_tokens", 0) or 0); ot = int(getattr(u, "output_tokens", 0) or 0)
-        ct = int(getattr(getattr(u, "input_tokens_details", None), "cached_tokens", 0) or 0)
-        cost = ((it - ct) * self.price_in + ct * self.price_cached_in + ot * self.price_out) / 1e6
-        return (getattr(r, "output_text", "") or "").strip(), Meter(provider="openai", model=self.model, input_tokens=it, cached_input_tokens=ct,
-                                                                     output_tokens=ot, latency_ms=round(ms, 1), cost_usd=round(cost, 8))
+        with chat_span("openai", self.model, self.max_output_tokens) as sp:
+            t0 = time.perf_counter()
+            r = self._client.responses.create(model=self.model, instructions=SYSTEM, input="Facts (JSON):\n" + json.dumps(facts, ensure_ascii=False),
+                                              max_output_tokens=self.max_output_tokens, **extra)
+            ms = (time.perf_counter() - t0) * 1000
+            u = getattr(r, "usage", None); it = int(getattr(u, "input_tokens", 0) or 0); ot = int(getattr(u, "output_tokens", 0) or 0)
+            ct = int(getattr(getattr(u, "input_tokens_details", None), "cached_tokens", 0) or 0)
+            cost = ((it - ct) * self.price_in + ct * self.price_cached_in + ot * self.price_out) / 1e6
+            meter = Meter(provider="openai", model=getattr(r, "model", None) or self.model, input_tokens=it, cached_input_tokens=ct,
+                          output_tokens=ot, latency_ms=round(ms, 1), cost_usd=round(cost, 8))
+            record_usage(sp, meter)
+        return (getattr(r, "output_text", "") or "").strip(), meter
 
 
 class NoteService:
@@ -176,7 +180,14 @@ class NoteService:
         return hashlib.sha256(json.dumps([PROMPT_VERSION, model, facts], sort_keys=True, default=str).encode()).hexdigest()[:24]
 
     def note(self, facts: dict, use_cache: bool = True) -> tuple[str, str, dict, Meter, str | None]:
-        """Returns (served note, source, grader result, meter, raw model text)."""
+        """Returns (served note, source, grader result, meter, raw model text). Traced as one `notes.explain` span."""
+        with span("notes.explain", **{"wll.subject_type": facts.get("subject_type")}) as sp:
+            out = self._note(facts, use_cache)
+            sp.set_attributes({"wll.note_source": out[1], "wll.grounded": bool(out[2].get("served_ok")), "wll.cache_hit": out[3].cached,
+                               "wll.cost_usd": out[3].cost_usd})
+            return out
+
+    def _note(self, facts: dict, use_cache: bool) -> tuple[str, str, dict, Meter, str | None]:
         k = self.key(facts); t0 = time.perf_counter()
         if use_cache and k in self.cache:
             c = self.cache[k]

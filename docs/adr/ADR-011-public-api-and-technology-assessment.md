@@ -48,6 +48,18 @@
 | Multi-agent over A2A | Trial | Only with a pre-registered question that needs two agents; separate ADR |
 | Domain-specific or small models | Hold | No labelled explanation data |
 
+## Empirical results (2026-11-11)
+
+| Check | Target | Result |
+|---|---|---|
+| Injected instructions (5 payloads × 4 tools) | Refused, never echoed, never reach the model | 20 of 20 refused; 0 echoed; 0 model calls (`tests/test_safety_and_traces.py`) |
+| REST and MCP replies to injected input | No echo | Passed over HTTP |
+| MCP from an unknown host | Rejected (DNS-rebinding protection) | 421; only localhost and the deployment's own hostnames are allowed |
+| Live trace check, 20 FORCE notes (`scripts/trace_notes.py`) | One complete `chat` span per call; span cost = meter cost | 20 of 20 spans with provider, model, tokens and cost; $0.0013076 both ways: **passed** |
+| Cost and p95 latency from the traces (R13) | ≤ $0.20 per 1,000; p95 ≤ 5 s | $0.065 per 1,000 notes; p95 4.9 s |
+
+- **Found on the way:** the MCP SDK's DNS-rebinding guard rejects every host but localhost, so `/mcp` would have failed on the public host. The app now allows the hostnames the platform sets (`VERCEL_URL`, `VERCEL_PROJECT_PRODUCTION_URL`).
+
 ## Considered Options
 
 | Option | Status | Why |

@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SNAP = ROOT / "deploy" / "serving_snapshot.tar.gz"
 SHA = ROOT / "deploy" / "serving_snapshot.sha256"
 REQS = ["fastapi==0.143.0", "mcp==2.3.0", "pydantic>=2.7", "pyyaml>=6.0"]
-SERVING = ["__init__.py", "contracts.py", "mcp_server.py", "notes.py", "public.py", "store.py", "tools.py"]
+SERVING = ["__init__.py", "contracts.py", "mcp_server.py", "notes.py", "public.py", "store.py", "telemetry.py", "tools.py"]
 
 
 def sha256(p: Path) -> str:

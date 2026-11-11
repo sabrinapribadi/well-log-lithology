@@ -1,0 +1,19 @@
+{
+ "design": "ADR-011",
+ "model": "gpt-6-luna",
+ "calls": 20,
+ "live_calls": 20,
+ "chat_spans": 20,
+ "spans_with_required_attributes": 20,
+ "chat_spans_nested": true,
+ "span_cost_usd": 0.0013076,
+ "meter_cost_usd": 0.0013076,
+ "cost_per_1000_usd": 0.0654,
+ "p95_ms_live": 4861.7,
+ "span_names": [
+  "chat gpt-6-luna",
+  "execute_tool explain_well",
+  "notes.explain"
+ ],
+ "pass": true
+}

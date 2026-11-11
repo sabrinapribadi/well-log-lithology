@@ -16,3 +16,5 @@ httpx
 mcp
 openai
 pydantic
+opentelemetry-api>=1.40
+opentelemetry-sdk>=1.40

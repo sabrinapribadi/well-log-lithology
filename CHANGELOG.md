@@ -2,6 +2,17 @@
 
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
+## [0.11.0] — 2026-11-11 — Public API and remote MCP, prompt-injection tests, GenAI traces
+**Files:** src/serving/public.py, src/serving/telemetry.py, src/serving/tools.py, src/serving/notes.py, scripts/build_deploy.py, scripts/trace_notes.py, deploy/, tests/test_safety_and_traces.py, data/outputs/traces_*.json*, docs/adr/ADR-011
+- **Situation:** P5's tools ran only on a laptop; the portfolio rules now require free hosting, CI/CD and a technology assessment (R19–R21).
+- **Task:** A public, read-only API and MCP endpoint that never spends tokens, defended against prompt injection and traced to standard conventions.
+- **Action:**
+  - Stateless MCP (2026-07-28 spec) beside the REST tools; cached notes served without a key; a checksummed 0.5 MB deploy bundle.
+  - Tools accept identifiers only and never echo other input; the model sees store facts only.
+  - OpenTelemetry GenAI spans (`execute_tool`, `notes.explain`, `chat`) with tokens and cost.
+- **Result:** 20 of 20 injection attempts refused, none echoed; 20 of 20 live calls traced, span cost equal to meter cost ($0.065 per 1,000 notes, p95 4.9 s).
+- **Talking point:** The tests caught that the MCP library would have rejected every request on the public host; it now allows only the deployment's own hostnames.
+
 ## [0.10.0] — 2026-11-09 — P6 Databricks: parity failed, explained; registry and yearly job passed
 **Files:** databricks.yml, scripts/databricks_p6.py, scripts/databricks_prepare_inputs.sh, scripts/p6_drift_reference.py, scripts/p6_seed_spread.py, src/quality.py, data/outputs/p6_*.json, docs/adr/ADR-008
 - **Situation:** ADR-008 required Databricks to reproduce model B's hidden-well score to three decimals, register the models, and run a yearly quality and drift job.

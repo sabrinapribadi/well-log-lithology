@@ -10,8 +10,10 @@
 from __future__ import annotations
 
 import contextlib
+import os
 
 from fastapi import FastAPI, HTTPException
+from mcp.server.transport_security import TransportSecuritySettings
 
 from src.serving.contracts import Lithology, Note, NotFound, Quality, UnitAgreement
 from src.serving.mcp_server import build_server
@@ -21,7 +23,23 @@ from src.serving.tools import CFG, Tools
 
 # writer=None: never calls a model; serves notes cached for the configured model, else the template
 TOOLS = Tools(Store(), NoteService(None, store_path().with_name("notes_cache.json"), cache_model=CFG["notes"]["model"]))
-MCP = build_server(TOOLS).streamable_http_app(stateless_http=True, json_response=True, streamable_http_path="/")
+
+
+def allowed_hosts() -> list[str]:
+    """DNS-rebinding protection stays on: only localhost and this deployment's own hostnames reach /mcp.
+    Vercel sets VERCEL_URL (this deployment) and VERCEL_PROJECT_PRODUCTION_URL; WLL_ALLOWED_HOSTS adds more (comma-separated)."""
+    hosts = ["localhost", "localhost:*", "127.0.0.1", "127.0.0.1:*"]
+    for v in ("VERCEL_URL", "VERCEL_BRANCH_URL", "VERCEL_PROJECT_PRODUCTION_URL"):
+        if os.environ.get(v):
+            hosts.append(os.environ[v])
+    hosts += [h.strip() for h in os.environ.get("WLL_ALLOWED_HOSTS", "").split(",") if h.strip()]
+    return hosts
+
+
+SECURITY = TransportSecuritySettings(enable_dns_rebinding_protection=True, allowed_hosts=allowed_hosts(),
+                                     allowed_origins=[f"{s}://{h.removesuffix(':*')}" + (":*" if h.endswith(":*") else "")
+                                                      for h in allowed_hosts() for s in ("http", "https")])
+MCP = build_server(TOOLS).streamable_http_app(stateless_http=True, json_response=True, streamable_http_path="/", transport_security=SECURITY)
 
 
 @contextlib.asynccontextmanager
