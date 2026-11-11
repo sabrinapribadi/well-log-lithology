@@ -1,4 +1,4 @@
-# Databricks Asset Bundle for P6 (ADR-008): parity of model B, Unity Catalog registry, Spark scoring of the newest
+# Databricks Asset Bundle for P6 (ADR-008) and the Databricks App (ADR-011): parity of model B, Unity Catalog registry, Spark scoring of the newest
 # Kansas archive with model T, and drift. Serverless compute; the workspace comes from the CLI profile.
 #   bash scripts/databricks_prepare_inputs.sh            # uploads FORCE Parquet, model T, the 2026 archive, drift reference
 #   databricks bundle deploy -p portfolio && databricks bundle run og2_p6 -p portfolio
@@ -11,6 +11,7 @@ sync:
     - configs/**
     - scripts/databricks_p6.py
     - scripts/p1_baseline.py
+    - build/databricks-app/**          # the Databricks App bundle (git-ignored; built by scripts/build_deploy.py)
   exclude:
     - docs/**
     - tests/**
@@ -22,6 +23,12 @@ targets:
     default: true
 
 resources:
+  apps:
+    og2_api:                           # ADR-011 §3: the public API and MCP endpoint as a Databricks App (workspace login required)
+      name: og2-lithology-api
+      description: Read-only lithology API and stateless MCP endpoint (same app as the public Vercel deployment); notes cached, no key.
+      source_code_path: ./build/databricks-app
+
   jobs:
     og2_p6:
       name: og2-p6-yearly-scoring

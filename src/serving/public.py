@@ -27,7 +27,8 @@ TOOLS = Tools(Store(), NoteService(None, store_path().with_name("notes_cache.jso
 
 def allowed_hosts() -> list[str]:
     """DNS-rebinding protection stays on: only localhost and this deployment's own hostnames reach /mcp.
-    Vercel sets VERCEL_URL (this deployment) and VERCEL_PROJECT_PRODUCTION_URL; WLL_ALLOWED_HOSTS adds more (comma-separated)."""
+    Vercel sets VERCEL_URL (this deployment) and VERCEL_PROJECT_PRODUCTION_URL; WLL_ALLOWED_HOSTS adds more (comma-separated;
+    the Databricks App sets it in app.yaml, because Databricks Apps expose no URL variable)."""
     hosts = ["localhost", "localhost:*", "127.0.0.1", "127.0.0.1:*"]
     for v in ("VERCEL_URL", "VERCEL_BRANCH_URL", "VERCEL_PROJECT_PRODUCTION_URL"):
         if os.environ.get(v):

@@ -49,3 +49,32 @@ jobs:
       - name: No token yet
         if: env.VERCEL_TOKEN == ''
         run: echo "::notice::VERCEL_TOKEN not set; bundle built and attested, deploy skipped."
+
+  # CD to Databricks (R19, ADR-011 §3): deploy the bundle (yearly job + Databricks App) and restart the app on the new code.
+  # Credentials only in GitHub Secrets; skips (job stays green) until DATABRICKS_HOST and DATABRICKS_TOKEN exist.
+  databricks:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      APP_HOST: ${{ vars.DATABRICKS_APP_HOST }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: No credentials yet
+        if: env.DATABRICKS_TOKEN == ''
+        run: echo "::notice::DATABRICKS_HOST / DATABRICKS_TOKEN not set; Databricks deploy skipped."
+      - uses: databricks/setup-cli@v1.20.0
+        if: env.DATABRICKS_TOKEN != ''
+      - name: Build the app (MCP allow-list = the app's own hostname)
+        if: env.DATABRICKS_TOKEN != ''
+        run: python scripts/build_deploy.py --out build/databricks-app --databricks-host "$APP_HOST"
+      - name: Deploy the bundle and start the app
+        if: env.DATABRICKS_TOKEN != ''
+        run: |
+          databricks bundle validate
+          databricks bundle deploy
+          databricks bundle run og2_api

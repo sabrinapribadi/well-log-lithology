@@ -57,7 +57,10 @@
 | MCP from an unknown host | Rejected (DNS-rebinding protection) | 421; only localhost and the deployment's own hostnames are allowed |
 | Live trace check, 20 FORCE notes (`scripts/trace_notes.py`) | One complete `chat` span per call; span cost = meter cost | 20 of 20 spans with provider, model, tokens and cost; $0.0013076 both ways: **passed** |
 | Cost and p95 latency from the traces (R13) | ≤ $0.20 per 1,000; p95 ≤ 5 s | $0.065 per 1,000 notes; p95 4.9 s |
+| Databricks App (`og2-lithology-api`, Free Edition, deployed by the bundle) | Same app answers; MCP works behind the workspace proxy | Health, lithology and MCP `tools/list` (4 tools) pass with a workspace token; injected text refused; no login → redirect to sign-in |
+| Public deployment (Vercel Hobby, CD from `main`) | Smoke test passes on the public URL | Passed: well-log-lithology.vercel.app (health, lithology, MCP, injection probe) |
 
+- **Databricks App host:** Databricks Apps expose no URL variable, so the build writes the app's hostname into `app.yaml` (`WLL_ALLOWED_HOSTS`; repo variable `DATABRICKS_APP_HOST` in CI). Free Edition stops apps after 24 hours; restart with `databricks bundle run og2_api`.
 - **Found on the way:** the MCP SDK's DNS-rebinding guard rejects every host but localhost, so `/mcp` would have failed on the public host. The app now allows the hostnames the platform sets (`VERCEL_URL`, `VERCEL_PROJECT_PRODUCTION_URL`).
 
 ## Considered Options
