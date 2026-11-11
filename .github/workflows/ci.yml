@@ -1,5 +1,7 @@
 name: ci
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -10,3 +12,40 @@ jobs:
       - run: pip install -r requirements.txt
       - run: ruff check src scripts tests
       - run: python -m pytest -q tests
+
+  # CD (R19, ADR-011): build the read-only bundle, sign its provenance, deploy to Vercel Hobby, smoke-test the live URL.
+  # Skips the deploy (job stays green) until the VERCEL_TOKEN secret exists.
+  deploy:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write       # signs the build provenance
+      attestations: write
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Build the bundle (serving code, config, checksummed snapshot)
+        run: |
+          python scripts/build_deploy.py --out build/well-log-lithology
+          tar -czf build/well-log-lithology.tar.gz -C build well-log-lithology
+      - name: Sign build provenance
+        uses: actions/attest-build-provenance@v4
+        with: {subject-path: build/well-log-lithology.tar.gz}
+      - uses: actions/upload-artifact@v4
+        with: {name: deploy-bundle, path: build/well-log-lithology.tar.gz}
+      - name: Deploy to Vercel (production)
+        if: env.VERCEL_TOKEN != ''
+        id: vercel
+        working-directory: build/well-log-lithology
+        run: echo "url=$(npx -y vercel@65.4.0 deploy --prod --yes --token "$VERCEL_TOKEN")" >> "$GITHUB_OUTPUT"
+      - name: Smoke test the live URL
+        if: env.VERCEL_TOKEN != ''
+        run: python scripts/smoke_test.py "${{ vars.PUBLIC_URL || steps.vercel.outputs.url }}"
+      - name: No token yet
+        if: env.VERCEL_TOKEN == ''
+        run: echo "::notice::VERCEL_TOKEN not set; bundle built and attested, deploy skipped."
