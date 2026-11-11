@@ -6,10 +6,14 @@ import json
 import os
 from pathlib import Path
 
+BUNDLED = Path(__file__).resolve().parents[2] / "serving" / "store.json"   # deploy bundle layout (scripts/build_deploy.py)
+
 
 def store_path() -> Path:
     if os.environ.get("WLL_STORE"):
         return Path(os.environ["WLL_STORE"])
+    if BUNDLED.exists():
+        return BUNDLED
     return Path(os.environ.get("WLL_DATA_DIR", "~/data/well-log-lithology")).expanduser() / "serving" / "store.json"
 
 

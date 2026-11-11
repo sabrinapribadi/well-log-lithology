@@ -64,3 +64,18 @@ def test_grader_rejects_invented_numbers():
     facts = {"subject_type": "force_well", "well": "15/9-23", "blind_score": -0.395, "doubtful_m": 45}
     assert grade("Blind score -0.40; 45 m doubtful.", facts)["ok"]
     assert not grade("Blind score -0.41; 300 m doubtful.", facts)["ok"]
+
+
+def test_read_only_service_serves_cached_model_notes_without_a_writer(tmp_path):
+    import json
+
+    from src.serving.notes import NoteService, force_facts
+    facts = force_facts(Store(FIX).force["15/9-23"])
+    writer_side = NoteService(None, cache_model="gpt-6-luna")
+    key = writer_side.key(facts)
+    cache = tmp_path / "notes_cache.json"
+    cache.write_text(json.dumps({key: {"note": "Cached note for 15/9-23.", "source": "model", "grader": {"ok": True, "served_ok": True},
+                                       "model": "gpt-6-luna", "raw": None}}))
+    note, source, *_ = NoteService(None, cache, cache_model="gpt-6-luna").note(facts)
+    assert source == "model" and note.startswith("Cached")
+    assert NoteService(None, cache).note(facts)[1] == "template"        # no cache_model: template, never a call
