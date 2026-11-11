@@ -1,0 +1,46 @@
+# Hiring-team brief (rule R22). Edit here only; `python scripts/brief.py` writes it into README.md, docs/index.html and docs/build.html.
+repo_url: https://github.com/sabrinapribadi/well-log-lithology
+brief:
+  - w: What
+    lines:
+      - A rock-type (lithology) model for well logs, served as a results page, an API, MCP tools and grounded notes.
+  - w: Why
+    lines:
+      - Petrophysicists pick lithology by hand at every 0.152 m of every well; a checked first pass shows where to look first.
+  - w: Who
+    lines:
+      - "Users: petrophysicists and geologists reviewing new wells."
+      - "Data: FORCE 2020 North Sea, 118 wells with interpreted rock types (CC BY 4.0), plus 28,906 public Kansas LAS files."
+  - w: Where
+    lines:
+      - "[Results page](https://sabrinapribadi.github.io/well-log-lithology/) and [technical walkthrough](https://sabrinapribadi.github.io/well-log-lithology/build.html) on GitHub Pages; [live API and MCP](https://well-log-lithology.vercel.app/docs) on Vercel; yearly job, registry and app on Databricks."
+  - w: When it fails
+    lines:
+      - 8 phases, each with a pass bar set before the work; 3 failed and are reported (baseline, Kansas transfer, cloud parity).
+      - "No live A/B test: there are no live users. Changes face 10 blind wells, grouped cross-validation and a 10-seed paired test."
+  - w: How
+    lines:
+      - XGBoost with engineered features and a penalty-aware decision, chosen over LightGBM and a 1D CNN by cross-validation.
+      - "Score: the official FORCE penalty, 0 is perfect: −0.504 on 10 unseen wells (4th of 13 2020 finalists); beats the baseline on 10 of 10 seeds."
+skills:
+  - group: Data engineering
+    what: LAS parsing, unit standardisation and quality checks for 28,906 files
+    proof: [["src/kansas.py", "src/kansas.py"], ["ADR-006", "docs/adr/ADR-006-log-quality-and-drift.md"]]
+  - group: Machine learning
+    what: XGBoost, LightGBM and a PyTorch 1D CNN under one comparison
+    proof: [["ADR-004", "docs/adr/ADR-004-baseline-and-model-choice.md"], ["ADR-009", "docs/adr/ADR-009-method-comparison.md"]]
+  - group: Statistics and evaluation
+    what: blind wells, grouped CV, cost matrix, paired-seed interval, PSI drift
+    proof: [["ADR-002", "docs/adr/ADR-002-validation-and-gates.md"], ["ADR-010", "docs/adr/ADR-010-multi-seed-comparison.md"]]
+  - group: MLOps and CI/CD
+    what: GitHub Actions with browser tests, gated Pages, signed build provenance, CD to Vercel
+    proof: [["ci.yml", ".github/workflows/ci.yml"]]
+  - group: Cloud and platform
+    what: Databricks bundle, Spark job, Unity Catalog registry, Databricks App
+    proof: [["ADR-008", "docs/adr/ADR-008-databricks-job.md"], ["databricks.yml", "databricks.yml"]]
+  - group: GenAI and agents
+    what: grounded notes with a grader, MCP tools, OpenTelemetry traces, prompt-injection tests
+    proof: [["ADR-007", "docs/adr/ADR-007-api-mcp-copilot.md"], ["ADR-011", "docs/adr/ADR-011-public-api-and-technology-assessment.md"]]
+  - group: Domain
+    what: petrophysics (LAS standard, formation tops, lithology classes, Kansas geology)
+    proof: [["ADR-003", "docs/adr/ADR-003-industry-alignment.md"], ["ADR-005", "docs/adr/ADR-005-kansas-transfer-test.md"]]

@@ -2,6 +2,14 @@
 
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
+## [0.13.0] — 2026-11-11 — Hiring-team brief (R22), rules audit fixes, Databricks App
+**Files:** docs/brief.yaml, scripts/brief.py, README.md, docs/index.html, docs/build.html, docs/PRD.md, docs/adr/README.md, docs/adr/ADR-011, scripts/build_deploy.py, databricks.yml, .github/workflows/ci.yml, tests/browser/*.js
+- **Situation:** A rules audit found gaps: browser tests not in CI, Pages publishing without a gate, no free-tier notes, an unbumped PRD, no ADR dependency tree, long paragraphs; hiring teams had no one-glance summary.
+- **Task:** Fix every gap and put a 5W1H brief first on the README and both pages, with no repeated content.
+- **Action:** One brief source written into all three by script and checked in CI; removed the lede, intro bullets, status chips and repeated figures; browser tests now run in CI and fail on errors; Pages deploy only after tests; the API and MCP also run as a Databricks App from the bundle.
+- **Result:** CI green with unit, browser and brief checks; 351 build-page and all hover checks pass; Databricks App answers REST and MCP behind workspace login.
+- **Talking point:** "A hiring manager gets what, why, who, where, when it fails and how in six lines, each skill linked to its proof."
+
 ## [0.12.0] — 2026-11-11 — Multi-seed comparison: B reliably beats the baseline (ADR-010)
 **Files:** scripts/p2c_multi_seed.py, data/outputs/p2c_multi_seed.json, scripts/export_page_data.py, docs/data/page_data.js, docs/index.html, docs/build.html, docs/adr/ADR-010, ADR-002, docs/PRD.md, README.md
 - **Situation:** P2's +0.036 over the baseline came from one seed, and P6 showed seed noise up to 0.18.

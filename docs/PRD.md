@@ -1,8 +1,8 @@
 PRODUCT REQUIREMENT DOCUMENT (PRD)
 Project: Well-Log Lithology — Does a North Sea Model Transfer to Kansas?
-Version: 0.3 (P3 failed and transfer withdrawn; P4, P5 passed; P6 failed on parity; method comparison added)
+Version: 0.4 (multi-seed check: B beats P1 on 10 of 10 seeds, ADR-010; public API, MCP, traces and Databricks App, ADR-011)
 Author: Sabrina Pribadi
-Date: November 9, 2026
+Date: November 11, 2026
 Status: Active — P0–P6 done; North Sea-only model (Kansas transfer failed)
 
 
@@ -103,7 +103,9 @@ Raw data lives in `WLL_DATA_DIR` (OneDrive `github_project/data/well-log-litholo
 1. Sources → `scripts/` ingestion (FORCE CSVs; Kansas LAS read inside the yearly and nested zips)
 2. Local models (XGBoost, LightGBM) with well-grouped validation (P1–P2)
 3. Outputs as small JSON files → two static pages on GitHub Pages
-4. Later: Databricks job (Spark LAS standardisation, registry, drift), API and MCP tools
+4. Databricks job (Spark LAS quality, registry, drift; ADR-008) and API + MCP tools with grounded notes (ADR-007)
+5. Public read-only API and stateless MCP on Vercel Hobby, the same app as a Databricks App, CD with signed provenance (ADR-011)
+6. OpenTelemetry GenAI traces on every note; prompt-injection tests on every tool (ADR-011)
 
 
 9. IMPLEMENTATION PLAN
