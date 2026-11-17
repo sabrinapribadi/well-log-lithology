@@ -1,0 +1,628 @@
+{
+ "recorded_utc": "2026-11-17 18:28",
+ "model": "gpt-6-luna",
+ "api": "https://well-log-lithology.vercel.app",
+ "runs": [
+  {
+   "question": "What rocks does well 15/9-23 have, and where should I review first?",
+   "answer": "Well 15/9-23 is predicted to be mostly shale (72%), with limestone (17%), sandstone (6%), marl (4%) and coal (under 1%).\n\nReview the doubtful intervals first, especially the cluster of marl predictions around 2860–2890 m. Other thick doubtful intervals include marl near 2919.9 m, sandstone/shale at 3133.0 m, and limestone at 2524.2 m.",
+   "tool_calls": [
+    {
+     "name": "predict_lithology",
+     "arguments": {
+      "well": "15/9-23"
+     },
+     "ok": true
+    }
+   ],
+   "tool_results": [
+    {
+     "well": "15/9-23",
+     "split": "hidden",
+     "model": "B (P2 choice, XGBoost)",
+     "blind_score": -0.395,
+     "share_as_interpreted": 0.829,
+     "rock_shares": {
+      "Shale": 0.722,
+      "Limestone": 0.172,
+      "Sandstone": 0.063,
+      "Marl": 0.037,
+      "Coal": 0.004
+     },
+     "doubtful_m": 45,
+     "doubtful_intervals": 161,
+     "meaning": "Blind score: average penalty per 0.152 m sample on a well the model never saw; 0 is perfect.",
+     "logged_from_m": 1518.3,
+     "logged_to_m": 3212.8,
+     "thickest_doubtful_intervals": [
+      {
+       "rock": "Marl",
+       "top_m": 2872.0,
+       "base_m": 2874.6,
+       "probability": 0.47
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2860.1,
+       "base_m": 2862.3,
+       "probability": 0.48
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2863.0,
+       "base_m": 2864.7,
+       "probability": 0.46
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2866.7,
+       "base_m": 2867.3,
+       "probability": 0.48
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2870.2,
+       "base_m": 2870.8,
+       "probability": 0.4
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2888.6,
+       "base_m": 2889.2,
+       "probability": 0.4
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2919.9,
+       "base_m": 2920.5,
+       "probability": 0.36
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 3133.0,
+       "base_m": 3133.6,
+       "probability": 0.4
+      },
+      {
+       "rock": "Limestone",
+       "top_m": 2524.2,
+       "base_m": 2524.7,
+       "probability": 0.45
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2882.0,
+       "base_m": 2882.5,
+       "probability": 0.48
+      }
+     ]
+    }
+   ],
+   "steps": 2,
+   "grounded": true,
+   "ungrounded_numbers": [],
+   "model": "gpt-6-luna",
+   "tokens": {
+    "input": 1718,
+    "cached_input": 0,
+    "output": 120
+   },
+   "cost_usd": 0.0002318,
+   "latency_ms": 5780.2
+  },
+  {
+   "question": "How good is the model on well 16/2-7?",
+   "answer": "The model was tested on the hidden well, so this is the stronger check. Its blind score was **−0.555** (zero is perfect), and **78.9%** of its predictions matched the interpreter. Review the **116 m** of doubtful intervals first; the thickest listed interval is at **2121.5–2123.5 m**.",
+   "tool_calls": [
+    {
+     "name": "predict_lithology",
+     "arguments": {
+      "well": "16/2-7"
+     },
+     "ok": true
+    }
+   ],
+   "tool_results": [
+    {
+     "well": "16/2-7",
+     "split": "hidden",
+     "model": "B (P2 choice, XGBoost)",
+     "blind_score": -0.555,
+     "share_as_interpreted": 0.789,
+     "rock_shares": {
+      "Shale": 0.436,
+      "Sandstone": 0.263,
+      "Limestone": 0.127,
+      "Marl": 0.119,
+      "Dolomite": 0.022
+     },
+     "doubtful_m": 116,
+     "doubtful_intervals": 356,
+     "meaning": "Blind score: average penalty per 0.152 m sample on a well the model never saw; 0 is perfect.",
+     "logged_from_m": 704.1,
+     "logged_to_m": 2480.7,
+     "thickest_doubtful_intervals": [
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 2121.5,
+       "base_m": 2123.5,
+       "probability": 0.43
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 2112.1,
+       "base_m": 2113.8,
+       "probability": 0.46
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 2106.5,
+       "base_m": 2108.1,
+       "probability": 0.44
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 2114.4,
+       "base_m": 2116.0,
+       "probability": 0.4
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 2119.2,
+       "base_m": 2120.5,
+       "probability": 0.41
+      },
+      {
+       "rock": "Dolomite",
+       "top_m": 2183.8,
+       "base_m": 2185.1,
+       "probability": 0.49
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 2003.1,
+       "base_m": 2004.3,
+       "probability": 0.42
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 2004.5,
+       "base_m": 2005.7,
+       "probability": 0.39
+      },
+      {
+       "rock": "Shale",
+       "top_m": 2080.9,
+       "base_m": 2082.0,
+       "probability": 0.47
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 1992.2,
+       "base_m": 1993.2,
+       "probability": 0.49
+      }
+     ]
+    }
+   ],
+   "steps": 2,
+   "grounded": true,
+   "ungrounded_numbers": [],
+   "model": "gpt-6-luna",
+   "tokens": {
+    "input": 1722,
+    "cached_input": 0,
+    "output": 104
+   },
+   "cost_usd": 0.0002242,
+   "latency_ms": 5284.6
+  },
+  {
+   "question": "Compare wells 15/9-14 and 15/9-23.",
+   "answer": "Both are shale-dominant, but 15/9-23 has stronger agreement with interpretation (82.9% versus 58%) and a better blind score (-0.395 versus -1.009). It also has fewer doubtful metres: 45 m versus 155 m.\n\nReview the doubtful intervals first: for 15/9-23, the thickest are marl intervals around 2860–2874 m; for 15/9-14, start around 3072–3075 m and 3128–3146 m, including mixed sandstone/shale. 15/9-23 is a hidden well; 15/9-14 is an open-well check.",
+   "tool_calls": [
+    {
+     "name": "predict_lithology",
+     "arguments": {
+      "well": "15/9-14"
+     },
+     "ok": true
+    },
+    {
+     "name": "predict_lithology",
+     "arguments": {
+      "well": "15/9-23"
+     },
+     "ok": true
+    }
+   ],
+   "tool_results": [
+    {
+     "well": "15/9-14",
+     "split": "open",
+     "model": "B (P2 choice, XGBoost)",
+     "blind_score": -1.009,
+     "share_as_interpreted": 0.58,
+     "rock_shares": {
+      "Shale": 0.619,
+      "Sandstone": 0.211,
+      "Limestone": 0.118,
+      "Sandstone/Shale": 0.034,
+      "Marl": 0.014
+     },
+     "doubtful_m": 155,
+     "doubtful_intervals": 410,
+     "meaning": "Blind score: average penalty per 0.152 m sample on a well the model never saw; 0 is perfect.",
+     "logged_from_m": 480.6,
+     "logged_to_m": 3564.7,
+     "thickest_doubtful_intervals": [
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 3143.5,
+       "base_m": 3146.3,
+       "probability": 0.45
+      },
+      {
+       "rock": "Shale",
+       "top_m": 3072.1,
+       "base_m": 3074.7,
+       "probability": 0.46
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 3128.0,
+       "base_m": 3130.6,
+       "probability": 0.36
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 3140.9,
+       "base_m": 3143.1,
+       "probability": 0.47
+      },
+      {
+       "rock": "Marl",
+       "top_m": 3063.4,
+       "base_m": 3065.2,
+       "probability": 0.45
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 2711.8,
+       "base_m": 2713.4,
+       "probability": 0.45
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 3312.8,
+       "base_m": 3314.4,
+       "probability": 0.48
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 3308.4,
+       "base_m": 3309.8,
+       "probability": 0.41
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 2617.3,
+       "base_m": 2618.7,
+       "probability": 0.39
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 3148.4,
+       "base_m": 3149.7,
+       "probability": 0.43
+      }
+     ]
+    },
+    {
+     "well": "15/9-23",
+     "split": "hidden",
+     "model": "B (P2 choice, XGBoost)",
+     "blind_score": -0.395,
+     "share_as_interpreted": 0.829,
+     "rock_shares": {
+      "Shale": 0.722,
+      "Limestone": 0.172,
+      "Sandstone": 0.063,
+      "Marl": 0.037,
+      "Coal": 0.004
+     },
+     "doubtful_m": 45,
+     "doubtful_intervals": 161,
+     "meaning": "Blind score: average penalty per 0.152 m sample on a well the model never saw; 0 is perfect.",
+     "logged_from_m": 1518.3,
+     "logged_to_m": 3212.8,
+     "thickest_doubtful_intervals": [
+      {
+       "rock": "Marl",
+       "top_m": 2872.0,
+       "base_m": 2874.6,
+       "probability": 0.47
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2860.1,
+       "base_m": 2862.3,
+       "probability": 0.48
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2863.0,
+       "base_m": 2864.7,
+       "probability": 0.46
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2866.7,
+       "base_m": 2867.3,
+       "probability": 0.48
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2870.2,
+       "base_m": 2870.8,
+       "probability": 0.4
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2888.6,
+       "base_m": 2889.2,
+       "probability": 0.4
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2919.9,
+       "base_m": 2920.5,
+       "probability": 0.36
+      },
+      {
+       "rock": "Sandstone/Shale",
+       "top_m": 3133.0,
+       "base_m": 3133.6,
+       "probability": 0.4
+      },
+      {
+       "rock": "Limestone",
+       "top_m": 2524.2,
+       "base_m": 2524.7,
+       "probability": 0.45
+      },
+      {
+       "rock": "Marl",
+       "top_m": 2882.0,
+       "base_m": 2882.5,
+       "probability": 0.48
+      }
+     ]
+    }
+   ],
+   "steps": 2,
+   "grounded": true,
+   "ungrounded_numbers": [],
+   "model": "gpt-6-luna",
+   "tokens": {
+    "input": 2318,
+    "cached_input": 0,
+    "output": 207
+   },
+   "cost_usd": 0.0003353,
+   "latency_ms": 6815.0
+  },
+  {
+   "question": "Can I trust the lithology for Kansas well 1001184201?",
+   "answer": "No—not as a validated lithology interpretation. Kansas lithology has not been validated because the transfer test failed. For this well, gamma, neutron, and density coverage is 0%; 33.33% of values are outside physical ranges, and hole condition is unknown. The available curves are GR, NPHI, RDEP, and CALI.",
+   "tool_calls": [
+    {
+     "name": "well_quality",
+     "arguments": {
+      "kgs_id": "1001184201"
+     },
+     "ok": true
+    }
+   ],
+   "tool_results": [
+    {
+     "kgs_id": "1001184201",
+     "archive": "2001_2005",
+     "curves": [
+      "GR",
+      "NPHI",
+      "RDEP",
+      "CALI"
+     ],
+     "coverage_gr_neutron_density": 0.0,
+     "out_of_range_share": 0.3333,
+     "bad_hole_share": null,
+     "bad_hole_basis": "unknown",
+     "model_t_confidence_median": null,
+     "lithology_validated": false,
+     "caveat": "Kansas lithology is not validated: the transfer test failed (ADR-005). Confidence is a drift signal only."
+    }
+   ],
+   "steps": 2,
+   "grounded": true,
+   "ungrounded_numbers": [],
+   "model": "gpt-6-luna",
+   "tokens": {
+    "input": 1295,
+    "cached_input": 0,
+    "output": 99
+   },
+   "cost_usd": 0.000179,
+   "latency_ms": 4815.3
+  },
+  {
+   "question": "Did the model recognise the Arbuckle dolomite in Kansas?",
+   "answer": "No. The Arbuckle test did not pass. It was expected to be dolomite, but median agreement was 0%, and the model predicted mostly sandstone (67%) and shale (19%) inside the unit. The test scored 196 wells; the pass rule requires at least 50% median agreement and lift of at least 2. Kansas lithology is not validated.",
+   "tool_calls": [
+    {
+     "name": "unit_agreement",
+     "arguments": {
+      "unit": "Arbuckle"
+     },
+     "ok": true
+    }
+   ],
+   "tool_results": [
+    {
+     "unit": "Arbuckle",
+     "expected_rock": "Dolomite",
+     "gated": true,
+     "wells_scored": 196,
+     "median_agreement": 0.0,
+     "lift": 4.96,
+     "passed": false,
+     "predicted_mix_inside": {
+      "Sandstone": 0.67,
+      "Shale": 0.19,
+      "Limestone": 0.06,
+      "Sandstone/Shale": 0.05,
+      "Coal": 0.03
+     },
+     "pass_rule": {
+      "min_wells_scored": 30,
+      "min_median_agreement": 0.5,
+      "min_lift": 2
+     }
+    }
+   ],
+   "steps": 2,
+   "grounded": true,
+   "ungrounded_numbers": [],
+   "model": "gpt-6-luna",
+   "tokens": {
+    "input": 1298,
+    "cached_input": 0,
+    "output": 101
+   },
+   "cost_usd": 0.0001803,
+   "latency_ms": 5528.2
+  },
+  {
+   "question": "Give me a short note on well 35/9-8.",
+   "answer": "Well 35/9-8 is a hidden test well the model never saw. Its blind score is −0.724 (0 is perfect), and it matches the interpreter over 70.4% of logged depth. The model mainly predicts Sandstone/Shale (47%), Shale (27%) and Sandstone (14%). Review the 75 doubtful metres first.",
+   "tool_calls": [
+    {
+     "name": "explain_well",
+     "arguments": {
+      "well_or_kgs_id": "35/9-8"
+     },
+     "ok": true
+    }
+   ],
+   "tool_results": [
+    {
+     "subject": "35/9-8",
+     "note": "Well 35/9-8 is a test well the model never saw. Its blind score is -0.724; 0 is perfect. The model matches the interpreter over 70.4% of logged depth, mainly Sandstone/Shale (47%), Shale (27%) and Sandstone (14%). Review the 75 doubtful metres first.",
+     "source": "model",
+     "grounded": true,
+     "meter": {
+      "provider": "cache",
+      "model": "gpt-6-luna",
+      "input_tokens": 0,
+      "cached_input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0.004,
+      "cost_usd": 0.0,
+      "cached": true
+     }
+    }
+   ],
+   "steps": 2,
+   "grounded": true,
+   "ungrounded_numbers": [],
+   "model": "gpt-6-luna",
+   "tokens": {
+    "input": 1334,
+    "cached_input": 0,
+    "output": 107
+   },
+   "cost_usd": 0.0001869,
+   "latency_ms": 5326.5
+  },
+  {
+   "question": "What's the lithology of well 6507/7-2?",
+   "answer": "I couldn’t find FORCE test well 6507/7-2. Lithology predictions are available for the served open and hidden FORCE test wells.",
+   "tool_calls": [
+    {
+     "name": "predict_lithology",
+     "arguments": {
+      "well": "6507/7-2"
+     },
+     "ok": true
+    }
+   ],
+   "tool_results": [
+    {
+     "not_found": true,
+     "detail": "No FORCE test well '6507/7-2'. Lithology is served for the 20 open and hidden FORCE wells; Kansas lithology is not validated."
+    }
+   ],
+   "steps": 2,
+   "grounded": true,
+   "ungrounded_numbers": [],
+   "model": "gpt-6-luna",
+   "tokens": {
+    "input": 1210,
+    "cached_input": 0,
+    "output": 59
+   },
+   "cost_usd": 0.0001505,
+   "latency_ms": 4180.8
+  },
+  {
+   "question": "What porosity does well 15/9-23 have?",
+   "answer": "I can’t provide porosity: the available information for this well covers predicted lithology, not porosity. I can help with its predicted rocks and intervals to review.",
+   "tool_calls": [
+    {
+     "name": "explain_well",
+     "arguments": {
+      "well_or_kgs_id": "15/9-23"
+     },
+     "ok": true
+    }
+   ],
+   "tool_results": [
+    {
+     "subject": "15/9-23",
+     "note": "Well 15/9-23 is a test well the model never saw. Its blind score is -0.395, with 0 being perfect. The model matches the interpreter’s labels over 82.9% of logged depth; the main rocks are shale, limestone and sandstone. Review the 45 doubtful metres first.",
+     "source": "model",
+     "grounded": true,
+     "meter": {
+      "provider": "cache",
+      "model": "gpt-6-luna",
+      "input_tokens": 0,
+      "cached_input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0.004,
+      "cost_usd": 0.0,
+      "cached": true
+     }
+    }
+   ],
+   "steps": 2,
+   "grounded": true,
+   "ungrounded_numbers": [],
+   "model": "gpt-6-luna",
+   "tokens": {
+    "input": 1329,
+    "cached_input": 0,
+    "output": 66
+   },
+   "cost_usd": 0.0001659,
+   "latency_ms": 4626.0
+  }
+ ],
+ "summary": {
+  "questions": 8,
+  "grounded": 8,
+  "cost_usd_total": 0.001654,
+  "cost_per_1000_usd": 0.2067,
+  "latency_ms_p50": 5326.5,
+  "latency_ms_p95": 6815.0
+ }
+}

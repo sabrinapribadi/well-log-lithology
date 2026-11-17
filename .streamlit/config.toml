@@ -1,0 +1,28 @@
+# Theme for the Streamlit companion app (R26 item 7): dark by default, like the portfolio's featured apps.
+[theme]
+base = "dark"
+primaryColor = "#e0a33a"
+backgroundColor = "#0f0f0d"
+secondaryBackgroundColor = "#1a1a17"
+textColor = "#ece9e1"
+linkColor = "#f0be6a"
+borderColor = "#2e2c27"
+codeBackgroundColor = "#1a1a17"
+font = "'Source Sans 3':https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap"
+headingFont = "'Barlow Condensed':https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap"
+baseRadius = "0.5rem"
+buttonRadius = "full"
+showWidgetBorder = true
+showSidebarBorder = true
+metricValueFontSize = "2rem"
+metricValueFontWeight = 700
+
+[theme.sidebar]
+backgroundColor = "#131311"
+secondaryBackgroundColor = "#1d1d1a"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false

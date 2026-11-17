@@ -9,8 +9,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12", cache: pip}
-      - run: pip install -r requirements.txt
-      - run: ruff check src scripts tests skills
+      - run: pip install -r requirements.txt -r app/requirements.txt
+      - run: ruff check src scripts tests skills app
       - name: Skill client runs on Python 3.8+ (syntax check)
         run: ruff check --target-version py38 --select E9 skills
       - name: Hiring-team brief in sync with docs/brief.yaml (R22)

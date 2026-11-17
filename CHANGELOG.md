@@ -2,6 +2,14 @@
 
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
+## [0.15.0] — 2026-11-18 — Streamlit companion app with the agent chat (R26)
+**Files:** app/streamlit_app.py, app/wl_data.py, app/agent_tools.py, app/agent.py and app/chat.py (shared with the other portfolio apps), app/replays.json, app/requirements.txt, .streamlit/config.toml, scripts/record_agent_replays.py, tests/test_streamlit_app.py, tests/fixtures/app_api.json (all new), .github/workflows/ci.yml, README.md
+- **Situation:** The results page is static and LinkedIn previews a Streamlit app; the project had no interactive surface and no way to show its tools working with a model.
+- **Task:** Build the R26 app: brief and results first, only what a static page cannot do, no keys, tested in CI.
+- **Action:** Four lazy tabs (a well's strip log and review list, the Kansas transfer by unit, the Kansas archive on a map with a quality lookup, the agent chat); the agent's tools give it a summary and the thickest doubtful intervals, and the pass rule, so every number it states is checkable; 8 answers recorded on the public API.
+- **Result:** 8 of 8 recorded answers pass the number check; about $0.21 per 1,000 questions. Found on the way: the shared chat engine dropped a tool call's arguments when the tool failed (fixed in all five apps), and the agent printed fractions instead of percentages (instructions fixed).
+- **Talking point:** "A geologist can open any blind well, see the thickest doubtful intervals first, and ask the agent why Kansas is not validated."
+
 ## [0.14.0] — 2026-11-17 — Agent skill for lithology answers (R24)
 **Files:** skills/well-log-lithology/ (new), tests/test_skill_client.py (new), scripts/skill_live_check.py (new), .github/workflows/ci.yml, docs/adr/ADR-012-agent-skill.md (new), docs/adr/README.md, docs/brief.yaml, scripts/brief.py, README.md, docs/index.html, docs/build.html
 - **Situation:** The API and MCP were live, but an agent could misread the blind score (a penalty, 0 is perfect), mix open and hidden wells, or answer Kansas questions with an unvalidated rock column.

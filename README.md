@@ -60,6 +60,19 @@
 - After idle time the first call wakes the app: about 1–3 s (measured 2026-11-11).
 - **Fallback:** the [results page](https://sabrinapribadi.github.io/well-log-lithology/) is static and carries every number, even if the API is paused.
 
+## Try it interactively (Streamlit app)
+
+A companion app in [`app/`](app/streamlit_app.py) (rule R26), dark by default with the results and the brief on the first screen:
+
+1. **Well column:** pick any of the 20 FORCE test wells; a strip log of predicted rock by depth with a probability track (0.5 line), rock shares, the ten thickest doubtful intervals to review first and the planner note.
+2. **Kansas transfer test:** median agreement of each unit against the 50% pass line, with lift and the verdict; what the model predicted inside a chosen unit.
+3. **Kansas log quality:** 24,166 LAS files on a map by which core logs they hold; any well's quality by KGS ID, with the not-validated caveat.
+4. **Ask the agent:** replay of 8 recorded answers by default (tools, number check, cost, time); live with the viewer's own OpenAI key, session-only and capped.
+
+- **Data:** the public API and committed results only; no keys, no model.
+- **Tests:** `tests/test_streamlit_app.py` (AppTest on recorded API answers, every tab, the chat, and a check that the agent's tools match the registry) runs in CI.
+- **Free-tier limits:** the app sleeps after 12 hours without visits; the [results page](https://sabrinapribadi.github.io/well-log-lithology/) is always on.
+
 ## Use it from an AI agent (skill)
 
 The lithology tools ship as an Agent Skill in [`skills/well-log-lithology/`](skills/well-log-lithology/SKILL.md) (rule R24): when to use it, how to read the blind score and the Kansas results, a dependency-free client, charts and tested example tasks.
