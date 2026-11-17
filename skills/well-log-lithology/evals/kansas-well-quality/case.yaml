@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: kansas-well-quality
+expected_outcome: |
+  Says Kansas lithology is not validated (the transfer test failed, ADR-005) so no rock column should be trusted; gives the well's log quality: curves GR, NPHI, RDEP, CALI; gamma-neutron-density coverage 0%; 33% of values out of physical range; no chart needed.

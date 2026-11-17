@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: out-of-scope-well
+expected_outcome: |
+  Declines: lithology is served only for the 20 FORCE open and hidden test wells; offers a served well or the Kansas quality screen instead; invents nothing.

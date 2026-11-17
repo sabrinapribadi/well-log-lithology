@@ -10,7 +10,9 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12", cache: pip}
       - run: pip install -r requirements.txt
-      - run: ruff check src scripts tests
+      - run: ruff check src scripts tests skills
+      - name: Skill client runs on Python 3.8+ (syntax check)
+        run: ruff check --target-version py38 --select E9 skills
       - name: Hiring-team brief in sync with docs/brief.yaml (R22)
         run: python scripts/brief.py --check
       - run: python -m pytest -q tests
@@ -83,6 +85,10 @@ jobs:
       - name: Smoke test the live URL
         if: env.VERCEL_TOKEN != ''
         run: python scripts/smoke_test.py "${{ vars.PUBLIC_URL || steps.vercel.outputs.url }}"
+      # R24: the agent skill's client reaches the fresh deployment and the facts its eval graders use still hold
+      - name: Agent skill live check
+        if: env.VERCEL_TOKEN != ''
+        run: python scripts/skill_live_check.py --base "${{ vars.PUBLIC_URL || steps.vercel.outputs.url }}"
       - name: No token yet
         if: env.VERCEL_TOKEN == ''
         run: echo "::notice::VERCEL_TOKEN not set; bundle built and attested, deploy skipped."

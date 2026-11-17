@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: well-column-15-9-23
+expected_outcome: |
+  Opens with the data line; says 15/9-23 is a hidden test well with blind score -0.395 (0 is perfect) and 83% of logged depth matching the interpreter; names the main rocks (shale 72%, limestone 17%); points to the 45 doubtful metres; provides the strip-log chart.

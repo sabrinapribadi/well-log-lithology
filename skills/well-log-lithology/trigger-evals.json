@@ -1,0 +1,82 @@
+[
+ {
+  "query": "What rock types does well 15/9-23 have, by depth?",
+  "should_trigger": true
+ },
+ {
+  "query": "Show me a strip log for 16/2-7 with the doubtful zones.",
+  "should_trigger": true
+ },
+ {
+  "query": "How good is the lithology model on blind wells?",
+  "should_trigger": true
+ },
+ {
+  "query": "Is the LAS file for KGS well 1001184201 usable?",
+  "should_trigger": true
+ },
+ {
+  "query": "Did the model pick out the Arbuckle dolomite in Kansas?",
+  "should_trigger": true
+ },
+ {
+  "query": "Where should a petrophysicist review first on 35/9-8?",
+  "should_trigger": true
+ },
+ {
+  "query": "Compare the open and hidden FORCE test scores.",
+  "should_trigger": true
+ },
+ {
+  "query": "Which Kansas units did the transfer test fail?",
+  "should_trigger": true
+ },
+ {
+  "query": "Give me a note on well 15/9-14 for a geologist.",
+  "should_trigger": true
+ },
+ {
+  "query": "What does a blind score of -0.5 mean for facies prediction?",
+  "should_trigger": true
+ },
+ {
+  "query": "Estimate porosity from this density log.",
+  "should_trigger": false
+ },
+ {
+  "query": "What is the water saturation with Archie's equation?",
+  "should_trigger": false
+ },
+ {
+  "query": "Interpret this seismic section for faults.",
+  "should_trigger": false
+ },
+ {
+  "query": "Plot a decline curve for my oil well's production.",
+  "should_trigger": false
+ },
+ {
+  "query": "What's the best mobile site to build in Jakarta?",
+  "should_trigger": false
+ },
+ {
+  "query": "Which subscribers should we call this month?",
+  "should_trigger": false
+ },
+ {
+  "query": "Explain the geology of the Grand Canyon.",
+  "should_trigger": false
+ },
+ {
+  "query": "Convert this LAS 2.0 file to CSV.",
+  "should_trigger": false
+ },
+ {
+  "query": "What drilling mud weight should I use at 3,000 m?",
+  "should_trigger": false
+ },
+ {
+  "query": "Forecast transformer oil temperature for tomorrow.",
+  "should_trigger": false
+ }
+]

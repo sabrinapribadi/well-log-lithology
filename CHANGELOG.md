@@ -2,6 +2,14 @@
 
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
+## [0.14.0] — 2026-11-17 — Agent skill for lithology answers (R24)
+**Files:** skills/well-log-lithology/ (new), tests/test_skill_client.py (new), scripts/skill_live_check.py (new), .github/workflows/ci.yml, docs/adr/ADR-012-agent-skill.md (new), docs/adr/README.md, docs/brief.yaml, scripts/brief.py, README.md, docs/index.html, docs/build.html
+- **Situation:** The API and MCP were live, but an agent could misread the blind score (a penalty, 0 is perfect), mix open and hidden wells, or answer Kansas questions with an unvalidated rock column.
+- **Task:** Ship an evaluated agent skill under R24, with the portfolio's answer structure.
+- **Action:** Reading rules, a strip-log chart and Kansas unit bars, four eval tasks with 15 graders, 20 trigger prompts; offline client test, Python 3.8 syntax check and a live check after every deploy.
+- **Result:** 20 of 20 checks pass against the live API; two claims corrected while writing (R23).
+- **Talking point:** "The skill shows a geologist where to look first on a blind well, and refuses to give a Kansas rock column the model has not earned."
+
 ## [0.13.0] — 2026-11-11 — Hiring-team brief (R22), rules audit fixes, Databricks App
 **Files:** docs/brief.yaml, scripts/brief.py, README.md, docs/index.html, docs/build.html, docs/PRD.md, docs/adr/README.md, docs/adr/ADR-011, scripts/build_deploy.py, databricks.yml, .github/workflows/ci.yml, tests/browser/*.js
 - **Situation:** A rules audit found gaps: browser tests not in CI, Pages publishing without a gate, no free-tier notes, an unbumped PRD, no ADR dependency tree, long paragraphs; hiring teams had no one-glance summary.

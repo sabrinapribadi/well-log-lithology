@@ -13,6 +13,7 @@
 | [ADR-009](ADR-009-method-comparison.md) | P2b method comparison | Accepted | Fair LightGBM (one documented fix) and a 1D CNN over depth windows, same CV and hidden-well rule; B stays unless beaten by ≥ 0.02 in CV; finalists' methods documented. |
 | [ADR-010](ADR-010-multi-seed-comparison.md) | Multi-seed comparison of P1 and B | Accepted | Seeds 0–9 for both; B reliably better only if the mean hidden-well gain is ≥ 0.02 and its 95% interval excludes 0; robustness check, not a new choice. |
 | [ADR-011](ADR-011-public-api-and-technology-assessment.md) | Public API, remote MCP, technology assessment | Accepted | Read-only FastAPI + stateless MCP (2026-07-28) on Vercel Hobby, no key deployed; CD with build provenance; Databricks App as platform demo; R21 ratings. |
+| [ADR-012](ADR-012-agent-skill.md) | Agent skill for lithology answers (R24) | Accepted (20/20 checks) | `SKILL.md`, a dependency-free client, a strip-log chart and four evaluated tasks; the Kansas caveat built in; client test, py38 check and live check in CI. |
 
 ## Decision Dependencies
 
@@ -27,5 +28,6 @@ ADR-001 (framing, blind wells, penalty score)
         ├── ADR-006 (P4 log quality and drift)
         ├── ADR-007 (P5 API, MCP tools, grounded notes)
         │     └── ADR-011 (public API, remote MCP, traces, Databricks App; R21 assessment)
+        │           └── ADR-012 (agent skill over the ADR-011 API)
         └── ADR-008 (P6 Databricks job)
 ```

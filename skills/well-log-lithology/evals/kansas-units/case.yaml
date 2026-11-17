@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: kansas-units
+expected_outcome: |
+  Explains the pass rule (30+ wells, median agreement >= 50%, lift >= 2); Heebner: 90% agreement but lift 1.57, fails; Hutchinson Salt: 0% agreement (predicts shale, sandstone, anhydrite), lift 1.44, fails; no unit passed; provides the units chart.

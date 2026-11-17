@@ -8,7 +8,7 @@
 2. **Why:** Petrophysicists pick lithology by hand at every 0.152 m of every well; a checked first pass shows where to look first.
 3. **Who:** Users: petrophysicists and geologists reviewing new wells.
    - Data: FORCE 2020 North Sea, 118 wells with interpreted rock types (CC BY 4.0), plus 28,906 public Kansas LAS files.
-4. **Where:** [Results page](https://sabrinapribadi.github.io/well-log-lithology/) and [technical walkthrough](https://sabrinapribadi.github.io/well-log-lithology/build.html) on GitHub Pages; [live API and MCP](https://well-log-lithology.vercel.app/docs) on Vercel; yearly job, registry and app on Databricks.
+4. **Where:** [Results page](https://sabrinapribadi.github.io/well-log-lithology/) and [technical walkthrough](https://sabrinapribadi.github.io/well-log-lithology/build.html) on GitHub Pages; [live API and MCP](https://well-log-lithology.vercel.app/docs) on Vercel; yearly job, registry and app on Databricks; an [agent skill](skills/well-log-lithology/SKILL.md) for AI assistants.
 5. **When it fails:** 8 phases, each with a pass bar set before the work; 3 failed and are reported (baseline, Kansas transfer, cloud parity).
    - No live A/B test: there are no live users. Changes face 10 blind wells, grouped cross-validation and a 10-seed paired test.
 6. **How:** XGBoost with engineered features and a penalty-aware decision, chosen over LightGBM and a 1D CNN by cross-validation.
@@ -59,6 +59,20 @@
 - A monthly allotment; Hobby has no billing, so Vercel pauses the project instead of charging.
 - After idle time the first call wakes the app: about 1–3 s (measured 2026-11-11).
 - **Fallback:** the [results page](https://sabrinapribadi.github.io/well-log-lithology/) is static and carries every number, even if the API is paused.
+
+## Use it from an AI agent (skill)
+
+The lithology tools ship as an Agent Skill in [`skills/well-log-lithology/`](skills/well-log-lithology/SKILL.md) (rule R24): when to use it, how to read the blind score and the Kansas results, a dependency-free client, charts and tested example tasks.
+
+1. **Install in Claude Code:** `cp -r skills/well-log-lithology ~/.claude/skills/` (all projects) or `.claude/skills/` (one project).
+2. **Charts:** `python scripts/wll.py chart column 15/9-23` (strip log: rock by depth, probability, doubtful intervals hatched); `chart units` (Kansas units against the pass bars).
+3. **Ask in plain words**, for example: "Show me the lithology column for 15/9-23 and where to look first" or "Did the model recognise the Heebner Shale in Kansas?"
+
+| What is tested | How | Result (2026-11-17) |
+|---|---|---|
+| 4 task cases (a FORCE well, a Kansas well's quality, two Kansas units, an unserved well) | [`evals/`](skills/well-log-lithology/evals), graders checked by script against the live API | 20 of 20 checks pass (iteration 1) |
+| When the skill should and should not be used | [`trigger-evals.json`](skills/well-log-lithology/trigger-evals.json): 10 should-trigger, 10 near-miss | Ready for `claude plugin eval` |
+| Client, charts and the facts the graders use | `tests/test_skill_client.py` and a Python 3.8 syntax check in CI; `scripts/skill_live_check.py` after every deploy | Pass |
 
 ## Results
 
