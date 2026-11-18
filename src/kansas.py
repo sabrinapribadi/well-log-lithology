@@ -5,6 +5,9 @@
 - Units: neutron in percent (median > 1.5) → fraction; density in kg/m³ (median > 100) → g/cm³; sonic in µs/m
   (median > 300) → µs/ft; deep conductivity (mmho/m) → resistivity 1000 / C when no deep resistivity exists.
 - Density from density porosity when only DPHI exists: RHOB = 2.71 − 1.71 × DPHI (limestone matrix, fresh fluid).
+- Bulk density must be physically possible (ADR-013 erratum): a density candidate whose median, after the unit rule, lies
+  outside 1.2–3.3 g/cm³ is not density (in KGS files it is usually the density correction, RHOC) and is ignored; a curve
+  described as a density correction is DRHO. P3 (ADR-005) ran before this rule; its result stands as reported.
 - Depth in feet → metres; resampled to a 0.1524 m grid by linear interpolation, never bridging gaps over 0.3 m.
 """
 
@@ -50,6 +53,14 @@ def parse_data(raw: bytes) -> tuple[dict, pd.DataFrame]:
     return h, df.mask(df <= -999)
 
 
+def plausible_density(v: pd.Series) -> bool:
+    """A bulk-density curve has a median of 1.2–3.3 g/cm³ (or 1,200–3,300 kg/m³); a density correction sits near zero."""
+    m = float(np.nanmedian(v)) if v.notna().any() else np.nan
+    if m > 100:
+        m /= 1000
+    return bool(1.2 <= m <= 3.3)
+
+
 def standardise(h: dict, df: pd.DataFrame) -> pd.DataFrame:
     """Depth (m) plus one column per standard curve, with ADR-005 unit rules applied."""
     if df.empty:
@@ -60,7 +71,9 @@ def standardise(h: dict, df: pd.DataFrame) -> pd.DataFrame:
     out = pd.DataFrame({"DEPTH_MD": depth})
     best: dict[str, pd.Series] = {}
     for col, c in zip(df.columns[1:], h["curves"][1:]):
-        s = standard_name(c["mnemonic"])
+        s = standard_name(c["mnemonic"], c.get("description"))
+        if s == "RHOB" and not plausible_density(df[col]):
+            continue
         if s in WANT and (s not in best or df[col].notna().sum() > best[s].notna().sum()):
             best[s] = df[col]
     for s, v in best.items():

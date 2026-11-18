@@ -4,7 +4,7 @@
   doi: 10.5281/zenodo.4351156
   venue: "Zenodo (dataset, CC BY 4.0)"
   kind: dataset
-  used_in: [ADR-001, ADR-003]
+  used_in: [ADR-001, ADR-003, ADR-013]
   role: data, official splits and penalty matrix
 - key: chen_guestrin_2016
   doi: 10.1145/2939672.2939785
@@ -23,7 +23,7 @@
 - key: wlfm_2025
   title: "WLFM: A Well-Logs Foundation Model for Multi-Task and Cross-Well Geological Interpretation"
   arxiv: "2509.18152"
-  used_in: [ADR-004]
+  used_in: [ADR-004, ADR-013]
   role: cited alternative (well-log foundation model)
 - key: tabular_fm_2026
   title: "Beyond IID: How General Are Tabular Foundation Models, Really?"
@@ -46,3 +46,111 @@
   doi: 10.21314/JRMV.2020.227
   used_in: [ADR-006]
   role: population stability index (drift bands)
+# ---- ADR-013 (P3b Kansas retest): verified 2026-11-18 against OpenAlex or arXiv; grey literature (KGS bulletins, FORCE
+# organiser write-ups, chartbook pages) is listed in the ADR itself, because a title search would match the wrong work.
+- key: hall_2016
+  doi: 10.1190/tle35100906.1
+  used_in: [ADR-013]
+  role: Kansas Council Grove facies data (SEG 2016 contest; licence says treat as proprietary)
+- key: hall_hall_2017
+  doi: 10.1190/tle36030267.1
+  used_in: [ADR-013]
+  role: SEG 2016 contest results (blind-well F1 range on Kansas core facies)
+- key: dubois_2007
+  doi: 10.1016/j.cageo.2006.08.011
+  used_in: [ADR-013]
+  role: Kansas facies classification; realistic accuracy ceiling
+- key: chen_zeng_2018
+  arxiv: "1808.09856"
+  title: "Application of Machine Learning in Rock Facies Classification with Physics-Motivated Feature Augmentation"
+  used_in: [ADR-013]
+  role: physics-motivated features, about +5% F1 within one Kansas field
+- key: dunham_2020_geophysics
+  doi: 10.1190/geo2019-0238.1
+  used_in: [ADR-013]
+  role: semi-supervised self-training on Kansas logs (cross-well)
+- key: dunham_2020_cageo
+  doi: 10.1016/j.cageo.2020.104501
+  used_in: [ADR-013]
+  role: semi-supervised Gaussian mixtures vs XGBoost (cross-well)
+- key: chang_2021
+  doi: 10.1190/geo2020-0391.1
+  used_in: [ADR-013]
+  role: MMD domain adaptation for lithology, about +10% (cross-well, one basin)
+- key: liu_2020
+  doi: 10.3390/s20133643
+  used_in: [ADR-013]
+  role: transfer learning under data drift, 3 classes (cross-well)
+- key: sun_2023
+  doi: 10.3390/en16031475
+  used_in: [ADR-013]
+  role: adversarial alignment and wavelet features (cross-well)
+- key: askmda_2026
+  doi: 10.1007/s10596-026-10499-2
+  used_in: [ADR-013]
+  role: cross-well adversarial domain adaptation (no numbers read)
+- key: tabpfn_2025
+  doi: 10.1038/s41586-024-08328-6
+  used_in: [ADR-013]
+  role: tabular foundation model (no lithology use found; not pre-registered)
+- key: meta_tensors_2026
+  doi: 10.3390/bdcc10020047
+  used_in: [ADR-013]
+  role: within-FORCE weighted-F1 gains; same-well leakage warning
+- key: geohier_risknet_2026
+  doi: 10.1016/j.engeos.2026.100660
+  used_in: [ADR-013]
+  role: within-FORCE quality-aware model (split unverified)
+- key: arbuckle_benchmark_2026
+  doi: 10.1007/s11004-026-10300-1
+  used_in: [ADR-013]
+  role: Kansas Arbuckle lithology benchmark (paywalled; numbers not read)
+- key: shier_2004
+  title: "Well Log Normalization: Methods and Guidelines"
+  venue: "Petrophysics (SPWLA) 45(3), no DOI in OpenAlex"
+  peer_reviewed: true
+  used_in: [ADR-013]
+  role: type-well normalisation practice
+- key: clavier_rust_1976
+  title: "MID Plot: a new lithology technique"
+  venue: "The Log Analyst 17(6), no DOI in OpenAlex"
+  peer_reviewed: true
+  used_in: [ADR-013]
+  role: matrix identification plot (apparent matrix density and transit time)
+- key: asquith_2004
+  doi: 10.1306/Mth16823
+  kind: book
+  used_in: [ADR-013]
+  role: mineral endpoint values (chartbook)
+- key: ellis_singer_2007
+  doi: 10.1007/978-1-4020-4602-5
+  kind: book
+  used_in: [ADR-013]
+  role: mineral endpoint values and log physics
+- key: mayer_sibbit_1980
+  doi: 10.2118/9341-MS
+  used_in: [ADR-013]
+  role: multimineral log inversion (GLOBAL), basis of the M0 reference
+- key: wellington_core_data
+  doi: 10.18141/1888823
+  kind: dataset
+  used_in: [ADR-013]
+  role: Wellington KGS 1-32 core CT and scanning data (Kansas core truth candidate)
+- key: wellington_core_report
+  doi: 10.2172/1894355
+  venue: "OSTI technical report (US DOE, NETL)"
+  used_in: [ADR-013]
+  role: Wellington 1-32 core measurements report
+- key: hutchinson_core_2019
+  doi: 10.1111/sed.12665
+  used_in: [ADR-013]
+  role: Hutchinson Salt core lithologies (halite with shale and anhydrite)
+- key: saerens_2002
+  doi: 10.1162/089976602753284446
+  used_in: [ADR-013]
+  role: prior re-estimation under label shift (arm M2)
+- key: lipton_2018
+  arxiv: "1802.03916"
+  title: "Detecting and Correcting for Label Shift with Black Box Predictors"
+  used_in: [ADR-013]
+  role: black-box label-shift estimation (arm M2)

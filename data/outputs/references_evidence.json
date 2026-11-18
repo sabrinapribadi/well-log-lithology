@@ -1,5 +1,5 @@
 {
- "retrieved": "2026-11-11",
+ "retrieved": "2026-11-18",
  "source": "OpenAlex",
  "references": [
   {
@@ -8,24 +8,25 @@
    "venue": "Zenodo (dataset, CC BY 4.0)",
    "peer_reviewed": false,
    "year": 2020,
-   "citations": 16,
-   "citations_per_year": 2.3,
+   "citations": 23,
+   "citations_per_year": 3.3,
    "role": "data, official splits and penalty matrix",
    "used_in": [
     "ADR-001",
-    "ADR-003"
+    "ADR-003",
+    "ADR-013"
    ],
    "openalex_id": "https://openalex.org/W4393659431",
    "kind": "dataset"
   },
   {
    "key": "chen_guestrin_2016",
-   "title": "XGBoost",
+   "title": "XGBoost: A Scalable Tree Boosting System",
    "venue": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)",
    "peer_reviewed": true,
    "year": 2016,
-   "citations": 62643,
-   "citations_per_year": 5694.8,
+   "citations": 76145,
+   "citations_per_year": 6922.3,
    "role": "P1 baseline and candidates A, B",
    "used_in": [
     "ADR-004"
@@ -39,8 +40,8 @@
    "venue": "NeurIPS 2017 (OpenAlex primary copy is a mirror)",
    "peer_reviewed": true,
    "year": 2017,
-   "citations": 10515,
-   "citations_per_year": 1051.5,
+   "citations": 22955,
+   "citations_per_year": 2295.5,
    "role": "candidate C",
    "used_in": [
     "ADR-004"
@@ -54,8 +55,8 @@
    "venue": "Natural Resources Research",
    "peer_reviewed": true,
    "year": 2025,
-   "citations": 32,
-   "citations_per_year": 16.0,
+   "citations": 36,
+   "citations_per_year": 18.0,
    "role": "cited alternative (semi-supervised contrastive + Transformer)",
    "used_in": [
     "ADR-004"
@@ -69,11 +70,12 @@
    "venue": "arXiv 2509.18152",
    "peer_reviewed": false,
    "year": 2025,
-   "citations": 5,
-   "citations_per_year": 2.5,
+   "citations": 10,
+   "citations_per_year": 5.0,
    "role": "cited alternative (well-log foundation model)",
    "used_in": [
-    "ADR-004"
+    "ADR-004",
+    "ADR-013"
    ],
    "openalex_id": "https://openalex.org/W4416257517",
    "kind": "paper"
@@ -84,8 +86,8 @@
    "venue": "arXiv 2606.30410",
    "peer_reviewed": false,
    "year": 2026,
-   "citations": 27,
-   "citations_per_year": 27.0,
+   "citations": 34,
+   "citations_per_year": 34.0,
    "role": "cited alternative (tabular foundation models off IID data)",
    "used_in": [
     "ADR-004"
@@ -95,12 +97,12 @@
   },
   {
    "key": "lakens_2017",
-   "title": "Equivalence Tests",
+   "title": "Equivalence Tests: A Practical Primer for t Tests, Correlations, and Meta-Analyses",
    "venue": "Social Psychological and Personality Science",
    "peer_reviewed": true,
    "year": 2017,
-   "citations": 2671,
-   "citations_per_year": 267.1,
+   "citations": 3015,
+   "citations_per_year": 301.5,
    "role": "practice of a pre-set smallest worthwhile difference (the +0.02 margin is our own choice)",
    "used_in": [
     "ADR-002"
@@ -114,8 +116,8 @@
    "venue": "Journal of Petroleum Science and Engineering",
    "peer_reviewed": true,
    "year": 2018,
-   "citations": 230,
-   "citations_per_year": 25.6,
+   "citations": 239,
+   "citations_per_year": 26.6,
    "role": "1D CNN on well logs (candidate D)",
    "used_in": [
     "ADR-009"
@@ -129,8 +131,8 @@
    "venue": "Geophysics",
    "peer_reviewed": true,
    "year": 2021,
-   "citations": 103,
-   "citations_per_year": 17.2,
+   "citations": 106,
+   "citations_per_year": 17.7,
    "role": "deep models on log curves with a geologic constraint (context)",
    "used_in": [
     "ADR-009"
@@ -144,13 +146,373 @@
    "venue": "The Journal of Risk Model Validation",
    "peer_reviewed": true,
    "year": 2020,
-   "citations": 57,
-   "citations_per_year": 8.1,
+   "citations": 67,
+   "citations_per_year": 9.6,
    "role": "population stability index (drift bands)",
    "used_in": [
     "ADR-006"
    ],
    "openalex_id": "https://openalex.org/W3129493035",
+   "kind": "paper"
+  },
+  {
+   "key": "hall_2016",
+   "title": "Facies classification using machine learning",
+   "venue": "The Leading Edge",
+   "peer_reviewed": true,
+   "year": 2016,
+   "citations": 280,
+   "citations_per_year": 25.5,
+   "role": "Kansas Council Grove facies data (SEG 2016 contest; licence says treat as proprietary)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W2529108047",
+   "kind": "paper"
+  },
+  {
+   "key": "hall_hall_2017",
+   "title": "Distributed collaborative prediction: Results of the machine learning contest",
+   "venue": "The Leading Edge",
+   "peer_reviewed": true,
+   "year": 2017,
+   "citations": 77,
+   "citations_per_year": 7.7,
+   "role": "SEG 2016 contest results (blind-well F1 range on Kansas core facies)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W2594681445",
+   "kind": "paper"
+  },
+  {
+   "key": "dubois_2007",
+   "title": "Comparison of four approaches to a rock facies classification problem",
+   "venue": "Computers & Geosciences",
+   "peer_reviewed": true,
+   "year": 2007,
+   "citations": 239,
+   "citations_per_year": 11.9,
+   "role": "Kansas facies classification; realistic accuracy ceiling",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W1993192109",
+   "kind": "paper"
+  },
+  {
+   "key": "chen_zeng_2018",
+   "title": "Application of Machine Learning in Rock Facies Classification with Physics-Motivated Feature Augmentation",
+   "venue": "arXiv 1808.09856",
+   "peer_reviewed": false,
+   "year": 2018,
+   "citations": 20,
+   "citations_per_year": 2.2,
+   "role": "physics-motivated features, about +5% F1 within one Kansas field",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W2888931056",
+   "kind": "paper"
+  },
+  {
+   "key": "dunham_2020_geophysics",
+   "title": "Improved well-log classification using semisupervised label propagation and self-training, with comparisons to popular supervised algorithms",
+   "venue": "Geophysics",
+   "peer_reviewed": true,
+   "year": 2019,
+   "citations": 33,
+   "citations_per_year": 4.1,
+   "role": "semi-supervised self-training on Kansas logs (cross-well)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W2977594178",
+   "kind": "paper"
+  },
+  {
+   "key": "dunham_2020_cageo",
+   "title": "Improved well log classification using semisupervised Gaussian mixture models and a new hyper-parameter selection strategy",
+   "venue": "Computers & Geosciences",
+   "peer_reviewed": true,
+   "year": 2020,
+   "citations": 32,
+   "citations_per_year": 4.6,
+   "role": "semi-supervised Gaussian mixtures vs XGBoost (cross-well)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W3018127835",
+   "kind": "paper"
+  },
+  {
+   "key": "chang_2021",
+   "title": "Unsupervised domain adaptation using maximum mean discrepancy optimization for lithology identification",
+   "venue": "Geophysics",
+   "peer_reviewed": true,
+   "year": 2020,
+   "citations": 40,
+   "citations_per_year": 5.7,
+   "role": "MMD domain adaptation for lithology, about +10% (cross-well, one basin)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W3110444205",
+   "kind": "paper"
+  },
+  {
+   "key": "liu_2020",
+   "title": "Well Logging Based Lithology Identification Model Establishment Under Data Drift: A Transfer Learning Method",
+   "venue": "Sensors",
+   "peer_reviewed": true,
+   "year": 2020,
+   "citations": 81,
+   "citations_per_year": 11.6,
+   "role": "transfer learning under data drift, 3 classes (cross-well)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W3037119549",
+   "kind": "paper"
+  },
+  {
+   "key": "sun_2023",
+   "title": "Cross-Well Lithology Identification Based on Wavelet Transform and Adversarial Learning",
+   "venue": "Energies",
+   "peer_reviewed": true,
+   "year": 2023,
+   "citations": 23,
+   "citations_per_year": 5.8,
+   "role": "adversarial alignment and wavelet features (cross-well)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W4319002215",
+   "kind": "paper"
+  },
+  {
+   "key": "askmda_2026",
+   "title": "Cross-well lithology identification based on adversarial spectral kernel matching domain adaptation",
+   "venue": "Computational Geosciences",
+   "peer_reviewed": true,
+   "year": 2026,
+   "citations": 0,
+   "citations_per_year": 0.0,
+   "role": "cross-well adversarial domain adaptation (no numbers read)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W7216542913",
+   "kind": "paper"
+  },
+  {
+   "key": "tabpfn_2025",
+   "title": "Accurate predictions on small data with a tabular foundation model",
+   "venue": "Nature",
+   "peer_reviewed": true,
+   "year": 2025,
+   "citations": 2226,
+   "citations_per_year": 1113.0,
+   "role": "tabular foundation model (no lithology use found; not pre-registered)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W4406170795",
+   "kind": "paper"
+  },
+  {
+   "key": "meta_tensors_2026",
+   "title": "Lithology Identification from Well Logs via Meta-Information Tensors and Quality-Aware Weighting",
+   "venue": "Big Data and Cognitive Computing",
+   "peer_reviewed": true,
+   "year": 2026,
+   "citations": 3,
+   "citations_per_year": 3.0,
+   "role": "within-FORCE weighted-F1 gains; same-well leakage warning",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W7127090742",
+   "kind": "paper"
+  },
+  {
+   "key": "geohier_risknet_2026",
+   "title": "Robust lithology identification from imperfect well logs using a quality-aware and geological-risk-constrained deep learning framework",
+   "venue": "Energy Geoscience",
+   "peer_reviewed": true,
+   "year": 2026,
+   "citations": 0,
+   "citations_per_year": 0.0,
+   "role": "within-FORCE quality-aware model (split unverified)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W7223113447",
+   "kind": "paper"
+  },
+  {
+   "key": "arbuckle_benchmark_2026",
+   "title": "Lithology Classification Based on Well Log Data: A Benchmark for Machine Learning Models",
+   "venue": "Mathematical Geosciences",
+   "peer_reviewed": true,
+   "year": 2026,
+   "citations": 11,
+   "citations_per_year": 11.0,
+   "role": "Kansas Arbuckle lithology benchmark (paywalled; numbers not read)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W7160841747",
+   "kind": "paper"
+  },
+  {
+   "key": "shier_2004",
+   "title": "Well Log Normalization: Methods and Guidelines",
+   "venue": "Petrophysics (SPWLA) 45(3), no DOI in OpenAlex",
+   "peer_reviewed": true,
+   "year": 2004,
+   "citations": 69,
+   "citations_per_year": 3.0,
+   "role": "type-well normalisation practice",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W187061151",
+   "kind": "paper"
+  },
+  {
+   "key": "clavier_rust_1976",
+   "title": "MID Plot: a new lithology technique. [Matrix identification plot]",
+   "venue": "The Log Analyst 17(6), no DOI in OpenAlex",
+   "peer_reviewed": true,
+   "year": 1976,
+   "citations": 53,
+   "citations_per_year": 1.0,
+   "role": "matrix identification plot (apparent matrix density and transit time)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W50337802",
+   "kind": "paper"
+  },
+  {
+   "key": "asquith_2004",
+   "title": "Basic well log analysis",
+   "venue": "American Association of Petroleum Geologists eBooks",
+   "peer_reviewed": true,
+   "year": 2004,
+   "citations": 916,
+   "citations_per_year": 39.8,
+   "role": "mineral endpoint values (chartbook)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W2232648539",
+   "kind": "book"
+  },
+  {
+   "key": "ellis_singer_2007",
+   "title": "Well Logging for Earth Scientists",
+   "venue": "Springer eBooks",
+   "peer_reviewed": true,
+   "year": 2007,
+   "citations": 1622,
+   "citations_per_year": 81.1,
+   "role": "mineral endpoint values and log physics",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W1517624071",
+   "kind": "book"
+  },
+  {
+   "key": "mayer_sibbit_1980",
+   "title": "GLOBAL, A NEW APPROACH TO COMPUTER-PROCESSED LOG INTERPRETATION",
+   "venue": "SPE Annual Technical Conference and Exhibition",
+   "peer_reviewed": true,
+   "year": 1980,
+   "citations": 125,
+   "citations_per_year": 2.7,
+   "role": "multimineral log inversion (GLOBAL), basis of the M0 reference",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W1973451678",
+   "kind": "paper"
+  },
+  {
+   "key": "wellington_core_data",
+   "title": "CT and Scanning Data of the KGS Wellington 1-32 CarbonSAFE Core",
+   "venue": "OSTI OAI (U.S. Department of Energy Office of Scientific and Technical Information)",
+   "peer_reviewed": false,
+   "year": 2022,
+   "citations": 0,
+   "citations_per_year": 0.0,
+   "role": "Wellington KGS 1-32 core CT and scanning data (Kansas core truth candidate)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W4298191991",
+   "kind": "dataset"
+  },
+  {
+   "key": "wellington_core_report",
+   "title": "Computed Tomography Scanning and Geophysical Measurements of the Wellington 1-32 Core",
+   "venue": "OSTI technical report (US DOE, NETL)",
+   "peer_reviewed": false,
+   "year": 2022,
+   "citations": 0,
+   "citations_per_year": 0.0,
+   "role": "Wellington 1-32 core measurements report",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W4307186569",
+   "kind": "paper"
+  },
+  {
+   "key": "hutchinson_core_2019",
+   "title": "Using sedimentology to address the marine or continental origin of the Permian Hutchinson Salt Member of Kansas",
+   "venue": "Sedimentology",
+   "peer_reviewed": true,
+   "year": 2019,
+   "citations": 17,
+   "citations_per_year": 2.1,
+   "role": "Hutchinson Salt core lithologies (halite with shale and anhydrite)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W2976202962",
+   "kind": "paper"
+  },
+  {
+   "key": "saerens_2002",
+   "title": "Adjusting the Outputs of a Classifier to New a Priori Probabilities: A Simple Procedure",
+   "venue": "Neural Computation",
+   "peer_reviewed": true,
+   "year": 2002,
+   "citations": 653,
+   "citations_per_year": 26.1,
+   "role": "prior re-estimation under label shift (arm M2)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W2141253686",
+   "kind": "paper"
+  },
+  {
+   "key": "lipton_2018",
+   "title": "Detecting and Correcting for Label Shift with Black Box Predictors",
+   "venue": "arXiv 1802.03916",
+   "peer_reviewed": false,
+   "year": 2018,
+   "citations": 609,
+   "citations_per_year": 67.7,
+   "role": "black-box label-shift estimation (arm M2)",
+   "used_in": [
+    "ADR-013"
+   ],
+   "openalex_id": "https://openalex.org/W2785542264",
    "kind": "paper"
   }
  ]

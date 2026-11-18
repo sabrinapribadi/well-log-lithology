@@ -54,3 +54,21 @@ def test_nested_zip_entry_is_read():
     outer.seek(0)
     p = "/tmp/claude_test_outer.zip"; open(p, "wb").write(outer.getvalue())
     assert read_entry(p, "2014/123.zip/123.las").startswith(b"~VERSION")
+
+
+def test_density_correction_is_never_read_as_density():
+    """ADR-013 erratum: RHOC is the density correction in Halliburton CDL files; only a physically possible curve is density."""
+    import numpy as np
+    import pandas as pd
+
+    from src.curves import standard_name
+    from src.kansas import plausible_density, standardise
+    assert standard_name("RHOC", "CDL Density Correction") == "DRHO"
+    assert standard_name("RHOC", "Corrected Bulk Density") == "RHOB" and standard_name("RHOB", "Bulk Density") == "RHOB"
+    assert plausible_density(pd.Series([2.45, 2.6, 2.7])) and plausible_density(pd.Series([2450.0, 2600.0]))
+    assert not plausible_density(pd.Series([0.03, 0.05, -0.02]))
+    h = {"depth_unit": "FT", "curves": [{"mnemonic": "DEPT"}, {"mnemonic": "RHOC", "description": ""},
+                                         {"mnemonic": "DPOR", "description": "Density Porosity"}]}
+    raw = pd.DataFrame({"d": [1000.0, 1000.5, 1001.0], "rhoc": [0.04, 0.05, 0.03], "dpor": [10.0, 12.0, 8.0]})
+    out = standardise(h, raw)
+    assert np.allclose(out.RHOB.to_numpy(), 2.71 - 1.71 * np.array([0.10, 0.12, 0.08]))   # density porosity, not RHOC

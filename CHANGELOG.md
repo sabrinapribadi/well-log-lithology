@@ -3,6 +3,14 @@
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
 
+## [0.17.0] — 2026-11-18 — P3b pre-registered: reader erratum, diagnostics, amended gate, fresh test set (ADR-013)
+**Files:** docs/adr/ADR-013-p3b-kansas-retest.md (new), src/curves.py, src/kansas.py, scripts/p3b_diagnostics.py (new), scripts/p3b_select_fresh.py (new), scripts/kgs_inventory.py, tests/test_kansas.py, docs/references.yaml, data/outputs/p3b_diagnostics.json, data/outputs/p3b_test_manifest.json, data/outputs/references_evidence.json
+- **Situation:** P3 failed (0 of 6 Kansas units). A literature and data review found no open labelled Kansas or carbonate set and no published FORCE-to-other-basin lithology study, but basin-independent mineral physics that targets the documented failure.
+- **Task:** Pre-register a fair retest before any new model touches Kansas data, without moving the goalposts.
+- **Action:** Verified all 24 identifiers in the review against OpenAlex or arXiv (one unindexed preprint moved to the ADR's grey-literature list) and added 25 sources to `references.yaml`. Model-free diagnostics of the 1,915 development files found a reader bug: `RHOC`, usually the density correction in KGS files, was read as bulk density (about 10% of P3 wells per unit); fixed with a description rule and a physical-plausibility check, with a regression test. ADR-013 fixes an amended gate (sample quality; lift against 30 m of neighbours) next to the original, four arms (control, physics rules, physics-feature XGBoost, plus label-shift correction), the primary result, and a fresh one-shot test set of 601 files (SHA-256 recorded).
+- **Result:** Pre-registration pushed before any P3b model was evaluated. The Hutchinson Salt logs do not read as salt and only 10 fresh wells exist, so it is expected to fail; P3b needs 4 of the other 5 gated units. P3's result stands as reported.
+- **Talking point:** "Before retesting, we fixed the test: a model-free check found the reader feeding a density correction as density in one well in ten."
+
 ## [0.16.0] — 2026-11-18 — App template v2: sidebar pages, Explore the data, a business question per page
 **Files:** app/streamlit_app.py, app/frame.py (new, shared), tests/test_streamlit_app.py, README.md
 - **Situation:** The user wanted every Streamlit app to combine the older dashboards' structure (sidebar pages: a real use case, EDA, an AI assistant; a business question on every view) with the newer apps' 5W1H brief and KPI first screen.

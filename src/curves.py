@@ -36,9 +36,14 @@ _RULES = [(std, re.compile(rx)) for std, rx in RULES]
 CORE = ["GR", "RHOB", "NPHI", "DTC", "RDEP"]          # the logs the FORCE model leans on most
 
 
-def standard_name(mnemonic: str) -> str | None:
+def standard_name(mnemonic: str, description: str | None = None) -> str | None:
+    """Standard curve for a mnemonic. RHOC (and similar) means corrected bulk density for some vendors but the density
+    correction for others (e.g. Halliburton CDL "Density Correction"), so a density mnemonic whose description says
+    "correction" maps to DRHO (ADR-013 erratum; found 2026-11-18 in the P3b diagnostics)."""
     m = mnemonic.strip().upper().replace(" ", "")
     for std, rx in _RULES:
         if rx.match(m):
+            if std == "RHOB" and description and "CORR" in description.upper() and "CORRECTED" not in description.upper():
+                return "DRHO"
             return std
     return None

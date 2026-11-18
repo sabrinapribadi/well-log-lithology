@@ -52,7 +52,7 @@ def one_zip(path: str) -> tuple[list[dict], list[dict]]:
             cs = h.pop("curves")
             row.update(h)
             for c in cs:
-                curves.append({"archive": year, "file": Path(name).name, **c, "standard": standard_name(c["mnemonic"])})
+                curves.append({"archive": year, "file": Path(name).name, **c, "standard": standard_name(c["mnemonic"], c.get("description"))})
         except Exception as e:                      # noqa: BLE001 — every failure is recorded, not hidden
             row.update(ok=False, error=repr(e)[:120])
         files.append(row)

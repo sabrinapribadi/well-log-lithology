@@ -1,0 +1,296 @@
+{
+ "design": "ADR-013 \u00a72 (model-free; no prediction read)",
+ "rows": 2124,
+ "errors": 0,
+ "thresholds": {
+  "halite_rhob_below": 2.2,
+  "anhydrite_rhob_above": 2.85,
+  "hot_shale_gr_above": 100.0,
+  "washout_in": 1.5,
+  "drho_abs_above": 0.15
+ },
+ "units": {
+  "Arbuckle": {
+   "expected_rock": "Dolomite",
+   "gated": true,
+   "wells": 300,
+   "density_from_dphi_share": 0.12,
+   "pef_share": 0.283,
+   "caliper_and_bit_share": 0.057,
+   "median": {
+    "gr": 26.535,
+    "rhob": 2.614,
+    "nphi": 0.145,
+    "pef": 2.908,
+    "dtc": 57.356,
+    "rdep": 16.627,
+    "rhomaa": 2.799
+   },
+   "median_by_density_source": {
+    "DPHI": 2.659,
+    "RHOB": 2.612
+   },
+   "share_wells_mostly": {
+    "halite_like": 0.003,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.0,
+    "washout": 0.0,
+    "drho_bad": 0.063
+   },
+   "median_share": {
+    "halite_like": 0.0,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.0,
+    "washout": 0.0,
+    "drho_bad": 0.035
+   }
+  },
+  "Cherokee": {
+   "expected_rock": "Shale",
+   "gated": true,
+   "wells": 299,
+   "density_from_dphi_share": 0.124,
+   "pef_share": 0.361,
+   "caliper_and_bit_share": 0.027,
+   "median": {
+    "gr": 81.78,
+    "rhob": 2.582,
+    "nphi": 0.134,
+    "pef": 3.75,
+    "dtc": 68.866,
+    "rdep": 10.062,
+    "rhomaa": 2.757
+   },
+   "median_by_density_source": {
+    "DPHI": 2.577,
+    "RHOB": 2.582
+   },
+   "share_wells_mostly": {
+    "halite_like": 0.007,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.164,
+    "washout": 0.0,
+    "drho_bad": 0.057
+   },
+   "median_share": {
+    "halite_like": 0.0,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.324,
+    "washout": 0.0,
+    "drho_bad": 0.138
+   }
+  },
+  "Heebner": {
+   "expected_rock": "Shale",
+   "gated": true,
+   "wells": 298,
+   "density_from_dphi_share": 0.107,
+   "pef_share": 0.195,
+   "caliper_and_bit_share": 0.02,
+   "median": {
+    "gr": 200.581,
+    "rhob": 2.398,
+    "nphi": 0.232,
+    "pef": 3.43,
+    "dtc": 88.414,
+    "rdep": 7.101,
+    "rhomaa": 2.744
+   },
+   "median_by_density_source": {
+    "DPHI": 2.402,
+    "RHOB": 2.397
+   },
+   "share_wells_mostly": {
+    "halite_like": 0.014,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.895,
+    "washout": 0.0,
+    "drho_bad": 0.049
+   },
+   "median_share": {
+    "halite_like": 0.0,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.8,
+    "washout": 0.0,
+    "drho_bad": 0.0
+   }
+  },
+  "Hutchinson Salt": {
+   "expected_rock": "Halite",
+   "gated": true,
+   "wells": 299,
+   "density_from_dphi_share": 0.485,
+   "pef_share": 0.448,
+   "caliper_and_bit_share": 0.003,
+   "median": {
+    "gr": 36.358,
+    "rhob": 2.709,
+    "nphi": 0.111,
+    "pef": 3.814,
+    "dtc": 65.117,
+    "rdep": 13.373,
+    "rhomaa": 2.839
+   },
+   "median_by_density_source": {
+    "DPHI": 2.728,
+    "RHOB": 2.626,
+    "none": null
+   },
+   "share_wells_mostly": {
+    "halite_like": 0.025,
+    "anhydrite_like": 0.035,
+    "hot_shale": 0.022,
+    "washout": 0.0,
+    "drho_bad": 0.036
+   },
+   "median_share": {
+    "halite_like": 0.017,
+    "anhydrite_like": 0.169,
+    "hot_shale": 0.0,
+    "washout": 0.019,
+    "drho_bad": 0.021
+   }
+  },
+  "Lansing-Kansas City": {
+   "expected_rock": "Limestone",
+   "gated": true,
+   "wells": 298,
+   "density_from_dphi_share": 0.128,
+   "pef_share": 0.285,
+   "caliper_and_bit_share": 0.034,
+   "median": {
+    "gr": 44.33,
+    "rhob": 2.611,
+    "nphi": 0.07,
+    "pef": 4.381,
+    "dtc": 58.815,
+    "rdep": 14.834,
+    "rhomaa": 2.724
+   },
+   "median_by_density_source": {
+    "DPHI": 2.608,
+    "RHOB": 2.611
+   },
+   "share_wells_mostly": {
+    "halite_like": 0.007,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.003,
+    "washout": 0.0,
+    "drho_bad": 0.019
+   },
+   "median_share": {
+    "halite_like": 0.001,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.079,
+    "washout": 0.002,
+    "drho_bad": 0.059
+   }
+  },
+  "Mississippian": {
+   "expected_rock": "Limestone",
+   "gated": false,
+   "wells": 300,
+   "density_from_dphi_share": 0.187,
+   "pef_share": 0.373,
+   "caliper_and_bit_share": 0.043,
+   "median": {
+    "gr": 31.643,
+    "rhob": 2.564,
+    "nphi": 0.124,
+    "pef": 3.445,
+    "dtc": 64.05,
+    "rdep": 10.74,
+    "rhomaa": 2.723
+   },
+   "median_by_density_source": {
+    "DPHI": 2.559,
+    "RHOB": 2.567
+   },
+   "share_wells_mostly": {
+    "halite_like": 0.013,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.01,
+    "washout": 0.0,
+    "drho_bad": 0.06
+   },
+   "median_share": {
+    "halite_like": 0.0,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.0,
+    "washout": 0.0,
+    "drho_bad": 0.01
+   }
+  },
+  "Precambrian": {
+   "expected_rock": "Basement",
+   "gated": false,
+   "wells": 24,
+   "density_from_dphi_share": 0.208,
+   "pef_share": 0.375,
+   "caliper_and_bit_share": 0.0,
+   "median": {
+    "gr": 134.967,
+    "rhob": 2.611,
+    "nphi": 0.014,
+    "pef": 3.35,
+    "dtc": 56.575,
+    "rdep": 232.955,
+    "rhomaa": 2.673
+   },
+   "median_by_density_source": {
+    "DPHI": 2.591,
+    "RHOB": 2.623
+   },
+   "share_wells_mostly": {
+    "halite_like": 0.0,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.625,
+    "washout": null,
+    "drho_bad": 0.0
+   },
+   "median_share": {
+    "halite_like": 0.0,
+    "anhydrite_like": 0.0,
+    "hot_shale": 0.963,
+    "washout": null,
+    "drho_bad": 0.03
+   }
+  },
+  "Stone Corral": {
+   "expected_rock": "Anhydrite",
+   "gated": true,
+   "wells": 300,
+   "density_from_dphi_share": 0.187,
+   "pef_share": 0.263,
+   "caliper_and_bit_share": 0.017,
+   "median": {
+    "gr": 28.257,
+    "rhob": 2.631,
+    "nphi": 0.02,
+    "pef": 3.395,
+    "dtc": 52.021,
+    "rdep": 43.778,
+    "rhomaa": 2.814
+   },
+   "median_by_density_source": {
+    "DPHI": 2.2,
+    "RHOB": 2.728,
+    "none": null
+   },
+   "share_wells_mostly": {
+    "halite_like": 0.202,
+    "anhydrite_like": 0.395,
+    "hot_shale": 0.01,
+    "washout": 0.0,
+    "drho_bad": 0.318
+   },
+   "median_share": {
+    "halite_like": 0.0,
+    "anhydrite_like": 0.272,
+    "hot_shale": 0.0,
+    "washout": 0.0,
+    "drho_bad": 0.033
+   }
+  }
+ }
+}
