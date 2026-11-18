@@ -1,4 +1,4 @@
-"""Streamlit app (R26): first screen, every tab and the agent chat, offline on recorded API answers; no key."""
+"""Streamlit app (R26, app template v2): first screen, navigation, every page and the agent chat, offline on recorded API answers; no key."""
 import io
 import json
 import sys
@@ -42,10 +42,10 @@ def offline(monkeypatch):
     monkeypatch.setattr(D, "time", types.SimpleNamespace(sleep=lambda s: None))
 
 
-def run(view=None, **state):
+def run(page=None, **state):
     at = AppTest.from_file(APP, default_timeout=90)
-    if view:
-        at.session_state["view"] = view
+    if page:
+        at.session_state["page"] = page
     for k, v in state.items():
         at.session_state[k] = v
     at.run()
@@ -53,19 +53,53 @@ def run(view=None, **state):
     return at
 
 
-def test_first_screen_and_well_column():
+PAGES = ["overview", "explore", "well", "quality", "transfer", "agent"]
+
+
+def html_text(at) -> str:
+    return " ".join(e.proto.body for e in at.get("html"))
+
+
+def test_first_screen():
     at = run()
     h = D.headline()
     assert [m.value for m in at.metric][:4] == [f"{h['hidden']:.3f}", f"{h['open']:.3f}", "10 of 10 seeds", "0 of 6"]
     assert any("12 hours" in c.value for c in at.caption)
+    page = html_text(at)
+    for w in ["What", "Why", "Who", "Where", "When it fails", "How"]:          # the 5W1H brief (R22)
+        assert f'class="f-w">{w}<' in page, w
+    assert [b.key for b in at.sidebar.button] == [f"nav_{k}" for k in PAGES]
+    assert [b.key for b in at.button if b.key.startswith("go_")] == [f"go_{k}" for k in PAGES[1:]]
+
+
+def test_every_page_opens_with_its_business_question():
+    for key in PAGES[1:]:
+        at = run(key)
+        assert "Business question" in html_text(at), key
+        assert at.query_params["page"] == [key] or at.query_params["page"] == key
+
+
+def test_navigation_and_deep_link():
+    at = run()
+    at.sidebar.button(key="nav_transfer").click().run()
+    assert not at.exception and at.session_state["page"] == "transfer"
+    at = AppTest.from_file(APP, default_timeout=90)
+    at.query_params["page"] = "explore"
+    at.run()
+    assert not at.exception and at.session_state["page"] == "explore"
+    assert any(s.value.startswith("FORCE 2020 North Sea") for s in at.subheader)
+
+
+def test_well_and_kansas_pages():
+    at = run("well")
     assert at.subheader[0].value.startswith("15/9-23: hidden test well, blind score -0.395")
-
-
-def test_kansas_tabs():
-    at = run("Kansas transfer test")
+    assert len(at.dataframe[0].value) == 10                                    # the ten thickest doubtful intervals
+    at = run("transfer")
     assert at.subheader[0].value.startswith("No Kansas unit passed: 6 gated units")
-    at = run("Kansas log quality")
-    assert at.subheader[0].value.startswith("24,166 Kansas LAS files") and "not validated" in at.warning[0].value
+    at = run("quality")
+    assert "not validated" in at.warning[0].value
+    at = run("explore")
+    assert any("Kansas LAS archive" in s.value for s in at.subheader)
 
 
 def test_replays_recorded_grounded_and_keyless():
@@ -75,7 +109,7 @@ def test_replays_recorded_grounded_and_keyless():
 
 
 def test_agent_replay_and_live_stub(monkeypatch):
-    at = run("Ask the agent")
+    at = run("agent")
     assert at.radio(key="chat_mode").value.startswith("Replay")
     at.selectbox(key="replay_pick").set_value(AT.QUESTIONS[0]).run()
     first = json.loads((ROOT / "app" / "replays.json").read_text())["runs"][0]["answer"]
@@ -88,7 +122,7 @@ def test_agent_replay_and_live_stub(monkeypatch):
         return {"question": q, "answer": "Live answer.", "tool_calls": [], "tool_results": [], "steps": 1, "grounded": True,
                 "ungrounded_numbers": [], "model": model, "tokens": {"input": 1, "cached_input": 0, "output": 1}, "cost_usd": 0.0, "latency_ms": 1.0}
     monkeypatch.setattr(A, "run", fake)
-    at = run("Ask the agent")
+    at = run("agent")
     at.radio(key="chat_mode").set_value("Live: use your own OpenAI key").run()
     at.text_input(key="byo_key").input(key).run()
     at.chat_input(key="live_input").set_value("Anything").run()
@@ -103,3 +137,9 @@ def test_app_agent_tools_match_registry():
     for s in AT.SCHEMAS:
         params = [p for p in inspect.signature(getattr(tools_mod.Tools, s["name"])).parameters if p != "self"]
         assert sorted(s["parameters"]["properties"]) == sorted(params), s["name"]
+
+
+def test_frame_is_the_shared_copy():
+    """The app frame is identical in every portfolio app; change it everywhere at once (checksum of the shared copy)."""
+    import hashlib
+    assert hashlib.sha256((ROOT / "app" / "frame.py").read_bytes()).hexdigest()[:16] == "385e92329f20405a"

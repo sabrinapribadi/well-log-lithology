@@ -3,6 +3,14 @@
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
 
+## [0.16.0] — 2026-11-18 — App template v2: sidebar pages, Explore the data, a business question per page
+**Files:** app/streamlit_app.py, app/frame.py (new, shared), tests/test_streamlit_app.py, README.md
+- **Situation:** The user wanted every Streamlit app to combine the older dashboards' structure (sidebar pages: a real use case, EDA, an AI assistant; a business question on every view) with the newer apps' 5W1H brief and KPI first screen.
+- **Task:** Rebuild this app on one shared template (R26 item 8) and check every page against the data before release.
+- **Action:** Six pages (Overview, Explore the data, Review a well, Check a Kansas log, Kansas transfer test, AI Assistant) on the shared `frame.py`; a new EDA page from committed results (FORCE rock mix and missing logs, Kansas coverage by archive year, the wells map with filters); each page's answer computed from the data (e.g. where to review first in a well, which bars the closest Kansas unit missed).
+- **Result:** 8 app tests pass (every page, navigation, deep links, frame checksum). Checking the pages fixed a rock legend overlapping the next column and a 'core logs' count that included the caliper.
+- **Talking point:** "Every portfolio app now reads the same way: what it is for, the data, the use case, then an assistant; and every page answers a business question from the data."
+
 ## [0.15.1] — 2026-11-18 — App live on Streamlit; Databricks app start retried in CD
 **Files:** docs/brief.yaml, README.md, docs/index.html, docs/build.html, .github/workflows/ci.yml
 - **Situation:** The companion app was deployed on Streamlit Community Cloud, unlinked; the Databricks CD job failed twice on 2026-11-17 at app start ("Cannot create Databricks App, please try again later") while every other job passed.
