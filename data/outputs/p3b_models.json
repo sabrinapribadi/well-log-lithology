@@ -1,0 +1,171 @@
+{
+ "design": "ADR-013 \u00a75",
+ "params": {
+  "n_estimators": 300,
+  "max_depth": 8,
+  "learning_rate": 0.1,
+  "subsample": 0.8,
+  "colsample_bytree": 0.8,
+  "tree_method": "hist",
+  "random_state": 42,
+  "n_jobs": 8,
+  "objective": "multi:softprob"
+ },
+ "training_priors": {
+  "Sandstone": 0.14432756291910115,
+  "Sandstone/Shale": 0.12853787790119017,
+  "Shale": 0.6158019873371544,
+  "Marl": 0.028473888754569587,
+  "Dolomite": 0.0014421052002074309,
+  "Limestone": 0.0481157374855939,
+  "Chalk": 0.008981547375462511,
+  "Halite": 0.007016593607407363,
+  "Anhydrite": 0.0009269455818868853,
+  "Tuff": 0.01302422617130467,
+  "Coal": 0.0032635319104220295,
+  "Basement": 8.7995755699861e-05
+ },
+ "variants": {
+  "M1a": {
+   "features": [
+    "GR",
+    "RHOB",
+    "NPHI",
+    "DTC",
+    "RDEP",
+    "RMED",
+    "RSHA",
+    "PEF",
+    "CALI",
+    "BS",
+    "SP",
+    "DRHO",
+    "log_RSHA",
+    "log_RMED",
+    "log_RDEP",
+    "badhole",
+    "gr_pct_well",
+    "d_GR",
+    "roll_GR",
+    "d_RHOB",
+    "roll_RHOB",
+    "d_NPHI",
+    "roll_NPHI",
+    "d_DTC",
+    "roll_DTC",
+    "d_PEF",
+    "roll_PEF",
+    "rhomaa",
+    "nd_sep",
+    "dtmaa",
+    "umaa",
+    "gr_index"
+   ],
+   "open_test": {
+    "penalty_score": -0.6214003991636571,
+    "accuracy": 0.751743599491176,
+    "recall": {
+     "Sandstone": 0.7848885562208916,
+     "Sandstone/Shale": 0.3801685841211983,
+     "Shale": 0.8723191426019649,
+     "Marl": 0.17846339987900786,
+     "Dolomite": 0.0,
+     "Limestone": 0.5552313463943309,
+     "Chalk": 0.0,
+     "Halite": null,
+     "Anhydrite": 0.48,
+     "Tuff": 0.285140562248996,
+     "Coal": 0.5159420289855072,
+     "Basement": null
+    }
+   },
+   "hidden_test": {
+    "penalty_score": -0.6603184718579703,
+    "accuracy": 0.7513991355997287,
+    "recall": {
+     "Sandstone": 0.6943396226415094,
+     "Sandstone/Shale": 0.3039159814377595,
+     "Shale": 0.9046737299344257,
+     "Marl": 0.21474067333939945,
+     "Dolomite": 0.0,
+     "Limestone": 0.5767852877955577,
+     "Chalk": 0.3253012048192771,
+     "Halite": 0.971375807940905,
+     "Anhydrite": 0.3082077051926298,
+     "Tuff": 0.15090329436769395,
+     "Coal": 0.6024590163934426,
+     "Basement": null
+    }
+   }
+  },
+  "M1b": {
+   "features": [
+    "GR",
+    "DTC",
+    "RDEP",
+    "RMED",
+    "RSHA",
+    "PEF",
+    "CALI",
+    "BS",
+    "SP",
+    "DRHO",
+    "log_RSHA",
+    "log_RMED",
+    "log_RDEP",
+    "badhole",
+    "gr_pct_well",
+    "d_GR",
+    "roll_GR",
+    "d_RHOB",
+    "d_NPHI",
+    "d_DTC",
+    "roll_DTC",
+    "d_PEF",
+    "roll_PEF",
+    "rhomaa",
+    "nd_sep",
+    "dtmaa",
+    "umaa",
+    "gr_index"
+   ],
+   "open_test": {
+    "penalty_score": -0.6418557089175793,
+    "accuracy": 0.7409457108183586,
+    "recall": {
+     "Sandstone": 0.7742431803060545,
+     "Sandstone/Shale": 0.3889395147511106,
+     "Shale": 0.8564453706460255,
+     "Marl": 0.20205686630369027,
+     "Dolomite": 0.0,
+     "Limestone": 0.5496040016673615,
+     "Chalk": 0.0,
+     "Halite": null,
+     "Anhydrite": 0.0,
+     "Tuff": 0.26345381526104417,
+     "Coal": 0.5072463768115942,
+     "Basement": null
+    }
+   },
+   "hidden_test": {
+    "penalty_score": -0.6611283364788353,
+    "accuracy": 0.7471098147830421,
+    "recall": {
+     "Sandstone": 0.6917052331790673,
+     "Sandstone/Shale": 0.30546283481234227,
+     "Shale": 0.9015968925334484,
+     "Marl": 0.1840309372156506,
+     "Dolomite": 0.0,
+     "Limestone": 0.5659183186052066,
+     "Chalk": 0.29845094664371774,
+     "Halite": 0.9633733456448138,
+     "Anhydrite": 0.4053601340033501,
+     "Tuff": 0.17534537725823593,
+     "Coal": 0.5573770491803278,
+     "Basement": null
+    }
+   }
+  }
+ },
+ "seconds": 616
+}

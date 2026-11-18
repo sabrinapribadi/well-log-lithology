@@ -131,3 +131,19 @@ Grey literature and pages used (not in OpenAlex, so not in `docs/references.yaml
 ## Results
 
 *Appended after the one-shot test. Nothing above this line changes.*
+
+### Development set (1,915 files, before the test set was opened)
+
+Gated units passed (`data/outputs/p3b_dev.json`). M2 here used M1b (the script default); on the test it uses the frozen variant.
+
+| Arm | Original gate | Amended gate |
+|---|---|---|
+| C (P3 model T, fixed reader) | 0 of 6 | 1 of 6 (Heebner) |
+| M0 (physics rules) | 3 of 6 (Heebner, Lansing-Kansas City, Arbuckle) | 3 of 6 (Heebner, Cherokee, Arbuckle) |
+| M1a | 0 of 6 | 2 of 6 (Heebner, Cherokee) |
+| M1b | 0 of 6 | 1 of 6 (Heebner) |
+| M2 (with M1b) | 0 of 6 | 1 of 6 (Heebner) |
+
+- **M1 variant frozen: M1a** (2 units against 1 under the amended gate, rule in §5). The primary result on the test is M1a under the amended gate.
+- The North Sea-trained arms still call tight Kansas carbonates sandstone: median agreement 0–2% in the Lansing-Kansas City and Arbuckle for C, M1a, M1b and M2, against 55–74% for the physics rules.
+- The control passes the Heebner under the amended gate alone (lift 2.51 against neighbours, 1.73 against the whole well).
