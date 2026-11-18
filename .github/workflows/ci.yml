@@ -120,4 +120,6 @@ jobs:
         run: |
           databricks bundle validate
           databricks bundle deploy
-          databricks bundle run og2_api
+          # Starting a stopped app can fail with "Cannot create Databricks App, please try again later" (seen 2026-11-17);
+          # retry twice, a minute apart, before failing the job.
+          for i in 1 2 3; do databricks bundle run og2_api && exit 0; echo "::warning::app start attempt $i failed"; sleep 60; done; exit 1

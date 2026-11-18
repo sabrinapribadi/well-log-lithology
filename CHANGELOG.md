@@ -2,6 +2,14 @@
 
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
+
+## [0.15.1] — 2026-11-18 — App live on Streamlit; Databricks app start retried in CD
+**Files:** docs/brief.yaml, README.md, docs/index.html, docs/build.html, .github/workflows/ci.yml
+- **Situation:** The companion app was deployed on Streamlit Community Cloud, unlinked; the Databricks CD job failed twice on 2026-11-17 at app start ("Cannot create Databricks App, please try again later") while every other job passed.
+- **Task:** Link the live app; keep a passing platform hiccup from failing the pipeline.
+- **Action:** App link in the brief and README; started the stopped app by hand and re-ran the job (passed, so the error was transient on the Databricks side, not the bundle); the start step now retries twice, a minute apart.
+- **Result:** Live app linked from every brief; CI fully green again.
+
 ## [0.15.0] — 2026-11-18 — Streamlit companion app with the agent chat (R26)
 **Files:** app/streamlit_app.py, app/wl_data.py, app/agent_tools.py, app/agent.py and app/chat.py (shared with the other portfolio apps), app/replays.json, app/requirements.txt, .streamlit/config.toml, scripts/record_agent_replays.py, tests/test_streamlit_app.py, tests/fixtures/app_api.json (all new), .github/workflows/ci.yml, README.md
 - **Situation:** The results page is static and LinkedIn previews a Streamlit app; the project had no interactive surface and no way to show its tools working with a model.

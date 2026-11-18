@@ -8,7 +8,7 @@
 2. **Why:** Petrophysicists pick lithology by hand at every 0.152 m of every well; a checked first pass shows where to look first.
 3. **Who:** Users: petrophysicists and geologists reviewing new wells.
    - Data: FORCE 2020 North Sea, 118 wells with interpreted rock types (CC BY 4.0), plus 28,906 public Kansas LAS files.
-4. **Where:** [Results page](https://sabrinapribadi.github.io/well-log-lithology/) and [technical walkthrough](https://sabrinapribadi.github.io/well-log-lithology/build.html) on GitHub Pages; [live API and MCP](https://well-log-lithology.vercel.app/docs) on Vercel; yearly job, registry and app on Databricks; an [agent skill](skills/well-log-lithology/SKILL.md) for AI assistants.
+4. **Where:** [Results page](https://sabrinapribadi.github.io/well-log-lithology/) and [technical walkthrough](https://sabrinapribadi.github.io/well-log-lithology/build.html) on GitHub Pages; [interactive app](https://well-log-lithology.streamlit.app/) on Streamlit; [live API and MCP](https://well-log-lithology.vercel.app/docs) on Vercel; yearly job, registry and app on Databricks; an [agent skill](skills/well-log-lithology/SKILL.md) for AI assistants.
 5. **When it fails:** 8 phases, each with a pass bar set before the work; 3 failed and are reported (baseline, Kansas transfer, cloud parity).
    - No live A/B test: there are no live users. Changes face 10 blind wells, grouped cross-validation and a 10-seed paired test.
 6. **How:** XGBoost with engineered features and a penalty-aware decision, chosen over LightGBM and a 1D CNN by cross-validation.
@@ -62,7 +62,7 @@
 
 ## Try it interactively (Streamlit app)
 
-A companion app in [`app/`](app/streamlit_app.py) (rule R26), dark by default with the results and the brief on the first screen:
+**Live:** [well-log-lithology.streamlit.app](https://well-log-lithology.streamlit.app/). A companion app in [`app/`](app/streamlit_app.py) (rule R26), dark by default with the results and the brief on the first screen:
 
 1. **Well column:** pick any of the 20 FORCE test wells; a strip log of predicted rock by depth with a probability track (0.5 line), rock shares, the ten thickest doubtful intervals to review first and the planner note.
 2. **Kansas transfer test:** median agreement of each unit against the 50% pass line, with lift and the verdict; what the model predicted inside a chosen unit.
