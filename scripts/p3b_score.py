@@ -1,12 +1,15 @@
-"""P3b step 4: score the arms (ADR-013 §5) on a set of Kansas wells under the original and the amended gate (§3).
+"""P3b/P3c step 4: score the arms (ADR-013 §5, ADR-014 §2) on a set of Kansas wells under the original and amended gate.
 
     python scripts/p3b_score.py --set dev [--m1 M1b] [--workers 8] [--limit N]
-    python scripts/p3b_score.py --set test --m1 <frozen variant>     # once, after the variant is frozen
+    python scripts/p3b_score.py --set test --m1 <frozen variant>     # once, after the variant is frozen (ADR-013)
+    python scripts/p3b_score.py --set p3c --m1 M1a                   # once, after ADR-014 is pushed
+    python scripts/p3b_score.py --set test --m1 M1a --tag posthoc    # informational rerun; never overwrites a result
 
-dev  = the P3 selection (1,915 development files); test = the fresh manifest (scripts/p3b_select_fresh.py; its SHA-256
-is checked against ADR-013 before anything is read). Arms: C (P3 model T), M0 (physics rules), M1a, M1b, and M2 (the
-chosen M1 with priors re-estimated by EM on a systematic 1-in-10 sample of all valid samples in the scored wells;
-implementation choice, logged). All arms read logs with the fixed reader (ADR-013 §1).
+dev = the P3 selection (1,915 development files); test = the P3b fresh manifest; p3c = the P3c fresh manifest
+(scripts/p3b_select_fresh.py; each SHA-256 is checked against its ADR before anything is read). Arms: C (P3 model T),
+M0 (physics rules), M1a, M1b, M3 (ADR-014: M1a whose sandstone calls become the physics rules' limestone or dolomite
+where they say so), and M2 (the chosen M1 with priors re-estimated by EM on a systematic 1-in-10 sample of all valid
+samples in the scored wells; implementation choice, logged). All arms read logs with the fixed reader (ADR-013 §1).
 
 Original gate: samples with GR, NPHI and RHOB; agreement per well over intervals with ≥ 80% such samples; lift = pooled
 inside ÷ pooled rest of the well. Amended gate: the same samples minus |DRHO| > 0.15 g/cc; lift = pooled inside ÷ pooled
@@ -39,8 +42,13 @@ from src.physics import m0_classify  # noqa: E402
 from src.scoring import NAMES  # noqa: E402
 
 MANIFEST_SHA = "19165ba97993699cd3beeb8b2fccf7552069f0352e6c8726c59ec681a14572aa"   # ADR-013 §4
+P3C_SHA = "1ced56de9a82d5f98d406e49411c3b70bb2787bb6a74a7c28aa27820de0f8db9"        # ADR-014 §3
+SETS = {"dev": ("p3_selection.parquet", None, "ADR-013", "p3b_dev"),
+        "test": ("p3b_test_selection.parquet", MANIFEST_SHA, "ADR-013", "p3b_test"),
+        "p3c": ("p3c_test_selection.parquet", P3C_SHA, "ADR-014", "p3c_test")}
 CONTEXT_M, DRHO_MAX = 30.0, 0.15
-ARMS = ["C", "M0", "M1a", "M1b"]
+ARMS = ["C", "M0", "M1a", "M1b", "M3"]
+SAND, CARB = NAMES.index("Sandstone"), [NAMES.index("Limestone"), NAMES.index("Dolomite")]
 TMP = DER / "p3b_tmp"
 log = lambda *a: print(time.strftime("%H:%M:%S"), *a, flush=True)  # noqa: E731
 _models: dict = {}
@@ -85,6 +93,8 @@ def score_file(job: dict) -> dict:
     for v in ("M1a", "M1b"):
         proba[v] = model(v).predict(xgb.DMatrix(m1_matrix(w, v)))
         cls[v] = expected_penalty_decision(proba[v])
+    # M3 (ADR-014): the frozen M1a, except where it calls sandstone and the physics rules call limestone or dolomite
+    cls["M3"] = np.where((cls["M1a"] == SAND) & np.isin(cls["M0"], CARB), cls["M0"], cls["M1a"])
     np.savez_compressed(TMP / f"{job['kgs_id']}_{Path(job['entry']).stem}.npz", depth=depth, have_o=have_o, have_a=have_a,
                         **{f"p_{v}": proba[v].astype("float16") for v in proba})
     rows = [{"arm": a, "unit": u["unit"], "rock": u["rock"], "gated": u["gated"], "kgs_id": job["kgs_id"],
@@ -132,18 +142,20 @@ def summarise(rows: pd.DataFrame) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--set", choices=["dev", "test"], required=True)
+    ap.add_argument("--set", choices=list(SETS), required=True)
     ap.add_argument("--m1", choices=["M1a", "M1b"], default="M1b", help="variant used by M2")
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--tag", default="", help="suffix for an informational rerun, e.g. posthoc")
     a = ap.parse_args()
     t0 = time.time()
-    if a.set == "test":
-        sel = pd.read_parquet(DER / "p3b_test_selection.parquet").sort_values(["unit", "kgs_id"]).reset_index(drop=True)
+    path, sha, design, stem = SETS[a.set]
+    sel = pd.read_parquet(DER / path)
+    if sha:
+        sel = sel.sort_values(["unit", "kgs_id"]).reset_index(drop=True)
         listing = "\n".join(f"{r.unit}\t{r.kgs_id}\t{r.entry}" for r in sel.itertuples())
-        assert hashlib.sha256(listing.encode()).hexdigest() == MANIFEST_SHA, "test set differs from the pre-registered manifest"
-    else:
-        sel = pd.read_parquet(DER / "p3_selection.parquet")
+        assert hashlib.sha256(listing.encode()).hexdigest() == sha, "test set differs from the pre-registered manifest"
+    suffix = ("_check" if a.limit else "") + (f"_{a.tag}" if a.tag else "")
     jobs = [{"entry": e, "archive": g.archive.iloc[0], "kgs_id": g.kgs_id.iloc[0],
              "units": g[["unit", "rock", "gated", "top_m", "base_m"]].to_dict("records")} for e, g in sel.groupby("entry", sort=True)]
     if a.limit:
@@ -176,11 +188,11 @@ def main() -> None:
                   **counts(c, z["depth"], z["have_o"], z["have_a"], u)} for u in units_by_entry[kgs]]
     shutil.rmtree(TMP, ignore_errors=True)
     df = pd.DataFrame(rows)
-    df.to_parquet(DER / f"p3b_{a.set}_rows{'_check' if a.limit else ''}.parquet", index=False)
-    res = {"design": "ADR-013", "set": a.set, "check_run": bool(a.limit), "files": len(jobs), "errors": len(errors),
+    df.to_parquet(DER / f"{stem}_rows{suffix}.parquet", index=False)
+    res = {"design": design, "set": a.set, "tag": a.tag or None, "check_run": bool(a.limit), "files": len(jobs), "errors": len(errors),
            "error_examples": errors[:10], "m2_uses": a.m1, "m2_priors": {n: round(float(x), 4) for n, x in zip(NAMES, pri)},
            "arms": summarise(df), "seconds": round(time.time() - t0)}
-    name = f"p3b_{a.set}{'_check' if a.limit else ''}.json"
+    name = f"{stem}{suffix}.json"
     (ROOT / CFG["paths"]["outputs_dir"] / name).write_text(json.dumps(res, indent=1))
     for arm, r in res["arms"].items():
         log(f"{arm}: original {r['passed_original']}/6, amended {r['passed_amended']}/6")

@@ -210,7 +210,8 @@
    "citations_per_year": 2.2,
    "role": "physics-motivated features, about +5% F1 within one Kansas field",
    "used_in": [
-    "ADR-013"
+    "ADR-013",
+    "ADR-014"
    ],
    "openalex_id": "https://openalex.org/W2888931056",
    "kind": "paper"
@@ -405,7 +406,8 @@
    "citations_per_year": 39.8,
    "role": "mineral endpoint values (chartbook)",
    "used_in": [
-    "ADR-013"
+    "ADR-013",
+    "ADR-014"
    ],
    "openalex_id": "https://openalex.org/W2232648539",
    "kind": "book"
@@ -420,7 +422,8 @@
    "citations_per_year": 81.1,
    "role": "mineral endpoint values and log physics",
    "used_in": [
-    "ADR-013"
+    "ADR-013",
+    "ADR-014"
    ],
    "openalex_id": "https://openalex.org/W1517624071",
    "kind": "book"
@@ -435,7 +438,8 @@
    "citations_per_year": 2.7,
    "role": "multimineral log inversion (GLOBAL), basis of the M0 reference",
    "used_in": [
-    "ADR-013"
+    "ADR-013",
+    "ADR-014"
    ],
    "openalex_id": "https://openalex.org/W1973451678",
    "kind": "paper"
@@ -513,6 +517,36 @@
     "ADR-013"
    ],
    "openalex_id": "https://openalex.org/W2785542264",
+   "kind": "paper"
+  },
+  {
+   "key": "dwork_2015",
+   "title": "The reusable holdout: Preserving validity in adaptive data analysis",
+   "venue": "Science",
+   "peer_reviewed": true,
+   "year": 2015,
+   "citations": 506,
+   "citations_per_year": 42.2,
+   "role": "a rule chosen after seeing a test set needs a fresh holdout (reason for P3c's new wells)",
+   "used_in": [
+    "ADR-014"
+   ],
+   "openalex_id": "https://openalex.org/W1555759181",
+   "kind": "paper"
+  },
+  {
+   "key": "von_rueden_2021",
+   "title": "Informed Machine Learning - A Taxonomy and Survey of Integrating Prior Knowledge into Learning Systems",
+   "venue": "IEEE Transactions on Knowledge and Data Engineering",
+   "peer_reviewed": true,
+   "year": 2021,
+   "citations": 1173,
+   "citations_per_year": 195.5,
+   "role": "integrating prior knowledge with learned models (physics rules plus XGBoost, arm M3)",
+   "used_in": [
+    "ADR-014"
+   ],
+   "openalex_id": "https://openalex.org/W3006087551",
    "kind": "paper"
   }
  ]

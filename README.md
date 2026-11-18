@@ -132,6 +132,7 @@ make lint test build-test hover-test preview evidence
 | P2b comparison | `p2b_lightgbm_fair.py`, `p2b_cnn.py` | `p2b_lightgbm_fair.json`, `p2b_cnn.json` | ADR-009 |
 | P3 Kansas transfer | `p3_transfer_model.py`, `p3_select_wells.py`, `p3_kansas_transfer.py`, `p3_diagnostic.py` | `p3_*.json` | ADR-005 |
 | P3b Kansas retest | `p3b_diagnostics.py`, `p3b_select_fresh.py`, `p3b_train.py`, `p3b_score.py`, `src/physics.py` | `p3b_*.json` | ADR-013 |
+| P3c combined-arm retest | `p3b_select_fresh.py --design p3c`, `p3b_score.py --set p3c` | `p3c_*.json` | ADR-014 |
 | P4 quality and drift | `p4_quality.py` | `p4_quality.json` | ADR-006 |
 | P5 serving | `p5_build_store.py`, `p5_eval_notes.py`, `src/serving/` | `p5_notes_eval.json` | ADR-007 |
 | P6 Databricks | `databricks_p6.py`, `databricks.yml`, `p6_seed_spread.py` | `p6_*.json` | ADR-008 |

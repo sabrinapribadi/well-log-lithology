@@ -3,6 +3,14 @@
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
 
+## [0.20.0] — 2026-11-18 — P3c pre-registered: combined physics + model arm on new fresh wells (ADR-014)
+**Files:** docs/adr/ADR-014-p3c-combined-arm-retest.md (new), docs/adr/README.md, scripts/p3b_select_fresh.py, scripts/p3b_score.py, data/outputs/p3c_test_manifest.json, docs/references.yaml, data/outputs/references_evidence.json, README.md
+- **Situation:** P3b failed at 3 of 6 units, but its arms failed in different places: the physics rules recognise the carbonates, the physics-feature model the shale and anhydrite. Combining them was thought of only after the P3b test set was seen.
+- **Task:** Test the combination fairly, on wells no earlier test had used, with the rule and the pass bar fixed first.
+- **Action:** Arm M3 written as one line with no free parameter (M1a, except where it says sandstone and the physics rules say limestone or dolomite). New fresh set: 589 files, seed 2027, excluding all 2,515 wells scored in P3 and P3b, SHA-256 recorded and checked by the scorer. The selection script's P3b output was checked to stay byte-identical. Expectations per unit written down before scoring; two new sources verified on OpenAlex.
+- **Result:** Pre-registration pushed before any M3 score exists. Hutchinson Salt has no wells left, so M3 needs 4 of the other 5 gated units; the ADR expects 3 or 4, with the Lansing-Kansas City likely failing on lift.
+- **Talking point:** "An idea born from looking at test results gets a new test set, and its expected outcome is written down before the run."
+
 ## [0.19.0] — 2026-11-18 — Reader erratum carried through: Kansas log quality recounted (ADR-006); P3b on the results page, app, API and skill
 **Files:** docs/adr/ADR-006-log-quality-and-drift.md, docs/adr/README.md, data/outputs/p0_foundation.json, data/outputs/p4_quality.json, data/outputs/kgs_wells_summary.json, deploy/serving_snapshot.tar.gz, deploy/serving_snapshot.sha256, docs/index.html, docs/build.html, docs/brief.yaml, docs/data/page_data.js, docs/PRD.md, README.md, scripts/export_page_data.py, app/streamlit_app.py, tests/test_streamlit_app.py, tests/browser/build_test.js, src/serving/contracts.py, skills/well-log-lithology/SKILL.md, skills/well-log-lithology/scripts/wll.py
 - **Situation:** The P3b reader fix (a density correction, `RHOC`, read as density) also touched the archive-wide inventory and log-quality figures published since P0 and P4, and P3b's result was only in its ADR.

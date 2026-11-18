@@ -1,0 +1,68 @@
+{
+ "design": "ADR-014 \u00a73",
+ "seed": 2027,
+ "max_wells_per_unit": 100,
+ "development_wells_excluded": 1914,
+ "units": {
+  "Hutchinson Salt": {
+   "expected_rock": "Halite",
+   "gated": true,
+   "fresh_eligible_wells": 0,
+   "selected": 0,
+   "median_interval_m": null
+  },
+  "Stone Corral": {
+   "expected_rock": "Anhydrite",
+   "gated": true,
+   "fresh_eligible_wells": 221,
+   "selected": 100,
+   "median_interval_m": 14.0
+  },
+  "Arbuckle": {
+   "expected_rock": "Dolomite",
+   "gated": true,
+   "fresh_eligible_wells": 1067,
+   "selected": 100,
+   "median_interval_m": 30.0
+  },
+  "Heebner": {
+   "expected_rock": "Shale",
+   "gated": true,
+   "fresh_eligible_wells": 7141,
+   "selected": 100,
+   "median_interval_m": 1.5
+  },
+  "Lansing-Kansas City": {
+   "expected_rock": "Limestone",
+   "gated": true,
+   "fresh_eligible_wells": 7257,
+   "selected": 100,
+   "median_interval_m": 78.0
+  },
+  "Cherokee": {
+   "expected_rock": "Shale",
+   "gated": true,
+   "fresh_eligible_wells": 3487,
+   "selected": 100,
+   "median_interval_m": 24.1
+  },
+  "Mississippian": {
+   "expected_rock": "Limestone",
+   "gated": false,
+   "fresh_eligible_wells": 2710,
+   "selected": 100,
+   "median_interval_m": 30.0
+  },
+  "Precambrian": {
+   "expected_rock": "Basement",
+   "gated": false,
+   "fresh_eligible_wells": 0,
+   "selected": 0,
+   "median_interval_m": null
+  }
+ },
+ "files": 589,
+ "rows": 600,
+ "sha256": "1ced56de9a82d5f98d406e49411c3b70bb2787bb6a74a7c28aa27820de0f8db9",
+ "earlier_test_wells_excluded": 601
+}

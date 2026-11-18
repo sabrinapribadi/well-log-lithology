@@ -15,6 +15,7 @@
 | [ADR-011](ADR-011-public-api-and-technology-assessment.md) | Public API, remote MCP, technology assessment | Accepted | Read-only FastAPI + stateless MCP (2026-07-28) on Vercel Hobby, no key deployed; CD with build provenance; Databricks App as platform demo; R21 ratings. |
 | [ADR-012](ADR-012-agent-skill.md) | Agent skill for lithology answers (R24) | Accepted (20/20 checks) | `SKILL.md`, a dependency-free client, a strip-log chart and four evaluated tasks; the Kansas caveat built in; client test, py38 check and live check in CI. |
 | [ADR-013](ADR-013-p3b-kansas-retest.md) | P3b Kansas transfer retest | Accepted — failed (3 of 6 units) | Reader erratum (density correction read as density), model-free diagnostics, an amended gate written before modelling, physics-feature arms, 601 fresh test files scored once. |
+| [ADR-014](ADR-014-p3c-combined-arm-retest.md) | P3c combined-arm Kansas retest | Accepted — pre-registered; result pending | Arm M3: the frozen M1a, with the physics rules' limestone or dolomite replacing its sandstone calls; amended gate unchanged; 589 fresh files (seed 2027, SHA recorded) excluding every well scored before; pass = 4 of 6 gated units. |
 
 ## Decision Dependencies
 
@@ -26,7 +27,8 @@ ADR-001 (framing, blind wells, penalty score)
         │     ├── ADR-009 (P2b method comparison)
         │     └── ADR-010 (multi-seed check of P1 vs B)
         ├── ADR-005 (P3 Kansas transfer) ── failed → amendments to ADR-007 and ADR-008
-        │     └── ADR-013 (P3b retest: reader erratum, physics features, fresh wells; failed 3 of 6)
+        │     ├── ADR-013 (P3b retest: reader erratum, physics features, fresh wells; failed 3 of 6)
+        │     └── ADR-014 (P3c retest: combined physics + model arm on new fresh wells; pre-registered)
         ├── ADR-006 (P4 log quality and drift)
         ├── ADR-007 (P5 API, MCP tools, grounded notes)
         │     └── ADR-011 (public API, remote MCP, traces, Databricks App; R21 assessment)

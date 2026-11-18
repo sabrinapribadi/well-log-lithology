@@ -63,7 +63,7 @@
 - key: chen_zeng_2018
   arxiv: "1808.09856"
   title: "Application of Machine Learning in Rock Facies Classification with Physics-Motivated Feature Augmentation"
-  used_in: [ADR-013]
+  used_in: [ADR-013, ADR-014]
   role: physics-motivated features, about +5% F1 within one Kansas field
 - key: dunham_2020_geophysics
   doi: 10.1190/geo2019-0238.1
@@ -120,16 +120,16 @@
 - key: asquith_2004
   doi: 10.1306/Mth16823
   kind: book
-  used_in: [ADR-013]
+  used_in: [ADR-013, ADR-014]
   role: mineral endpoint values (chartbook)
 - key: ellis_singer_2007
   doi: 10.1007/978-1-4020-4602-5
   kind: book
-  used_in: [ADR-013]
+  used_in: [ADR-013, ADR-014]
   role: mineral endpoint values and log physics
 - key: mayer_sibbit_1980
   doi: 10.2118/9341-MS
-  used_in: [ADR-013]
+  used_in: [ADR-013, ADR-014]
   role: multimineral log inversion (GLOBAL), basis of the M0 reference
 - key: wellington_core_data
   doi: 10.18141/1888823
@@ -154,3 +154,12 @@
   title: "Detecting and Correcting for Label Shift with Black Box Predictors"
   used_in: [ADR-013]
   role: black-box label-shift estimation (arm M2)
+# ---- ADR-014 (P3c combined-arm retest): added 2026-11-18, verified against OpenAlex by scripts/evidence.py
+- key: dwork_2015
+  doi: 10.1126/science.aaa9375
+  used_in: [ADR-014]
+  role: a rule chosen after seeing a test set needs a fresh holdout (reason for P3c's new wells)
+- key: von_rueden_2021
+  doi: 10.1109/TKDE.2021.3079836
+  used_in: [ADR-014]
+  role: integrating prior knowledge with learned models (physics rules plus XGBoost, arm M3)
