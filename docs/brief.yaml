@@ -16,7 +16,7 @@ brief:
       - "[Results page](https://sabrinapribadi.github.io/well-log-lithology/) and [technical walkthrough](https://sabrinapribadi.github.io/well-log-lithology/build.html) on GitHub Pages; [interactive app](https://well-log-lithology.streamlit.app/) on Streamlit; [live API and MCP](https://well-log-lithology.vercel.app/docs) on Vercel; yearly job, registry and app on Databricks; an [agent skill](skills/well-log-lithology/SKILL.md) for AI assistants."
   - w: When it fails
     lines:
-      - 8 phases, each with a pass bar set before the work; 3 failed and are reported (baseline, Kansas transfer, cloud parity).
+      - 9 phases, each with a pass bar set before the work; 4 failed and are reported (baseline, Kansas transfer and its retest at 3 of 6, cloud parity).
       - "No live A/B test: there are no live users. Changes face 10 blind wells, grouped cross-validation and a 10-seed paired test."
   - w: How
     lines:

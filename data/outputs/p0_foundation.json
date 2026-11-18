@@ -354,20 +354,20 @@
    "TOOL_QC": 47547,
    "MICRO": 34686,
    "NPHI": 33102,
-   "RHOB": 28063,
    "GR": 27633,
    "RDEP": 19663,
    "DPHI": 19034,
    "SP": 18278,
+   "RHOB": 17352,
    "CALI": 15455,
    "RMED": 15292,
    "RSHA": 13586,
+   "DRHO": 13358,
    "DCAL": 11183,
    "COND_DEEP": 10304,
    "DTC": 6418,
    "PHI_OTHER": 5484,
    "PEF": 5146,
-   "DRHO": 2647,
    "BS": 656,
    "GAS": 248
   },
@@ -400,8 +400,8 @@
   },
   "files_with": {
    "GR": 0.9319864388016329,
-   "GR+RHOB+NPHI": 0.5828201757420605,
-   "core (GR, RHOB, NPHI, DTC, RDEP)": 0.1817269770981803
+   "GR+RHOB+NPHI": 0.5463225627897322,
+   "core (GR, RHOB, NPHI, DTC, RDEP)": 0.17505016259600084
   },
   "archive_counts": {
    "1999": 2061,

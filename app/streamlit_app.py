@@ -53,6 +53,19 @@ def safe(path: str) -> dict | None:
         return None
 
 
+def retest(r: dict) -> None:
+    """P3b (ADR-013): every arm under both gates, scored once on fresh wells (committed result)."""
+    st.subheader(f"The retest (P3b): {r['arms']['M1a']['passed_amended']} of 6 on {r['files']} fresh files, short of 4")
+    names = {"C": "P3 model, reader fixed (control)", "M0": "Physics rules, no training", "M1a": "Model with physics features (primary)",
+             "M1b": "Same, without raw density and neutron", "M2": "Primary plus rock-mix correction"}
+    st.dataframe(pd.DataFrame([{"Method": names[a], "Original gate": v["passed_original"], "Amended gate": v["passed_amended"],
+                                "Passed (amended)": ", ".join(u for u, x in v["units"].items() if x["gated"] and x["amended"]["passed"]) or "none"}
+                               for a, v in r["arms"].items() if a in names]), hide_index=True, width="stretch")
+    st.caption("Pre-registered in ADR-013 before modelling; scored once. Amended gate: good-quality samples only, and lift against the 30 m above "
+               "and below a unit. A reader bug (density correction read as density, about 1 well in 10) was fixed first. Physics rules recognise "
+               "the carbonates; every North Sea-trained model still calls them sandstone.")
+
+
 @st.cache_data
 def committed(name: str) -> dict:
     return json.loads((D.OUT / name).read_text())
@@ -75,6 +88,7 @@ def training_rocks() -> pd.DataFrame:
 
 h = D.headline()
 units = committed("p3_kansas_transfer.json")
+p3b = committed("p3b_test.json")
 page = F.navigate(st, PAGES, brand="Well-log lithology", tagline="Rock type from well logs, checked on unseen wells", icon="◧")
 F.sidebar_stats(st, [(f"{h['hidden']:.3f}", "blind score, hidden wells (0 is perfect)"), ("4th of 13", "level among 2020 finalists"),
                      ("118", "North Sea wells (FORCE 2020)"), (f"{len(wells_df()):,}", "Kansas logs on the map")])
@@ -278,7 +292,8 @@ elif page.key == "transfer":
                                     pd.isna(best["lift"]) or best["lift"] < 2)] if bad]
         F.header(st, page, "Can we use the North Sea model to call rock types in Kansas wells?",
                  f"**No.** {int(u[u['gated']]['passed'].sum())} of {int(u['gated'].sum())} gated units passed. Even the closest, {best['unit']} "
-                 f"(expected {best['expected_rock']}), misses: {'; '.join(missed) or 'see the chart'}. Use Kansas logs for quality checks only.")
+                 f"(expected {best['expected_rock']}), misses: {'; '.join(missed) or 'see the chart'}. A pre-registered retest (P3b) reached "
+                 f"{p3b['arms']['M1a']['passed_amended']} of 6 on fresh wells, still short of 4 (below). Use Kansas logs for quality checks only.")
         st.subheader(f"No Kansas unit passed: {int(u['gated'].sum())} gated units, none met all three bars (30+ wells, median agreement "
                      "of at least 50%, lift of at least 2)")
         bars = alt.Chart(u).mark_bar(cornerRadiusEnd=4, color="#e0a33a").encode(
@@ -302,6 +317,7 @@ elif page.key == "transfer":
         st.caption("Lift = share of the expected rock inside the unit ÷ the same share in the rest of those wells (ADR-005). "
                    "High agreement alone is not a pass: the model can call one rock almost everywhere. Mississippian and Precambrian were "
                    "not gated (reported only).")
+        retest(p3b)
     else:
         F.header(st, page, "Can we use the North Sea model to call rock types in Kansas wells?",
                  f"No: {units['units_passed']} of {units['units_gated']} gated units passed (committed result, ADR-005); the live API did not answer.")

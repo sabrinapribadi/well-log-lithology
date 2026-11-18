@@ -9,7 +9,7 @@
 3. **Who:** Users: petrophysicists and geologists reviewing new wells.
    - Data: FORCE 2020 North Sea, 118 wells with interpreted rock types (CC BY 4.0), plus 28,906 public Kansas LAS files.
 4. **Where:** [Results page](https://sabrinapribadi.github.io/well-log-lithology/) and [technical walkthrough](https://sabrinapribadi.github.io/well-log-lithology/build.html) on GitHub Pages; [interactive app](https://well-log-lithology.streamlit.app/) on Streamlit; [live API and MCP](https://well-log-lithology.vercel.app/docs) on Vercel; yearly job, registry and app on Databricks; an [agent skill](skills/well-log-lithology/SKILL.md) for AI assistants.
-5. **When it fails:** 8 phases, each with a pass bar set before the work; 3 failed and are reported (baseline, Kansas transfer, cloud parity).
+5. **When it fails:** 9 phases, each with a pass bar set before the work; 4 failed and are reported (baseline, Kansas transfer and its retest at 3 of 6, cloud parity).
    - No live A/B test: there are no live users. Changes face 10 blind wells, grouped cross-validation and a 10-seed paired test.
 6. **How:** XGBoost with engineered features and a penalty-aware decision, chosen over LightGBM and a 1D CNN by cross-validation.
    - Score: the official FORCE penalty, 0 is perfect: −0.504 on 10 unseen wells (4th of 13 2020 finalists); beats the baseline on 10 of 10 seeds.
@@ -107,6 +107,7 @@ The lithology tools ship as an Agent Skill in [`skills/well-log-lithology/`](ski
 - **Seed check (ADR-010):** B's lead is +0.134 on average; the 95% interval, +0.055 to +0.213, would hold the true gain 19 times in 20 and stays above 0.
 - **One hidden well drives the seed noise.** Well 17/4-1 swings by up to 0.74 between seeds; the other nine stay within 0.08.
 - **Why Kansas failed (0 of 6 units):** old Kansas carbonates are tighter than any North Sea limestone and read as sandstone; evaporite intervals do not read as evaporites.
+- **The retest (P3b, 3 of 6, still short of 4):** pre-registered in [ADR-013](docs/adr/ADR-013-p3b-kansas-retest.md) and scored once on 601 fresh files. A reader bug (the density correction read as density in about 1 well in 10) was fixed first; with lift measured against neighbouring rock, the shales and the anhydrite pass. Physics rules recognise the carbonates (61–71%) where every North Sea-trained model still calls them sandstone (0–2%).
 - **Kansas data quality:** gamma ray, neutron and density together cover a median 36% of each file's depth; logs sit outside the North Sea range in every year.
 - **Databricks:** quality and drift match the laptop exactly; retraining B moves the score like a seed change (features bit-identical).
 

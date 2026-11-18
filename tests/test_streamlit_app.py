@@ -96,6 +96,7 @@ def test_well_and_kansas_pages():
     assert len(at.dataframe[0].value) == 10                                    # the ten thickest doubtful intervals
     at = run("transfer")
     assert at.subheader[0].value.startswith("No Kansas unit passed: 6 gated units")
+    assert any(s.value.startswith("The retest (P3b): 3 of 6 on 601 fresh files") for s in at.subheader)   # ADR-013
     at = run("quality")
     assert "not validated" in at.warning[0].value
     at = run("explore")

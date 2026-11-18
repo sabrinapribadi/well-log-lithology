@@ -3,6 +3,14 @@
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
 
+## [0.19.0] — 2026-11-18 — Reader erratum carried through: Kansas log quality recounted (ADR-006); P3b on the results page, app, API and skill
+**Files:** docs/adr/ADR-006-log-quality-and-drift.md, docs/adr/README.md, data/outputs/p0_foundation.json, data/outputs/p4_quality.json, data/outputs/kgs_wells_summary.json, deploy/serving_snapshot.tar.gz, deploy/serving_snapshot.sha256, docs/index.html, docs/build.html, docs/brief.yaml, docs/data/page_data.js, docs/PRD.md, README.md, scripts/export_page_data.py, app/streamlit_app.py, tests/test_streamlit_app.py, tests/browser/build_test.js, src/serving/contracts.py, skills/well-log-lithology/SKILL.md, skills/well-log-lithology/scripts/wll.py
+- **Situation:** The P3b reader fix (a density correction, `RHOC`, read as density) also touched the archive-wide inventory and log-quality figures published since P0 and P4, and P3b's result was only in its ADR.
+- **Task:** Recount every figure the fix could move, publish the corrections next to the originals, and show P3b wherever the Kansas result appears, keeping "not validated".
+- **Action:** Reran the inventory, the P0 report and P4 on all 28,906 files (2 h 06 min); wrote an erratum to ADR-006 with a before/after table; rebuilt the serving store, deploy snapshot and page data; checked that the P3b test set rebuilt from the new inventory has the same SHA-256. Added P3b to the results page (a line and a collapsed per-method table), the walkthrough (a phase entry), the app's Kansas page, the API caveat, the agent skill, the brief, README and PRD.
+- **Result:** Hole condition is now knowable for 46.6% of files (was 9.4%), and where knowable the median bad-hole share is 12.8% (was 5.5%). Files with gamma ray, density and neutron: 54.6% (was 58.3%); mapped wells holding gamma ray plus density or neutron: 59% (was 63%). Density drift alerts against FORCE: 16 of 18 years (was 17). Coverage (36%), wells (24,157), the map (24,166 wells) and the P0 and P4 gates are unchanged. 60 Python tests, 390 walkthrough and 121 results-page checks pass; the results page stays at 7.2 screens.
+- **Talking point:** "When a bug turned up mid-project, we recounted every number it touched and published the corrections next to the originals."
+
 ## [0.18.0] — 2026-11-18 — P3b result: failed, 3 of 6 Kansas units (ADR-013)
 **Files:** docs/adr/ADR-013-p3b-kansas-retest.md, docs/adr/README.md, README.md, data/outputs/p3b_test.json
 - **Situation:** P3b was pre-registered (commit c609433) and its M1 variant frozen on the development set (commit 6a1bff8) before the fresh test set was opened.

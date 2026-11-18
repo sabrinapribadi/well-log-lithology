@@ -150,6 +150,15 @@ def main() -> None:
                       "diag": {"kansas_lkc": p3d["kansas_unit_medians"]["Lansing-Kansas City"], "force_limestone": p3d["force_rock_medians"]["Limestone"],
                                "force_sandstone": p3d["force_rock_medians"]["Sandstone"], "kansas_salt": p3d["kansas_unit_medians"]["Hutchinson Salt"],
                                "force_halite": p3d["force_rock_medians"]["Halite"]}}
+    # P3b Kansas retest (ADR-013): every arm under both gates, one-shot test on fresh wells
+    p3b = load("p3b_test.json")
+    if p3b:
+        fin = lambda x: None if x is None or not np.isfinite(x) else x  # noqa: E731
+        page["p3b"] = {"files": p3b["files"], "primary": "M1a",
+                       "arms": {a: {"original": r["passed_original"], "amended": r["passed_amended"],
+                                    "units": {u: {"gated": v["gated"], "wells": v["amended"]["wells"], "agreement": v["amended"]["median_agreement"],
+                                                  "lift": fin(v["amended"]["lift"]), "passed": v["amended"]["passed"]}
+                                              for u, v in r["units"].items()}} for a, r in p3b["arms"].items()}}
     # P4 quality and drift (ADR-006)
     p4 = load("p4_quality.json")
     if p4:

@@ -30,7 +30,8 @@ FACTS = {                                     # committed results (ADR-002, ADR-
     "hidden_score": -0.504, "open_score": -0.521, "baseline_hidden": -0.540, "finalists_rank": "4th of 13 2020 finalists",
     "seeds": "beats the baseline on 10 of 10 seeds; mean +0.134 on the hidden wells (95% interval +0.055 to +0.213)",
     "score_meaning": "official FORCE penalty per 0.152 m sample on wells the model never saw; 0 is perfect, more negative is worse",
-    "kansas": "Kansas Geological Survey LAS archive: log quality only; lithology not validated (the transfer test failed, ADR-005)",
+    "kansas": ("Kansas Geological Survey LAS archive: log quality only; lithology not validated "
+               "(the transfer test failed, ADR-005; retest 3 of 6 units, short of 4, ADR-013)"),
     "unit_gate": "a unit passes with at least 30 wells scored, median agreement >= 50% and lift >= 2",
 }
 

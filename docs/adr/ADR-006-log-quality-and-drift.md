@@ -1,6 +1,6 @@
 # ADR-006: P4 Log Quality and Drift Across the Kansas Archive
 
-**Status:** Accepted — written and pushed before P4 ran; results appended
+**Status:** Accepted — written and pushed before P4 ran; results appended; erratum 2026-11-18 (curve reader, see ADR-013)
 **Date:** 2026-11-08
 **Deciders:** Sabrina Pribadi
 
@@ -61,6 +61,27 @@
 - **Model T's confidence:** median 0.77, steady across years (0.75–0.82).
 - **Drift vs earlier years:** neutron alerts (PSI > 0.25) in 9 of 17 comparable years, largest in 2020–2021 (0.58), consistent with changing tools; gamma ray and sonic stable in 15–16 of 17.
 - **Drift vs FORCE:** density alerts in 17 of 18 years; neutron, sonic, resistivity and T's confidence in all 18. Kansas logs sit far from what the model learned, consistent with P3's failure.
+
+## Erratum (2026-11-18): density correction read as density
+
+- **Bug:** in Halliburton CDL files the mnemonic `RHOC` is the density correction, not bulk density. The reader mapped it to `RHOB`, so 10,709 correction curves counted as density and could not count as `DRHO`. Found while preparing ADR-013.
+- **Fix:** a density mnemonic whose description says it is a correction maps to `DRHO`; a density curve whose median is outside 1.2–3.3 g/cc is not used as density (`src/curves.py`, `src/kansas.py`, tested). P0 and P4 were rerun on the whole archive with the same code otherwise; old outputs kept outside the repository.
+- **What changed:**
+
+| Measure | Before | After |
+|---|---|---|
+| Curves read as density / as density correction | 28,063 / 2,647 | 17,352 / 13,358 |
+| Files with gamma ray, density and neutron (P0) | 58.3% | 54.6% |
+| Files with all five core logs (P0) | 18.2% | 17.5% |
+| Mapped wells holding gamma ray plus density or neutron | 63% | 59% |
+| Hole condition knowable | 9.4% of files (DRHO 2,644, caliper 78) | 46.6% (DRHO 13,351, caliper 78) |
+| Median bad-hole share where knowable | 5.5% | 12.8% |
+| Model T's median confidence | 0.77 (0.75–0.82 by year) | 0.78 (0.76–0.83) |
+| Density drift vs FORCE: alert years | 17 of 18 | 16 of 18 |
+| Density drift vs earlier year: watch / alert | 7 / 1 | 3 / 1 |
+
+- **What did not change:** files measured (28,841, 99.92%), wells (24,157), wells on the map (24,166), median coverage (36%), coverage by year, neutron, sonic and resistivity drift, and the gate (passed). The P3b test selection rebuilt from the new inventory has the same SHA-256 (19165ba9…).
+- **Reading:** hole condition is now measurable for almost half the archive, and where it is measurable it is worse than first reported. The P3 result (ADR-005) is unaffected in direction; ADR-013 reran Kansas scoring with the fixed reader.
 
 ## Considered Options
 
