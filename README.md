@@ -37,6 +37,7 @@
 | P2 Model choice | Chosen model beats P1 by ≥ 0.02 on hidden wells and on open wells | Passed (−0.504; +0.036) |
 | P2b Method comparison | A new candidate replaces B only if ≥ 0.02 better in CV | B stays (fair LightGBM level; 1D CNN far behind) |
 | P3 Kansas transfer | ≥ 50% agreement and lift ≥ 2 in 4 of 6 named units | **Failed** (0 of 6); transfer withdrawn |
+| P3b Kansas retest (pre-registered) | Same bars, lift against 30 m of neighbours, 601 fresh files, scored once | **Failed** (3 of 6: Heebner, Cherokee, Stone Corral); carbonates still read as sandstone; reader erratum fixed |
 | P4 Log quality and drift | Measures for ≥ 99% of Kansas files, drift every year | Passed (99.92%) |
 | P5 API, MCP tools, copilot | Contract tests; grounded notes; cost and latency budgets | Passed (100% grounded, $0.066 per 1,000) |
 | P6 Databricks job | Hidden score reproduced to 3 decimals; registry; drift job | **Failed** on parity (−0.486 vs −0.504); registry and job passed |
@@ -129,6 +130,7 @@ make lint test build-test hover-test preview evidence
 | P2 model choice | `p2_model_choice.py`, `p2_lgb_diagnostic.py` | `p2_model_choice.json`, `p2_lgb_diagnostic.json` | ADR-004 |
 | P2b comparison | `p2b_lightgbm_fair.py`, `p2b_cnn.py` | `p2b_lightgbm_fair.json`, `p2b_cnn.json` | ADR-009 |
 | P3 Kansas transfer | `p3_transfer_model.py`, `p3_select_wells.py`, `p3_kansas_transfer.py`, `p3_diagnostic.py` | `p3_*.json` | ADR-005 |
+| P3b Kansas retest | `p3b_diagnostics.py`, `p3b_select_fresh.py`, `p3b_train.py`, `p3b_score.py`, `src/physics.py` | `p3b_*.json` | ADR-013 |
 | P4 quality and drift | `p4_quality.py` | `p4_quality.json` | ADR-006 |
 | P5 serving | `p5_build_store.py`, `p5_eval_notes.py`, `src/serving/` | `p5_notes_eval.json` | ADR-007 |
 | P6 Databricks | `databricks_p6.py`, `databricks.yml`, `p6_seed_spread.py` | `p6_*.json` | ADR-008 |

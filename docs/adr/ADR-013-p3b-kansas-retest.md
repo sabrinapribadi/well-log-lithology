@@ -1,6 +1,6 @@
 # ADR-013: P3b Kansas Transfer Retest (pre-registered)
 
-**Status:** Proposed — pre-registered 2026-11-18; written and pushed before any P3b model is evaluated on Kansas data and before any test file is opened. Results are appended below the line, never edited above it.
+**Status:** Accepted — pre-registered 2026-11-18 (commit c609433) before any P3b model was evaluated; M1a frozen on the development set (commit 6a1bff8) before the test set was opened; **P3b failed** (primary arm 3 of 6 units). Results appended below the line.
 **Date:** 2026-11-18
 **Deciders:** Sabrina Pribadi
 **Amends:** nothing in ADR-005. P3's result (0 of 6 units, transfer claim withdrawn) stands as reported.
@@ -147,3 +147,31 @@ Gated units passed (`data/outputs/p3b_dev.json`). M2 here used M1b (the script d
 - **M1 variant frozen: M1a** (2 units against 1 under the amended gate, rule in §5). The primary result on the test is M1a under the amended gate.
 - The North Sea-trained arms still call tight Kansas carbonates sandstone: median agreement 0–2% in the Lansing-Kansas City and Arbuckle for C, M1a, M1b and M2, against 55–74% for the physics rules.
 - The control passes the Heebner under the amended gate alone (lift 2.51 against neighbours, 1.73 against the whole well).
+
+### One-shot test (601 fresh files, scored once)
+
+`data/outputs/p3b_test.json`; manifest hash checked before reading; 0 read errors. M2 used the frozen M1a.
+
+| Arm | Original gate | Amended gate | Units passed under the amended gate |
+|---|---|---|---|
+| C (P3 model T, fixed reader) | 0 of 6 | 2 of 6 | Stone Corral, Heebner |
+| M0 (physics rules) | 3 of 6 | 3 of 6 | Arbuckle, Cherokee, Heebner (original gate: Arbuckle, Lansing-Kansas City, Heebner) |
+| **M1a (primary)** | 0 of 6 | **3 of 6** | Stone Corral, Cherokee, Heebner |
+| M1b | 0 of 6 | 1 of 6 | Heebner |
+| M2 (M1a + priors) | 0 of 6 | 2 of 6 | Stone Corral, Heebner |
+
+**P3b failed: the primary arm passed 3 of 6 units; 4 were needed.** The transfer claim stays withdrawn.
+
+Per unit, primary arm under the amended gate (wells scored, median agreement, lift against neighbours):
+- Heebner: 96 wells, 80%, 2.85, passed. Cherokee: 96, 50%, 2.12, passed (agreement exactly at the bar).
+- Stone Corral: 64 wells, 58%, 148, passed.
+- Arbuckle: 57 wells, 0%, failed. Lansing-Kansas City: 99 wells, 2%, failed: the North Sea-trained model still calls tight Kansas carbonates sandstone.
+- Hutchinson Salt: 5 wells scored (10 selected), failed as expected (§3).
+
+What it means:
+- **The reader fix and the amended gate alone account for 2 of the 3:** the control passes the Heebner and the Stone Corral. The physics features add the Cherokee, at the bar.
+- **Carbonates need physics, not North Sea training:** the training-free rules reach 61% in the Arbuckle and 68–71% in the Lansing-Kansas City (median agreement), where every FORCE-trained arm stays at 0–2%. FORCE carbonates (porous chalk and limestone) do not look like tight Kansas carbonates, and features alone do not override that.
+- **No arm reaches 4.** Different arms pass different units (the rules pass the Arbuckle; the North Sea models pass the Stone Corral). Combining them after seeing these results would be choosing on the test set, so it is not done here; a combined arm (physics rules for carbonates, the model elsewhere) is a hypothesis for a new pre-registered test on wells not yet used.
+- **Lift against neighbours cuts both ways:** it frees the shales but costs the Lansing-Kansas City under the rules (lift 2.52 against the whole well, 1.35 against neighbours, which are limestone too).
+
+Follow-ups (outside P3b): recount the P4 log-quality figures with the fixed reader (§1 erratum); keep the Kansas "not validated" caveat in the API, app and skill.

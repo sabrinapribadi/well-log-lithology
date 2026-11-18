@@ -3,6 +3,14 @@
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
 
+## [0.18.0] — 2026-11-18 — P3b result: failed, 3 of 6 Kansas units (ADR-013)
+**Files:** docs/adr/ADR-013-p3b-kansas-retest.md, docs/adr/README.md, README.md, data/outputs/p3b_test.json
+- **Situation:** P3b was pre-registered (commit c609433) and its M1 variant frozen on the development set (commit 6a1bff8) before the fresh test set was opened.
+- **Task:** Score every arm once on the 601 fresh files and report the result as it falls.
+- **Action:** Manifest hash checked before reading; five arms scored under the original and the amended gate; 0 read errors.
+- **Result:** Primary arm (physics-feature XGBoost, amended gate) passed 3 of 6 units (Heebner, Cherokee, Stone Corral); 4 were needed, so the transfer claim stays withdrawn. The control already passes 2 with the reader fix and amended gate. Training-free physics rules reach 61–71% agreement in the Arbuckle and Lansing-Kansas City where every North Sea-trained arm stays at 0–2%, and pass 3 units themselves. No arm reaches 4; combining arms after the test is not done.
+- **Talking point:** "A pre-registered retest moved Kansas from 0 to 3 of 6 units and showed exactly why the rest fail: North Sea training cannot recognise tight carbonates, while basin-independent physics can."
+
 ## [0.17.0] — 2026-11-18 — P3b pre-registered: reader erratum, diagnostics, amended gate, fresh test set (ADR-013)
 **Files:** docs/adr/ADR-013-p3b-kansas-retest.md (new), src/curves.py, src/kansas.py, scripts/p3b_diagnostics.py (new), scripts/p3b_select_fresh.py (new), scripts/kgs_inventory.py, tests/test_kansas.py, docs/references.yaml, data/outputs/p3b_diagnostics.json, data/outputs/p3b_test_manifest.json, data/outputs/references_evidence.json
 - **Situation:** P3 failed (0 of 6 Kansas units). A literature and data review found no open labelled Kansas or carbonate set and no published FORCE-to-other-basin lithology study, but basin-independent mineral physics that targets the documented failure.
