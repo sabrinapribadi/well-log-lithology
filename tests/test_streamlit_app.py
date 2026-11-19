@@ -97,6 +97,7 @@ def test_well_and_kansas_pages():
     at = run("transfer")
     assert at.subheader[0].value.startswith("No Kansas unit passed: 6 gated units")
     assert any(s.value.startswith("The retest (P3b): 3 of 6 on 601 fresh files") for s in at.subheader)   # ADR-013
+    assert any(s.value.startswith("The second retest (P3c): 2 of 6 on 589 new fresh files") for s in at.subheader)   # ADR-014
     at = run("quality")
     assert "not validated" in at.warning[0].value
     at = run("explore")

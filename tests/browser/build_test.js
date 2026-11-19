@@ -17,7 +17,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     await page.goto("file://" + file, { waitUntil: "networkidle0" });
     ok(await page.$eval("#tip", (t) => t.hidden), `${mode}: tooltip hidden on load`);
     const phases = await page.$$eval("#picker button", (bs) => bs.map((x) => x.dataset.id));
-    ok(phases.length === 9, `${mode}: 9 phases`);
+    ok(phases.length === 10, `${mode}: 10 phases`);
     for (const id of phases) {
       await page.click(`#picker button[data-id="${id}"]`); await wait(60);
       ok(await page.$eval(`#picker button[data-id="${id}"]`, (x) => x.getAttribute("aria-selected") === "true"), `${mode} ${id}: selected`);

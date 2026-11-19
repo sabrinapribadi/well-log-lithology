@@ -9,7 +9,7 @@
 3. **Who:** Users: petrophysicists and geologists reviewing new wells.
    - Data: FORCE 2020 North Sea, 118 wells with interpreted rock types (CC BY 4.0), plus 28,906 public Kansas LAS files.
 4. **Where:** [Results page](https://sabrinapribadi.github.io/well-log-lithology/) and [technical walkthrough](https://sabrinapribadi.github.io/well-log-lithology/build.html) on GitHub Pages; [interactive app](https://well-log-lithology.streamlit.app/) on Streamlit; [live API and MCP](https://well-log-lithology.vercel.app/docs) on Vercel; yearly job, registry and app on Databricks; an [agent skill](skills/well-log-lithology/SKILL.md) for AI assistants.
-5. **When it fails:** 9 phases, each with a pass bar set before the work; 4 failed and are reported (baseline, Kansas transfer and its retest at 3 of 6, cloud parity).
+5. **When it fails:** 10 phases, each with a pass bar set before the work; 5 failed and are reported (baseline, Kansas transfer and its retests at 3 and 2 of 6, cloud parity).
    - No live A/B test: there are no live users. Changes face 10 blind wells, grouped cross-validation and a 10-seed paired test.
 6. **How:** XGBoost with engineered features and a penalty-aware decision, chosen over LightGBM and a 1D CNN by cross-validation.
    - Score: the official FORCE penalty, 0 is perfect: −0.504 on 10 unseen wells (4th of 13 2020 finalists); beats the baseline on 10 of 10 seeds.
@@ -38,6 +38,7 @@
 | P2b Method comparison | A new candidate replaces B only if ≥ 0.02 better in CV | B stays (fair LightGBM level; 1D CNN far behind) |
 | P3 Kansas transfer | ≥ 50% agreement and lift ≥ 2 in 4 of 6 named units | **Failed** (0 of 6); transfer withdrawn |
 | P3b Kansas retest (pre-registered) | Same bars, lift against 30 m of neighbours, 601 fresh files, scored once | **Failed** (3 of 6: Heebner, Cherokee, Stone Corral); carbonates still read as sandstone; reader erratum fixed |
+| P3c combined-arm retest (pre-registered) | Same bars; physics rules replace the model's sandstone calls in carbonates; 589 new wells, scored once | **Failed** (2 of 6: Heebner, Stone Corral, the same as the control); Cherokee did not replicate |
 | P4 Log quality and drift | Measures for ≥ 99% of Kansas files, drift every year | Passed (99.92%) |
 | P5 API, MCP tools, copilot | Contract tests; grounded notes; cost and latency budgets | Passed (100% grounded, $0.066 per 1,000) |
 | P6 Databricks job | Hidden score reproduced to 3 decimals; registry; drift job | **Failed** on parity (−0.486 vs −0.504); registry and job passed |
@@ -108,6 +109,7 @@ The lithology tools ship as an Agent Skill in [`skills/well-log-lithology/`](ski
 - **One hidden well drives the seed noise.** Well 17/4-1 swings by up to 0.74 between seeds; the other nine stay within 0.08.
 - **Why Kansas failed (0 of 6 units):** old Kansas carbonates are tighter than any North Sea limestone and read as sandstone; evaporite intervals do not read as evaporites.
 - **The retest (P3b, 3 of 6, still short of 4):** pre-registered in [ADR-013](docs/adr/ADR-013-p3b-kansas-retest.md) and scored once on 601 fresh files. A reader bug (the density correction read as density in about 1 well in 10) was fixed first; with lift measured against neighbouring rock, the shales and the anhydrite pass. Physics rules recognise the carbonates (61–71%) where every North Sea-trained model still calls them sandstone (0–2%).
+- **The second retest (P3c, 2 of 6):** a combined arm (the model, with physics rules deciding where it says sandstone and they say limestone or dolomite), pre-registered in [ADR-014](docs/adr/ADR-014-p3c-combined-arm-retest.md) and scored once on 589 new wells. It passed the same 2 units as the control; P3b's Cherokee pass (50.2%) did not replicate. Kansas needs core-based labels, not another rule.
 - **Kansas data quality:** gamma ray, neutron and density together cover a median 36% of each file's depth; logs sit outside the North Sea range in every year.
 - **Databricks:** quality and drift match the laptop exactly; retraining B moves the score like a seed change (features bit-identical).
 

@@ -52,4 +52,4 @@ Geologists decide in seconds whether an answer is useful, so keep it short:
 
 ## Limits
 
-FORCE predictions cover 20 test wells only; Kansas lithology is not validated (the transfer test failed; a pre-registered retest reached 3 of 6 units, short of 4); FORCE data are CC BY 4.0; no live A/B test.
+FORCE predictions cover 20 test wells only; Kansas lithology is not validated (the transfer test failed; pre-registered retests reached 3 of 6 and 2 of 6 units, short of 4); FORCE data are CC BY 4.0; no live A/B test.

@@ -159,6 +159,15 @@ def main() -> None:
                                     "units": {u: {"gated": v["gated"], "wells": v["amended"]["wells"], "agreement": v["amended"]["median_agreement"],
                                                   "lift": fin(v["amended"]["lift"]), "passed": v["amended"]["passed"]}
                                               for u, v in r["units"].items()}} for a, r in p3b["arms"].items()}}
+    # P3c combined-arm retest (ADR-014): same shape, primary M3, new fresh wells
+    p3c = load("p3c_test.json")
+    if p3c:
+        fin = lambda x: None if x is None or not np.isfinite(x) else x  # noqa: E731
+        page["p3c"] = {"files": p3c["files"], "primary": "M3",
+                       "arms": {a: {"original": r["passed_original"], "amended": r["passed_amended"],
+                                    "units": {u: {"gated": v["gated"], "wells": v["amended"]["wells"], "agreement": v["amended"]["median_agreement"],
+                                                  "lift": fin(v["amended"]["lift"]), "passed": v["amended"]["passed"]}
+                                              for u, v in r["units"].items()}} for a, r in p3c["arms"].items()}}
     # P4 quality and drift (ADR-006)
     p4 = load("p4_quality.json")
     if p4:

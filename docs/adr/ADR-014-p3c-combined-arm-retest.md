@@ -1,6 +1,6 @@
 # ADR-014: P3c Combined-Arm Kansas Retest (pre-registered)
 
-**Status:** Accepted — pre-registered 2026-11-18, before arm M3 was scored on any Kansas well and before the P3c test set was opened. Results will be appended below the line.
+**Status:** Accepted — pre-registered 2026-11-18 (commit c88b270), before arm M3 was scored on any Kansas well and before the P3c test set was opened; **P3c failed** (M3 2 of 6 units). Results appended below the line.
 **Date:** 2026-11-18
 **Deciders:** Sabrina Pribadi
 **Amends:** nothing in ADR-005 or ADR-013. P3 (0 of 6 units) and P3b (3 of 6) stand as reported.
@@ -102,4 +102,49 @@ From the component arms on the P3b test (amended gate):
 
 ## Results
 
-Pending: appended after the one-shot run in §5.
+### Run log
+
+- **Informational runs (§5 step 2), 2026-11-18/19:** M3 on the two sets already seen, `--tag posthoc`, 0 read errors. Every other arm reproduced its committed P3b test numbers exactly.
+
+| Set (already seen) | M3, original gate | M3, amended gate |
+|---|---|---|
+| P3 development (1,915 files) | 1 | 2 (Heebner, Cherokee) |
+| P3b test (601 files) | 1 | 3 (Stone Corral, Cherokee, Heebner) |
+
+- **Interrupted first attempt (logged under §5 step 3):** the one-shot run started about 03:20 WIB on 2026-11-19 and stopped at 05:37 when the session ended, after writing temporary files for 170 of the 589 files (all P3c wells). It wrote no rows and no result and printed no score.
+- **One-shot run:** 2026-11-19 10:48–10:57 WIB, manifest hash checked, **589 files, 0 read errors**, 503 s. Output: `data/outputs/p3c_test.json`.
+
+### Result: P3c failed — M3 passed 2 of 6 gated units (4 needed)
+
+| Arm | Original gate (units passed) | Amended gate, primary (units passed) |
+|---|---|---|
+| **M3 (primary)** | 2 (Lansing-Kansas City, Stone Corral) | 2 (Heebner, Stone Corral) |
+| C (P3 model T, fixed reader) | 1 (Stone Corral) | 2 (Heebner, Stone Corral) |
+| M0 (physics rules) | 3 (Heebner, Arbuckle, Lansing-Kansas City) | 2 (Heebner, Arbuckle) |
+| M1a (physics-feature model) | 1 (Stone Corral) | 2 (Heebner, Stone Corral) |
+| M1b (without raw density and neutron) | 0 (none) | 2 (Heebner, Stone Corral) |
+| M2 (M1a, priors re-estimated) | 2 (Stone Corral, Heebner) | 2 (Stone Corral, Heebner) |
+
+M3 by unit (amended gate), next to the expectation written in §7:
+
+| Unit | Wells | Median agreement | Lift | Result | Expected in §7 |
+|---|---|---|---|---|---|
+| Heebner | 97 | 88.9% | 2.86 | passed | pass |
+| Stone Corral | 64 | 59.8% | 126.52 | passed | fragile |
+| Cherokee | 98 | 47.0% | 1.83 | failed | marginal |
+| Arbuckle | 62 | 27.5% | 3.20 | failed | likely pass |
+| Lansing-Kansas City | 98 | 63.8% | 1.40 | failed | likely fail on lift |
+| Hutchinson Salt | 0 | – | – | failed | fails by rule (no wells) |
+
+### Reading
+
+- **M3 adds nothing on fresh wells.** It passes the same 2 units as the control C (Heebner, Stone Corral). By §4, the reader fix and the amended gate explain these passes, not the method.
+- **The P3b Cherokee pass did not replicate.** It sat at 50.2% on the P3b test. On new wells M1a and M3 reach 47% (lift 1.83); the control and the physics rules reach 57% and 55% but lift only 1.81 and 1.91, so no arm passes Cherokee.
+- **Arbuckle was wrongly expected to pass.** M3 can only make a sample dolomite where the physics rules say dolomite **and** the model says sandstone. The physics rules reach a median 51% dolomite in the Arbuckle, M3 only 27.5%: in a large share of the physics rules' dolomite samples the model called a rock other than sandstone, so M3 kept the model's call. §7 assumed the model's error there was almost all "sandstone"; it was not.
+- **Lansing-Kansas City failed on lift, as expected** (1.40): the 30 m around it is also limestone, so even a good limestone call does not stand out.
+- **The one carbonate signal that held:** the training-free physics rules pass the Arbuckle on both fresh sets (61% on the P3b test, 51% here, lift 2.7). They are not the pre-registered arm, so this is reported, not claimed.
+
+### Decision (§6)
+
+- **P3c failed.** The transfer claim stays withdrawn: P3 0 of 6, P3b 3 of 6, P3c 2 of 6. The API, app and skill keep "Kansas lithology is not validated".
+- **No further arm combinations are tried on Kansas formation tops.** The next step needs core-based labels (ADR-013 §7), not another rule.

@@ -1,0 +1,651 @@
+{
+ "design": "ADR-014",
+ "set": "p3c",
+ "tag": null,
+ "check_run": false,
+ "files": 589,
+ "errors": 0,
+ "error_examples": [],
+ "m2_uses": "M1a",
+ "m2_priors": {
+  "Sandstone": 0.5333,
+  "Sandstone/Shale": 0.0726,
+  "Shale": 0.2835,
+  "Marl": 0.0,
+  "Dolomite": 0.0,
+  "Limestone": 0.0358,
+  "Chalk": 0.0,
+  "Halite": 0.0002,
+  "Anhydrite": 0.0128,
+  "Tuff": 0.0,
+  "Coal": 0.0617,
+  "Basement": 0.0
+ },
+ "arms": {
+  "C": {
+   "units": {
+    "Heebner": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 99,
+      "median_agreement": 0.9,
+      "lift": 1.6453208473577001,
+      "passed": false
+     },
+     "amended": {
+      "wells": 97,
+      "median_agreement": 0.9,
+      "lift": 2.425122917848857,
+      "passed": true
+     }
+    },
+    "Cherokee": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 98,
+      "median_agreement": 0.6100251076040173,
+      "lift": 1.3555699037272164,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.5735191637630661,
+      "lift": 1.8060548677926787,
+      "passed": false
+     }
+    },
+    "Arbuckle": {
+     "expected_rock": "Dolomite",
+     "gated": true,
+     "original": {
+      "wells": 62,
+      "median_agreement": 0.0,
+      "lift": 31.210820895522385,
+      "passed": false
+     },
+     "amended": {
+      "wells": 62,
+      "median_agreement": 0.0,
+      "lift": 20.442081701175155,
+      "passed": false
+     }
+    },
+    "Mississippian": {
+     "expected_rock": "Limestone",
+     "gated": false,
+     "original": {
+      "wells": 89,
+      "median_agreement": 0.0,
+      "lift": 1.473054912511825,
+      "passed": false
+     },
+     "amended": {
+      "wells": 86,
+      "median_agreement": 0.0,
+      "lift": 0.8882334734424698,
+      "passed": false
+     }
+    },
+    "Lansing-Kansas City": {
+     "expected_rock": "Limestone",
+     "gated": true,
+     "original": {
+      "wells": 100,
+      "median_agreement": 0.0025380710659898475,
+      "lift": 0.7983636995165596,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.0024906638875448195,
+      "lift": 1.3394206117440601,
+      "passed": false
+     }
+    },
+    "Stone Corral": {
+     "expected_rock": "Anhydrite",
+     "gated": true,
+     "original": {
+      "wells": 74,
+      "median_agreement": 0.5355351170568562,
+      "lift": 218.9372078038937,
+      "passed": true
+     },
+     "amended": {
+      "wells": 64,
+      "median_agreement": 0.5706521739130435,
+      "lift": 132.45152190804365,
+      "passed": true
+     }
+    }
+   },
+   "passed_original": 1,
+   "passed_amended": 2,
+   "gate_original": false,
+   "gate_amended": false
+  },
+  "M0": {
+   "units": {
+    "Heebner": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 99,
+      "median_agreement": 0.9,
+      "lift": 2.2064651726308915,
+      "passed": true
+     },
+     "amended": {
+      "wells": 97,
+      "median_agreement": 0.9,
+      "lift": 2.6865800931245087,
+      "passed": true
+     }
+    },
+    "Cherokee": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 98,
+      "median_agreement": 0.5725762527233116,
+      "lift": 1.5680074383540699,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.5477422663589528,
+      "lift": 1.914785175271046,
+      "passed": false
+     }
+    },
+    "Arbuckle": {
+     "expected_rock": "Dolomite",
+     "gated": true,
+     "original": {
+      "wells": 62,
+      "median_agreement": 0.5100189933523267,
+      "lift": 3.9573033203138643,
+      "passed": true
+     },
+     "amended": {
+      "wells": 62,
+      "median_agreement": 0.5100189933523267,
+      "lift": 2.720031861143837,
+      "passed": true
+     }
+    },
+    "Mississippian": {
+     "expected_rock": "Limestone",
+     "gated": false,
+     "original": {
+      "wells": 89,
+      "median_agreement": 0.5989847715736041,
+      "lift": 2.0273555346652015,
+      "passed": false
+     },
+     "amended": {
+      "wells": 86,
+      "median_agreement": 0.6141718163760759,
+      "lift": 1.2256785525209977,
+      "passed": false
+     }
+    },
+    "Lansing-Kansas City": {
+     "expected_rock": "Limestone",
+     "gated": true,
+     "original": {
+      "wells": 100,
+      "median_agreement": 0.6723976672535211,
+      "lift": 2.4712926515882385,
+      "passed": true
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.690793528505393,
+      "lift": 1.3369363769376152,
+      "passed": false
+     }
+    },
+    "Stone Corral": {
+     "expected_rock": "Anhydrite",
+     "gated": true,
+     "original": {
+      "wells": 74,
+      "median_agreement": 0.2391304347826087,
+      "lift": 203.57929326008093,
+      "passed": false
+     },
+     "amended": {
+      "wells": 64,
+      "median_agreement": 0.2826086956521739,
+      "lift": 259.8378855444073,
+      "passed": false
+     }
+    }
+   },
+   "passed_original": 3,
+   "passed_amended": 2,
+   "gate_original": false,
+   "gate_amended": false
+  },
+  "M1a": {
+   "units": {
+    "Heebner": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 99,
+      "median_agreement": 0.8888888888888888,
+      "lift": 1.721826992478186,
+      "passed": false
+     },
+     "amended": {
+      "wells": 97,
+      "median_agreement": 0.8888888888888888,
+      "lift": 2.858084343806525,
+      "passed": true
+     }
+    },
+    "Cherokee": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 98,
+      "median_agreement": 0.5205518584384128,
+      "lift": 1.2889983201198731,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.4699879951980792,
+      "lift": 1.8305207096220943,
+      "passed": false
+     }
+    },
+    "Arbuckle": {
+     "expected_rock": "Dolomite",
+     "gated": true,
+     "original": {
+      "wells": 62,
+      "median_agreement": 0.0,
+      "lift": 2.295968433693601,
+      "passed": false
+     },
+     "amended": {
+      "wells": 62,
+      "median_agreement": 0.0,
+      "lift": 0.7787459695685772,
+      "passed": false
+     }
+    },
+    "Mississippian": {
+     "expected_rock": "Limestone",
+     "gated": false,
+     "original": {
+      "wells": 89,
+      "median_agreement": 0.0,
+      "lift": 1.56825593734714,
+      "passed": false
+     },
+     "amended": {
+      "wells": 86,
+      "median_agreement": 0.0,
+      "lift": 1.0765917630599724,
+      "passed": false
+     }
+    },
+    "Lansing-Kansas City": {
+     "expected_rock": "Limestone",
+     "gated": true,
+     "original": {
+      "wells": 100,
+      "median_agreement": 0.016592545531554426,
+      "lift": 0.9508004505457288,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.01781984506781588,
+      "lift": 1.3557822482958457,
+      "passed": false
+     }
+    },
+    "Stone Corral": {
+     "expected_rock": "Anhydrite",
+     "gated": true,
+     "original": {
+      "wells": 74,
+      "median_agreement": 0.5355351170568562,
+      "lift": 184.3328956679552,
+      "passed": true
+     },
+     "amended": {
+      "wells": 64,
+      "median_agreement": 0.5977636181909045,
+      "lift": 126.52320184697614,
+      "passed": true
+     }
+    }
+   },
+   "passed_original": 1,
+   "passed_amended": 2,
+   "gate_original": false,
+   "gate_amended": false
+  },
+  "M1b": {
+   "units": {
+    "Heebner": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 99,
+      "median_agreement": 0.9,
+      "lift": 1.7387675838291277,
+      "passed": false
+     },
+     "amended": {
+      "wells": 97,
+      "median_agreement": 0.8888888888888888,
+      "lift": 2.646454340107091,
+      "passed": true
+     }
+    },
+    "Cherokee": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 98,
+      "median_agreement": 0.5670045494452869,
+      "lift": 1.35709398101971,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.5049941927990709,
+      "lift": 1.7838260015746508,
+      "passed": false
+     }
+    },
+    "Arbuckle": {
+     "expected_rock": "Dolomite",
+     "gated": true,
+     "original": {
+      "wells": 62,
+      "median_agreement": 0.0,
+      "lift": 29.13009950248756,
+      "passed": false
+     },
+     "amended": {
+      "wells": 62,
+      "median_agreement": 0.0,
+      "lift": 8.479678335302285,
+      "passed": false
+     }
+    },
+    "Mississippian": {
+     "expected_rock": "Limestone",
+     "gated": false,
+     "original": {
+      "wells": 89,
+      "median_agreement": 0.0,
+      "lift": 0.7173269862081652,
+      "passed": false
+     },
+     "amended": {
+      "wells": 86,
+      "median_agreement": 0.0,
+      "lift": 0.9789105260791466,
+      "passed": false
+     }
+    },
+    "Lansing-Kansas City": {
+     "expected_rock": "Limestone",
+     "gated": true,
+     "original": {
+      "wells": 100,
+      "median_agreement": 0.0,
+      "lift": 0.264845443129952,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.0,
+      "lift": 1.053875525343166,
+      "passed": false
+     }
+    },
+    "Stone Corral": {
+     "expected_rock": "Anhydrite",
+     "gated": true,
+     "original": {
+      "wells": 74,
+      "median_agreement": 0.41304347826086957,
+      "lift": 71.36588423386178,
+      "passed": false
+     },
+     "amended": {
+      "wells": 64,
+      "median_agreement": 0.5082417582417582,
+      "lift": 170.63804575699572,
+      "passed": true
+     }
+    }
+   },
+   "passed_original": 0,
+   "passed_amended": 2,
+   "gate_original": false,
+   "gate_amended": false
+  },
+  "M3": {
+   "units": {
+    "Heebner": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 99,
+      "median_agreement": 0.8888888888888888,
+      "lift": 1.721826992478186,
+      "passed": false
+     },
+     "amended": {
+      "wells": 97,
+      "median_agreement": 0.8888888888888888,
+      "lift": 2.858084343806525,
+      "passed": true
+     }
+    },
+    "Cherokee": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 98,
+      "median_agreement": 0.5205518584384128,
+      "lift": 1.2889983201198731,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.4699879951980792,
+      "lift": 1.8305207096220943,
+      "passed": false
+     }
+    },
+    "Arbuckle": {
+     "expected_rock": "Dolomite",
+     "gated": true,
+     "original": {
+      "wells": 62,
+      "median_agreement": 0.2908284765306762,
+      "lift": 8.252788276472774,
+      "passed": false
+     },
+     "amended": {
+      "wells": 62,
+      "median_agreement": 0.27529258005109014,
+      "lift": 3.201095211447758,
+      "passed": false
+     }
+    },
+    "Mississippian": {
+     "expected_rock": "Limestone",
+     "gated": false,
+     "original": {
+      "wells": 89,
+      "median_agreement": 0.5714285714285714,
+      "lift": 2.2769126271885414,
+      "passed": false
+     },
+     "amended": {
+      "wells": 86,
+      "median_agreement": 0.5787274962953621,
+      "lift": 1.3117233808187623,
+      "passed": false
+     }
+    },
+    "Lansing-Kansas City": {
+     "expected_rock": "Limestone",
+     "gated": true,
+     "original": {
+      "wells": 100,
+      "median_agreement": 0.6239324998292,
+      "lift": 2.7988815698157072,
+      "passed": true
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.6382960413080896,
+      "lift": 1.4015853337620994,
+      "passed": false
+     }
+    },
+    "Stone Corral": {
+     "expected_rock": "Anhydrite",
+     "gated": true,
+     "original": {
+      "wells": 74,
+      "median_agreement": 0.5355351170568562,
+      "lift": 184.3328956679552,
+      "passed": true
+     },
+     "amended": {
+      "wells": 64,
+      "median_agreement": 0.5977636181909045,
+      "lift": 126.52320184697614,
+      "passed": true
+     }
+    }
+   },
+   "passed_original": 2,
+   "passed_amended": 2,
+   "gate_original": false,
+   "gate_amended": false
+  },
+  "M2": {
+   "units": {
+    "Stone Corral": {
+     "expected_rock": "Anhydrite",
+     "gated": true,
+     "original": {
+      "wells": 74,
+      "median_agreement": 0.5464046822742474,
+      "lift": 120.95960342113295,
+      "passed": true
+     },
+     "amended": {
+      "wells": 64,
+      "median_agreement": 0.6032608695652174,
+      "lift": 120.09821627647715,
+      "passed": true
+     }
+    },
+    "Arbuckle": {
+     "expected_rock": "Dolomite",
+     "gated": true,
+     "original": {
+      "wells": 62,
+      "median_agreement": 0.0,
+      "lift": null,
+      "passed": false
+     },
+     "amended": {
+      "wells": 62,
+      "median_agreement": 0.0,
+      "lift": null,
+      "passed": false
+     }
+    },
+    "Mississippian": {
+     "expected_rock": "Limestone",
+     "gated": false,
+     "original": {
+      "wells": 89,
+      "median_agreement": 0.0,
+      "lift": 0.8504084514013562,
+      "passed": false
+     },
+     "amended": {
+      "wells": 86,
+      "median_agreement": 0.0,
+      "lift": 0.6893422335558388,
+      "passed": false
+     }
+    },
+    "Cherokee": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 98,
+      "median_agreement": 0.33773148148148147,
+      "lift": 1.3795427363418258,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.3002525252525252,
+      "lift": 1.887706910581667,
+      "passed": false
+     }
+    },
+    "Heebner": {
+     "expected_rock": "Shale",
+     "gated": true,
+     "original": {
+      "wells": 99,
+      "median_agreement": 0.7,
+      "lift": 2.1599323676719657,
+      "passed": true
+     },
+     "amended": {
+      "wells": 97,
+      "median_agreement": 0.6666666666666666,
+      "lift": 3.120565263219919,
+      "passed": true
+     }
+    },
+    "Lansing-Kansas City": {
+     "expected_rock": "Limestone",
+     "gated": true,
+     "original": {
+      "wells": 100,
+      "median_agreement": 0.0,
+      "lift": 0.5200373356665269,
+      "passed": false
+     },
+     "amended": {
+      "wells": 98,
+      "median_agreement": 0.0,
+      "lift": 2.299181507835314,
+      "passed": false
+     }
+    }
+   },
+   "passed_original": 2,
+   "passed_amended": 2,
+   "gate_original": false,
+   "gate_amended": false
+  }
+ },
+ "seconds": 503
+}

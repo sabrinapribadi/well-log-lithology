@@ -51,8 +51,8 @@ class Quality(BaseModel):
     bad_hole_basis: str
     model_t_confidence_median: float | None
     lithology_validated: bool = False
-    caveat: str = ("Kansas lithology is not validated: the transfer test failed (ADR-005) and its pre-registered retest passed 3 of 6 units, "
-                    "short of 4 (ADR-013). Confidence is a drift signal only.")
+    caveat: str = ("Kansas lithology is not validated: the transfer test failed (ADR-005) and its pre-registered retests passed 3 of 6 "
+                    "(ADR-013) and 2 of 6 units (ADR-014), short of 4. Confidence is a drift signal only.")
 
 
 class UnitAgreement(BaseModel):

@@ -3,6 +3,14 @@
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
 
+## [0.21.0] — 2026-11-19 — P3c result: failed, 2 of 6 Kansas units (ADR-014); no further rules on formation tops
+**Files:** docs/adr/ADR-014-p3c-combined-arm-retest.md, docs/adr/README.md, data/outputs/p3c_test.json, data/outputs/p3b_dev_posthoc.json, data/outputs/p3b_test_posthoc.json, docs/index.html, docs/build.html, docs/brief.yaml, docs/data/page_data.js, docs/PRD.md, README.md, scripts/export_page_data.py, app/streamlit_app.py, tests/test_streamlit_app.py, tests/browser/build_test.js, src/serving/contracts.py, skills/well-log-lithology/SKILL.md, skills/well-log-lithology/scripts/wll.py
+- **Situation:** P3c was pre-registered (commit c88b270) with the combined arm M3, a new fresh set of 589 files and a written forecast of 3 or 4 units.
+- **Task:** Score M3 once on the new wells and report the result as it falls, including a run that was interrupted.
+- **Action:** Informational M3 runs on the two sets already seen (development 2 of 6, P3b test 3 of 6; every other arm reproduced its committed numbers). The first one-shot attempt stopped after 170 of 589 files with no score written; it was logged and rerun as the ADR allows (589 files, 0 read errors, manifest hash checked).
+- **Result:** P3c failed: M3 passed 2 of 6 (Heebner, Stone Corral), exactly the control's 2. P3b's Cherokee pass (50.2%) did not replicate (47%, lift 1.83); Arbuckle reached 28% because the model's carbonate errors are not all "sandstone"; Lansing-Kansas City failed on lift (1.40) as forecast. Only the training-free physics rules pass the Arbuckle on both fresh sets (61%, 51%). Per ADR-014, no more rules are tried on Kansas formation tops; the next step needs core-based labels. Results page, walkthrough (10th phase), app, API caveat, skill, brief, README and PRD updated.
+- **Talking point:** "Three pre-registered Kansas tests, three honest failures; the third showed that an attractive post-hoc fix adds nothing on new wells, and named what would: real labels."
+
 ## [0.20.0] — 2026-11-18 — P3c pre-registered: combined physics + model arm on new fresh wells (ADR-014)
 **Files:** docs/adr/ADR-014-p3c-combined-arm-retest.md (new), docs/adr/README.md, scripts/p3b_select_fresh.py, scripts/p3b_score.py, data/outputs/p3c_test_manifest.json, docs/references.yaml, data/outputs/references_evidence.json, README.md
 - **Situation:** P3b failed at 3 of 6 units, but its arms failed in different places: the physics rules recognise the carbonates, the physics-feature model the shale and anhydrite. Combining them was thought of only after the P3b test set was seen.

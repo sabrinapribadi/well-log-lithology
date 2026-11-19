@@ -160,6 +160,7 @@ Raw data lives in `WLL_DATA_DIR` (OneDrive `github_project/data/well-log-litholo
 - Kansas archive: 99.86% of 28,906 headers read; 17.5% of files carry all five core logs (18.2% before the ADR-013 reader fix).
 - Transfer failed (0 of 6 units): Kansas Paleozoic carbonates are tighter than any North Sea limestone and read as sandstone; evaporite intervals do not read as evaporites.
 - Pre-registered retest P3b (ADR-013, 2026-11-18): 3 of 6 units on 601 fresh files, short of 4; transfer stays withdrawn. A reader erratum (density correction read as density) was fixed first.
+- Pre-registered retest P3c (ADR-014, 2026-11-19): a combined physics + model arm passed 2 of 6 units on 589 new wells, the same as the control; no further rules on formation tops.
 - Kansas logs sit outside the North Sea training range in every archive year (P4 drift); gamma ray, neutron and density together cover a median 36% of depth.
 - Method comparison: a fair LightGBM is level with XGBoost; a 1D CNN trails by 0.27 in CV; 11 of 12 in-range finalists used tree ensembles.
 - Hidden-well scores move by up to 0.18 with the random seed alone, mostly through one well (17/4-1).
