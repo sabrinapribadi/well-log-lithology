@@ -3,6 +3,14 @@
 Newest first. Each entry uses STAR (Situation, Task, Action, Result) so it can be told as a story.
 
 
+## [0.21.1] — 2026-11-19 — Brief reframed: the working model first, Kansas as the validated-domain limit
+**Files:** docs/brief.yaml, README.md, docs/index.html, docs/build.html
+- **Situation:** After three Kansas tests the brief opened item 5 with "5 failed", which read as if the whole project failed; the North Sea model passed every bar it was built for.
+- **Task:** Lead with what works and state the domain limit plainly, without hiding any failure.
+- **Action:** "What" now carries the blind-well score; "When it fails" states the limit first (outside the North Sea; three pre-registered Kansas tests; Kansas lithology labelled not validated), then every phase that fell short; skills add the curve-mapping bug caught in about 10,700 curves and the pre-registered out-of-basin tests (ADR-014).
+- **Result:** Same facts, clearer order on the README, results page and walkthrough; all checks pass (results page 7.3 screens).
+- **Talking point:** "The model works where it was validated, and the project proves where it stops."
+
 ## [0.21.0] — 2026-11-19 — P3c result: failed, 2 of 6 Kansas units (ADR-014); no further rules on formation tops
 **Files:** docs/adr/ADR-014-p3c-combined-arm-retest.md, docs/adr/README.md, data/outputs/p3c_test.json, data/outputs/p3b_dev_posthoc.json, data/outputs/p3b_test_posthoc.json, docs/index.html, docs/build.html, docs/brief.yaml, docs/data/page_data.js, docs/PRD.md, README.md, scripts/export_page_data.py, app/streamlit_app.py, tests/test_streamlit_app.py, tests/browser/build_test.js, src/serving/contracts.py, skills/well-log-lithology/SKILL.md, skills/well-log-lithology/scripts/wll.py
 - **Situation:** P3c was pre-registered (commit c88b270) with the combined arm M3, a new fresh set of 589 files and a written forecast of 3 or 4 units.

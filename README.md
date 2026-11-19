@@ -4,21 +4,22 @@
 
 ## At a glance
 
-1. **What:** A rock-type (lithology) model for well logs, served as a results page, an API, MCP tools and grounded notes.
+1. **What:** A rock-type (lithology) model for well logs that scores −0.504 on 10 blind North Sea wells (4th-place level of 13 2020 finalists), served as a results page, an API, MCP tools and grounded notes.
 2. **Why:** Petrophysicists pick lithology by hand at every 0.152 m of every well; a checked first pass shows where to look first.
 3. **Who:** Users: petrophysicists and geologists reviewing new wells.
    - Data: FORCE 2020 North Sea, 118 wells with interpreted rock types (CC BY 4.0), plus 28,906 public Kansas LAS files.
 4. **Where:** [Results page](https://sabrinapribadi.github.io/well-log-lithology/) and [technical walkthrough](https://sabrinapribadi.github.io/well-log-lithology/build.html) on GitHub Pages; [interactive app](https://well-log-lithology.streamlit.app/) on Streamlit; [live API and MCP](https://well-log-lithology.vercel.app/docs) on Vercel; yearly job, registry and app on Databricks; an [agent skill](skills/well-log-lithology/SKILL.md) for AI assistants.
-5. **When it fails:** 10 phases, each with a pass bar set before the work; 5 failed and are reported (baseline, Kansas transfer and its retests at 3 and 2 of 6, cloud parity).
+5. **When it fails:** Outside the North Sea. Three pre-registered tests on fresh Kansas wells showed it does not transfer to old Kansas carbonates, so the API, app and agent label Kansas lithology "not validated".
+   - 10 phases, each with a pass bar set before the work; 5 fell short and are reported in full (the first baseline, the three Kansas tests, cloud parity).
    - No live A/B test: there are no live users. Changes face 10 blind wells, grouped cross-validation and a 10-seed paired test.
 6. **How:** XGBoost with engineered features and a penalty-aware decision, chosen over LightGBM and a 1D CNN by cross-validation.
    - Score: the official FORCE penalty, 0 is perfect: −0.504 on 10 unseen wells (4th of 13 2020 finalists); beats the baseline on 10 of 10 seeds.
 
 **Skills applied** (each linked to the file or decision that shows it):
 
-- **Data engineering:** LAS parsing, unit standardisation and quality checks for 28,906 files — [src/kansas.py](src/kansas.py), [ADR-006](docs/adr/ADR-006-log-quality-and-drift.md)
+- **Data engineering:** LAS parsing, unit standardisation and quality checks for 28,906 files; caught a curve-mapping bug in about 10,700 curves — [src/kansas.py](src/kansas.py), [ADR-006](docs/adr/ADR-006-log-quality-and-drift.md)
 - **Machine learning:** XGBoost, LightGBM and a PyTorch 1D CNN under one comparison — [ADR-004](docs/adr/ADR-004-baseline-and-model-choice.md), [ADR-009](docs/adr/ADR-009-method-comparison.md)
-- **Statistics and evaluation:** blind wells, grouped CV, cost matrix, paired-seed interval, PSI drift — [ADR-002](docs/adr/ADR-002-validation-and-gates.md), [ADR-010](docs/adr/ADR-010-multi-seed-comparison.md)
+- **Statistics and evaluation:** blind wells, grouped CV, cost matrix, paired-seed interval, PSI drift, pre-registered out-of-basin tests — [ADR-002](docs/adr/ADR-002-validation-and-gates.md), [ADR-010](docs/adr/ADR-010-multi-seed-comparison.md), [ADR-014](docs/adr/ADR-014-p3c-combined-arm-retest.md)
 - **MLOps and CI/CD:** GitHub Actions with browser tests, gated Pages, signed build provenance, CD to Vercel — [ci.yml](.github/workflows/ci.yml)
 - **Cloud and platform:** Databricks bundle, Spark job, Unity Catalog registry, Databricks App — [ADR-008](docs/adr/ADR-008-databricks-job.md), [databricks.yml](databricks.yml)
 - **GenAI and agents:** grounded notes with a grader, MCP tools, OpenTelemetry traces, prompt-injection tests — [ADR-007](docs/adr/ADR-007-api-mcp-copilot.md), [ADR-011](docs/adr/ADR-011-public-api-and-technology-assessment.md)
